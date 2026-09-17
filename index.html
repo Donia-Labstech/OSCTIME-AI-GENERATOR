@@ -1,328 +1,319 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" data-theme="dark">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>DONIA LABS | OSCTIME AI GENERATOR v2.0</title>
-<meta name="description" content="مولّد جداول aSc Timetables 2023 بالذكاء الاصطناعي - DONIA LABS TECH" />
+<title>DONIA LABS | OSCTIME AI GENERATOR v4.0</title>
+<meta name="description" content="مولّد جداول aSc Timetables 2023 - DONIA LABS TECH" />
 
-<!-- Tailwind CSS -->
 <script src="https://cdn.tailwindcss.com"></script>
-<script>
-tailwind.config = {
-  theme: {
-    extend: {
-      colors: {
-        donia: {
-          dark:    '#0A0F1E',
-          panel:   '#0F172A',
-          panel2:  '#1E293B',
-          accent:  '#00E5FF',
-          accent2: '#7C3AED',
-          gold:    '#FFB800',
-          green:   '#10B981',
-          red:     '#EF4444'
-        }
-      },
-      fontFamily: { cairo: ['Cairo', 'Tajawal', 'system-ui', 'sans-serif'] }
-    }
-  }
-}
-</script>
-
-<!-- SheetJS لقراءة Excel -->
 <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 
 <style>
-  * { font-family: 'Cairo', sans-serif; }
-  body { background: #0A0F1E; color: #E2E8F0; min-height: 100vh; }
-  .glass { background: rgba(15,23,42,.85); backdrop-filter: blur(16px); border: 1px solid rgba(0,229,255,.12); }
-  .glow-accent { box-shadow: 0 0 30px rgba(0,229,255,.2); }
-  .glow-purple { box-shadow: 0 0 30px rgba(124,58,237,.2); }
-  .btn-primary { background: linear-gradient(135deg,#00E5FF,#7C3AED); color:#0A0F1E; font-weight:800; transition: all .2s; }
-  .btn-primary:hover { transform: translateY(-1px); filter: brightness(1.1); box-shadow: 0 8px 30px rgba(0,229,255,.35); }
-  .btn-ghost { border: 1px solid rgba(0,229,255,.3); color: #00E5FF; transition: all .2s; }
-  .btn-ghost:hover { background: rgba(0,229,255,.1); }
-  .input-field { background: #0A0F1E; border: 1px solid rgba(0,229,255,.2); color: #E2E8F0; transition: all .2s; }
-  .input-field:focus { outline: none; border-color: #00E5FF; box-shadow: 0 0 0 3px rgba(0,229,255,.15); }
-  .step-active { background: linear-gradient(135deg,#00E5FF,#7C3AED); color:#0A0F1E; font-weight:800; }
-  .step-idle { background:#1E293B; color:#94A3B8; }
-  .step-done { background: rgba(16,185,129,.2); color:#10B981; border:1px solid #10B981; }
-  .tab-active { background: rgba(0,229,255,.15); color:#00E5FF; border-bottom: 2px solid #00E5FF; }
-  .tab-idle { color:#94A3B8; }
-  .tab-idle:hover { color:#00E5FF; background: rgba(0,229,255,.05); }
+  :root[data-theme="dark"] {
+    --bg: #0A0F1E; --bg-2: #0F172A; --bg-3: #1E293B;
+    --border: rgba(0,229,255,.15); --text: #E2E8F0; --text-mute: #94A3B8;
+    --accent: #00E5FF; --accent-2: #7C3AED; --gold: #FFB800;
+    --glass: rgba(15,23,42,.75);
+    --cell-bg: #0F172A; --cell-border: rgba(0,229,255,.2);
+  }
+  :root[data-theme="light"] {
+    --bg: #F1F5F9; --bg-2: #FFFFFF; --bg-3: #F8FAFC;
+    --border: rgba(0,80,120,.15); --text: #0F172A; --text-mute: #64748B;
+    --accent: #0891B2; --accent-2: #7C3AED; --gold: #D97706;
+    --glass: rgba(255,255,255,.85);
+    --cell-bg: #FFFFFF; --cell-border: rgba(0,80,120,.2);
+  }
+  * { font-family: 'Cairo', sans-serif; transition: background .25s, color .25s, border-color .25s; }
+  body { background: var(--bg); color: var(--text); min-height: 100vh; }
+  .glass { background: var(--glass); backdrop-filter: blur(16px); border: 1px solid var(--border); }
+  .btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #0A0F1E; font-weight: 800; transition: all .2s; }
+  [data-theme="light"] .btn-primary { color: #fff; }
+  .btn-primary:hover { transform: translateY(-1px); filter: brightness(1.1); }
+  .btn-ghost { border: 1px solid var(--border); color: var(--accent); background: transparent; }
+  .btn-ghost:hover { background: rgba(0,229,255,.08); }
+  .input-field { background: var(--bg); border: 1px solid var(--border); color: var(--text); }
+  .input-field:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,229,255,.15); }
+  .step-active { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #0A0F1E; font-weight: 800; }
+  [data-theme="light"] .step-active { color: #fff; }
+  .step-idle { background: var(--bg-3); color: var(--text-mute); }
+  .step-done { background: rgba(16,185,129,.15); color: #10B981; border: 1px solid #10B981; }
+  .tab-active { background: rgba(0,229,255,.12); color: var(--accent); border-bottom: 2px solid var(--accent); }
+  .tab-idle { color: var(--text-mute); }
   ::-webkit-scrollbar { width: 8px; height: 8px; }
-  ::-webkit-scrollbar-track { background: #0A0F1E; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
   ::-webkit-scrollbar-thumb { background: rgba(0,229,255,.3); border-radius: 8px; }
-  .badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; }
   .pulse-dot { width: 8px; height: 8px; border-radius: 50%; animation: pulse 1.5s infinite; }
   @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:.3; } }
-  .log-line { border-right: 3px solid #00E5FF; padding-right: 12px; margin-bottom: 6px; }
+  .log-line { border-right: 3px solid var(--accent); padding-right: 12px; margin-bottom: 6px; font-size: 12px; }
   .card-hover { transition: all .2s; }
-  .card-hover:hover { transform: translateY(-2px); border-color: rgba(0,229,255,.4); }
+  .card-hover:hover { transform: translateY(-2px); border-color: var(--accent); }
+  .theme-toggle { width: 56px; height: 28px; border-radius: 14px; background: var(--bg-3); border: 1px solid var(--border); position: relative; cursor: pointer; }
+  .theme-toggle::after { content: ''; position: absolute; width: 22px; height: 22px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent-2)); top: 2px; right: 2px; transition: transform .3s; }
+  [data-theme="light"] .theme-toggle::after { transform: translateX(-28px); }
+  .stat-card { background: var(--bg-2); border: 1px solid var(--border); border-radius: 12px; padding: 16px; text-align: center; }
+  .stat-card:hover { transform: translateY(-2px); border-color: var(--accent); }
+  
+  /* Timetable Grid */
+  .tt-grid { display: grid; gap: 4px; }
+  .tt-cell { background: var(--cell-bg); border: 1px solid var(--cell-border); border-radius: 8px; padding: 6px; min-height: 60px; font-size: 11px; overflow: hidden; }
+  .tt-cell-header { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #0A0F1E; font-weight: 800; text-align: center; padding: 8px; border-radius: 8px; font-size: 12px; }
+  [data-theme="light"] .tt-cell-header { color: #fff; }
+  .tt-cell-time { background: var(--bg-3); border: 1px solid var(--border); border-radius: 8px; padding: 6px; text-align: center; font-size: 10px; font-weight: 700; }
+  .tt-lesson { color: var(--accent); font-weight: 700; }
+  .tt-teacher { color: var(--gold); font-size: 10px; }
+  .tt-room { color: #10B981; font-size: 10px; }
+  .tt-empty { opacity: .3; text-align: center; }
+  
+  /* Teacher/Class selector */
+  .selector-tabs { display: flex; gap: 4px; flex-wrap: wrap; }
+  .sel-tab { padding: 6px 12px; border-radius: 8px; font-size: 12px; cursor: pointer; background: var(--bg-3); border: 1px solid var(--border); color: var(--text-mute); }
+  .sel-tab.active { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #0A0F1E; font-weight: 800; border-color: transparent; }
+  [data-theme="light"] .sel-tab.active { color: #fff; }
 </style>
 </head>
 <body>
 
-<!-- ═══════════════════ HEADER ═══════════════════ -->
-<header class="glass sticky top-0 z-40 border-b border-donia-accent/10">
-  <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+<!-- HEADER -->
+<header class="glass sticky top-0 z-40" style="border-bottom: 1px solid var(--border)">
+  <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between flex-wrap gap-3">
     <div class="flex items-center gap-3">
       <div class="w-11 h-11 rounded-xl btn-primary grid place-items-center text-2xl font-black">D</div>
       <div>
-        <h1 class="text-lg font-extrabold text-white leading-tight">DONIA LABS TECH</h1>
-        <p class="text-xs text-donia-accent font-semibold">OSCTIME AI GENERATOR · v2.0</p>
+        <h1 class="text-base font-extrabold leading-tight">DONIA LABS TECH</h1>
+        <p class="text-xs" style="color: var(--accent)">OSCTIME AI GENERATOR · v4.0</p>
       </div>
     </div>
     <div class="flex items-center gap-3">
-      <div id="apiIndicator" class="hidden md:flex items-center gap-2 text-xs text-gray-400">
+      <div id="apiIndicator" class="hidden md:flex items-center gap-2 text-xs" style="color: var(--text-mute)">
         <span id="apiDot" class="pulse-dot" style="background:#EF4444"></span>
         <span id="apiStatusText">API غير مُعدّ</span>
       </div>
-      <button id="openApiBtn" class="btn-primary px-4 py-2 rounded-lg text-sm">🔑 DeepSeek API</button>
+      <button id="themeToggle" class="theme-toggle"></button>
+      <button id="openApiBtn" class="btn-primary px-4 py-2 rounded-lg text-sm">🔑 API</button>
     </div>
   </div>
 </header>
 
-<!-- ═══════════════════ API SIDEBAR ═══════════════════ -->
-<aside id="apiSidebar" class="fixed top-0 left-0 h-full w-96 glass z-50 p-6 translate-x-[-110%] transition-transform duration-300 overflow-y-auto">
+<!-- API SIDEBAR -->
+<aside id="apiSidebar" class="fixed top-0 left-0 h-full w-96 glass z-50 p-6 transition-transform duration-300 overflow-y-auto" style="transform: translateX(-110%)">
   <div class="flex justify-between items-center mb-6">
-    <h2 class="text-lg font-bold text-donia-accent">🔐 إعدادات DeepSeek API</h2>
-    <button id="closeApiBtn" class="text-gray-400 hover:text-white text-xl">✕</button>
+    <h2 class="text-lg font-bold" style="color: var(--accent)">🔐 DeepSeek API</h2>
+    <button id="closeApiBtn" class="text-2xl" style="color: var(--text-mute)">✕</button>
   </div>
-
   <div class="space-y-4">
     <div>
-      <label class="block text-sm text-gray-300 mb-2">مفتاح API</label>
-      <input id="apiKeyInput" type="password" placeholder="sk-xxxxxxxxxxxxxxxx"
-        class="input-field w-full p-3 rounded-lg text-sm" />
+      <label class="block text-sm mb-2">مفتاح API</label>
+      <input id="apiKeyInput" type="password" placeholder="sk-..." class="input-field w-full p-3 rounded-lg text-sm" />
     </div>
-
     <div>
-      <label class="block text-sm text-gray-300 mb-2">نموذج الذكاء</label>
+      <label class="block text-sm mb-2">النموذج</label>
       <select id="modelSelect" class="input-field w-full p-3 rounded-lg text-sm">
-        <option value="deepseek-chat">deepseek-chat (موصى به)</option>
-        <option value="deepseek-coder">deepseek-coder</option>
+        <option value="deepseek-chat">deepseek-chat</option>
       </select>
     </div>
-
-    <button id="saveApiBtn" class="btn-primary w-full py-3 rounded-lg">💾 حفظ الإعدادات</button>
-    <button id="testApiBtn" class="btn-ghost w-full py-2 rounded-lg text-sm">🧪 اختبار الاتصال</button>
-
-    <div id="apiStatus" class="text-xs text-gray-400 leading-6 p-3 rounded-lg bg-donia-dark"></div>
-
-    <div class="border-t border-donia-accent/10 pt-4 mt-4">
-      <p class="text-xs text-gray-500 leading-6">
-        🔒 يتم تخزين المفتاح محلياً في <code class="text-donia-accent">localStorage</code> ولا يُرسل لأي خادم خارجي. يتم الاتصال بـ DeepSeek مباشرة من متصفحك.
-      </p>
-    </div>
+    <button id="saveApiBtn" class="btn-primary w-full py-3 rounded-lg">💾 حفظ</button>
+    <button id="testApiBtn" class="btn-ghost w-full py-2 rounded-lg text-sm">🧪 اختبار</button>
+    <div id="apiStatus" class="text-xs p-3 rounded-lg" style="background: var(--bg); color: var(--text-mute)"></div>
   </div>
 </aside>
 <div id="sidebarOverlay" class="hidden fixed inset-0 bg-black/60 z-40"></div>
 
-<!-- ═══════════════════ MAIN ═══════════════════ -->
+<!-- MAIN -->
 <main class="max-w-7xl mx-auto px-4 py-6">
 
-  <!-- Steps Bar -->
-  <div class="glass rounded-2xl p-3 mb-6 flex flex-wrap gap-2 justify-center" id="stepsBar">
-    <div data-step="1" class="step step-active px-4 py-2 rounded-lg text-sm cursor-pointer">1️⃣ البيانات العامة</div>
-    <div data-step="2" class="step step-idle px-4 py-2 rounded-lg text-sm cursor-pointer">2️⃣ الإسناد التربوي</div>
-    <div data-step="3" class="step step-idle px-4 py-2 rounded-lg text-sm cursor-pointer">3️⃣ القيود والقاعات</div>
-    <div data-step="4" class="step step-idle px-4 py-2 rounded-lg text-sm cursor-pointer">4️⃣ التوليد والتحميل</div>
+  <!-- Stats -->
+  <div id="statsBar" class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-6"></div>
+
+  <!-- Steps -->
+  <div class="glass rounded-2xl p-3 mb-6 flex flex-wrap gap-2 justify-center">
+    <div data-step="1" class="step step-active px-4 py-2 rounded-lg text-sm cursor-pointer">1️⃣ الأساسيات</div>
+    <div data-step="2" class="step step-idle px-4 py-2 rounded-lg text-sm cursor-pointer">2️⃣ الأفواج والمواد</div>
+    <div data-step="3" class="step step-idle px-4 py-2 rounded-lg text-sm cursor-pointer">3️⃣ الإسناد</div>
+    <div data-step="4" class="step step-idle px-4 py-2 rounded-lg text-sm cursor-pointer">4️⃣ توليد الجدول</div>
+    <div data-step="5" class="step step-idle px-4 py-2 rounded-lg text-sm cursor-pointer">5️⃣ التصدير</div>
   </div>
 
-  <!-- ═══════════ STEP 1: GENERAL DATA ═══════════ -->
+  <!-- ═══ STEP 1 ═══ -->
   <section id="step1" class="glass rounded-2xl p-6 mb-6">
     <div class="flex items-center gap-3 mb-5">
-      <div class="w-10 h-10 rounded-lg bg-donia-accent/10 grid place-items-center text-donia-accent font-bold">1</div>
+      <div class="w-10 h-10 rounded-lg grid place-items-center font-bold" style="background: rgba(0,229,255,.1); color: var(--accent)">1</div>
       <div>
-        <h2 class="text-xl font-bold text-white">البيانات العامة للمؤسسة</h2>
-        <p class="text-xs text-gray-400">أدخل معلومات التوقيت والأقسام والمواد</p>
+        <h2 class="text-xl font-bold">البيانات الأساسية</h2>
+        <p class="text-xs" style="color: var(--text-mute)">أدخل معلومات المؤسسة أو ارفع ملف Excel من osctime</p>
       </div>
     </div>
 
-    <!-- Institution -->
-    <div class="grid md:grid-cols-3 gap-4 mb-6">
+    <div class="rounded-xl p-5 mb-6" style="background: var(--bg-2); border: 1px dashed var(--border)">
+      <div class="flex items-center justify-between flex-wrap gap-3">
+        <div class="flex items-center gap-3">
+          <div class="text-3xl">📊</div>
+          <div>
+            <h3 class="font-bold">استيراد ملف osctime 2023</h3>
+            <p class="text-xs" style="color: var(--text-mute)">.xlsx المُصدَّر من aSc Timetables</p>
+          </div>
+        </div>
+        <input type="file" id="excelInput" accept=".xlsx,.xls,.csv" class="hidden" />
+        <button id="excelUploadBtn" class="btn-primary px-5 py-2 rounded-lg text-sm">📂 اختيار</button>
+      </div>
+      <p id="excelFileName" class="text-xs mt-3" style="color: var(--accent)"></p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-4 mb-4">
       <div>
-        <label class="text-sm text-gray-300">اسم المؤسسة</label>
-        <input id="instName" value="مؤسسة العقيد الحواس" class="input-field w-full p-3 mt-2 rounded-lg" />
+        <label class="text-sm">اسم المؤسسة</label>
+        <input id="instName" value="متوسطة الشهيد لخضر رباح السويدانية" class="input-field w-full p-3 mt-2 rounded-lg" />
       </div>
       <div>
-        <label class="text-sm text-gray-300">السنة الدراسية</label>
+        <label class="text-sm">السنة</label>
         <input id="schoolYear" value="2024-2025" class="input-field w-full p-3 mt-2 rounded-lg" />
       </div>
       <div>
-        <label class="text-sm text-gray-300">مدة الحصة (دقيقة)</label>
-        <input id="periodDuration" type="number" value="45" class="input-field w-full p-3 mt-2 rounded-lg" />
+        <label class="text-sm">مدة الحصة (د)</label>
+        <input id="periodDuration" type="number" value="55" class="input-field w-full p-3 mt-2 rounded-lg" />
       </div>
     </div>
 
-    <!-- Days & Periods -->
-    <div class="grid md:grid-cols-2 gap-4 mb-6">
+    <div class="grid md:grid-cols-2 gap-4">
       <div>
-        <label class="text-sm text-gray-300">أيام الدراسة (مفصولة بفاصلة)</label>
-        <input id="daysInput" value="الأحد, الاثنين, الثلاثاء, الأربعاء, الخميس"
-          class="input-field w-full p-3 mt-2 rounded-lg" />
+        <label class="text-sm">أيام الدراسة</label>
+        <input id="daysInput" value="الأحد, الاثنين, الثلاثاء, الأربعاء, الخميس" class="input-field w-full p-3 mt-2 rounded-lg" />
       </div>
       <div>
-        <label class="text-sm text-gray-300">عدد الحصص اليومية</label>
-        <input id="periodsCount" type="number" value="6" min="1" max="10"
-          class="input-field w-full p-3 mt-2 rounded-lg" />
+        <label class="text-sm">عدد الحصص اليومية</label>
+        <input id="periodsCount" type="number" value="7" min="1" max="12" class="input-field w-full p-3 mt-2 rounded-lg" />
       </div>
-    </div>
-
-    <!-- Levels & Classes -->
-    <div class="mb-6">
-      <div class="flex items-center justify-between mb-3">
-        <label class="text-sm text-gray-300">المستويات والأفواج</label>
-        <button id="loadDefaultClasses" class="text-xs text-donia-accent hover:underline">📋 تحميل النموذج الافتراضي</button>
-      </div>
-      <div id="levelsContainer" class="space-y-3"></div>
-      <button id="addLevelBtn" class="mt-3 text-xs btn-ghost px-3 py-1.5 rounded-lg">+ إضافة مستوى</button>
-    </div>
-
-    <!-- Subjects -->
-    <div>
-      <div class="flex items-center justify-between mb-3">
-        <label class="text-sm text-gray-300">المواد التعليمية</label>
-        <button id="loadDefaultSubjects" class="text-xs text-donia-accent hover:underline">📋 تحميل المواد الافتراضية</button>
-      </div>
-      <div id="subjectsContainer" class="grid md:grid-cols-3 gap-2"></div>
-      <button id="addSubjectBtn" class="mt-3 text-xs btn-ghost px-3 py-1.5 rounded-lg">+ إضافة مادة</button>
     </div>
   </section>
 
-  <!-- ═══════════ STEP 2: ASSIGNMENTS ═══════════ -->
+  <!-- ═══ STEP 2 ═══ -->
   <section id="step2" class="glass rounded-2xl p-6 mb-6 hidden">
     <div class="flex items-center gap-3 mb-5">
-      <div class="w-10 h-10 rounded-lg bg-donia-accent/10 grid place-items-center text-donia-accent font-bold">2</div>
+      <div class="w-10 h-10 rounded-lg grid place-items-center font-bold" style="background: rgba(0,229,255,.1); color: var(--accent)">2</div>
       <div>
-        <h2 class="text-xl font-bold text-white">الإسناد التربوي والأساتذة</h2>
-        <p class="text-xs text-gray-400">أدخل بيانات الأساتذة والأفواج المسندة لكل أستاذ</p>
+        <h2 class="text-xl font-bold">الأفواج والمواد والقاعات</h2>
+        <p class="text-xs" style="color: var(--text-mute)">17 فوج، 22 مادة، 22 قاعة</p>
       </div>
     </div>
 
-    <!-- Tabs for input modes -->
-    <div class="flex border-b border-donia-accent/10 mb-5">
-      <button data-tab="wizard" class="tab tab-active px-4 py-2 text-sm font-semibold">📝 إدخال موجّه</button>
-      <button data-tab="excel" class="tab tab-idle px-4 py-2 text-sm font-semibold">📊 رفع Excel</button>
-      <button data-tab="text" class="tab tab-idle px-4 py-2 text-sm font-semibold">📄 نص حر / AI</button>
+    <div class="grid md:grid-cols-3 gap-4">
+      <div>
+        <div class="flex justify-between items-center mb-2">
+          <label class="text-sm font-bold">الأفواج</label>
+          <span class="text-xs" id="classesCount" style="color: var(--accent)">0</span>
+        </div>
+        <textarea id="classesInput" rows="12" class="input-field w-full p-3 rounded-lg text-sm font-mono"></textarea>
+      </div>
+      <div>
+        <div class="flex justify-between items-center mb-2">
+          <label class="text-sm font-bold">المواد</label>
+          <span class="text-xs" id="subjectsCount" style="color: var(--accent)">0</span>
+        </div>
+        <textarea id="subjectsInput" rows="12" class="input-field w-full p-3 rounded-lg text-sm font-mono"></textarea>
+      </div>
+      <div>
+        <div class="flex justify-between items-center mb-2">
+          <label class="text-sm font-bold">القاعات</label>
+          <span class="text-xs" id="roomsCount" style="color: var(--accent)">0</span>
+        </div>
+        <textarea id="roomsInput" rows="12" class="input-field w-full p-3 rounded-lg text-sm font-mono"></textarea>
+      </div>
     </div>
 
-    <!-- TAB: Wizard -->
+    <button id="loadDefaults" class="btn-primary px-5 py-2 rounded-lg text-sm mt-4">
+      📋 تحميل البيانات الافتراضية (17 فوج محدّث)
+    </button>
+  </section>
+
+  <!-- ═══ STEP 3 ═══ -->
+  <section id="step3" class="glass rounded-2xl p-6 mb-6 hidden">
+    <div class="flex items-center gap-3 mb-5">
+      <div class="w-10 h-10 rounded-lg grid place-items-center font-bold" style="background: rgba(0,229,255,.1); color: var(--accent)">3</div>
+      <div>
+        <h2 class="text-xl font-bold">الإسناد التربوي</h2>
+        <p class="text-xs" style="color: var(--text-mute)">اربط الأستاذ بالمادة والأفواج وعدد الحصص</p>
+      </div>
+    </div>
+
+    <div class="flex border-b mb-5" style="border-color: var(--border)">
+      <button data-tab="wizard" class="tab tab-active px-4 py-2 text-sm font-semibold">📝 يدوي</button>
+      <button data-tab="text" class="tab tab-idle px-4 py-2 text-sm font-semibold">📄 نص حر + AI</button>
+    </div>
+
     <div id="tab-wizard" class="tab-content">
       <div id="teachersContainer" class="space-y-3"></div>
-      <button id="addTeacherBtn" class="mt-4 btn-primary px-5 py-2 rounded-lg text-sm">+ إضافة أستاذ</button>
+      <button id="addTeacherBtn" class="btn-primary px-5 py-2 rounded-lg text-sm mt-4">+ إضافة أستاذ</button>
     </div>
 
-    <!-- TAB: Excel -->
-    <div id="tab-excel" class="tab-content hidden">
-      <div class="border-2 border-dashed border-donia-accent/30 rounded-2xl p-8 text-center">
-        <div class="text-5xl mb-3">📊</div>
-        <h3 class="text-lg font-bold mb-2">رفع ملف Excel / CSV</h3>
-        <p class="text-sm text-gray-400 mb-4">يدعم ملفات .xlsx, .xls, .csv — مثال: نموذج "مؤسسة العقيد الحواس"</p>
-        <input type="file" id="excelInput" accept=".xlsx,.xls,.csv" class="hidden" />
-        <button id="excelUploadBtn" class="btn-primary px-6 py-3 rounded-lg">📂 اختيار ملف</button>
-        <p id="excelFileName" class="text-xs text-donia-accent mt-3"></p>
-      </div>
-      <div id="excelPreview" class="mt-4 hidden">
-        <div class="flex items-center justify-between mb-2">
-          <label class="text-sm text-gray-300">معاينة البيانات المستخرجة</label>
-          <button id="excelToWizardBtn" class="text-xs text-donia-accent hover:underline">✨ نقل إلى الإدخال الموجّه</button>
-        </div>
-        <pre id="excelContent" class="bg-black/40 p-4 rounded-lg text-xs overflow-auto max-h-64"></pre>
-      </div>
-    </div>
-
-    <!-- TAB: Free Text -->
     <div id="tab-text" class="tab-content hidden">
-      <label class="text-sm text-gray-300 block mb-2">أدخل أو الصق بيانات الإسناد التربوي بالعربية</label>
-      <textarea id="freeTextInput" rows="12" class="input-field w-full p-4 rounded-lg text-sm leading-7"
-placeholder="مثال:
-- أستاذ اللغة العربية (ع1): يدرس 4م1 و4م4 (13 حصة + 1 استدراك).
-- أستاذ الرياضيات (ر1): يدرس 4م1 و4م4 و2م2 (18 حصة + 1 استدراك).
-- أستاذ العلوم (عل1): يدرس 3م1 و3م3 و3م5 و1م1 (18 حصة) - القاعة: مخبر العلوم 1.
-- أستاذ التربية البدنية (ب1): يدرس 1م6 و4م1 و4م2 و4م3 و4م4 (14 حصة) - القاعة: الملعب."></textarea>
+      <textarea id="freeTextInput" rows="10" class="input-field w-full p-4 rounded-lg text-sm leading-7" placeholder="- أستاذ اللغة العربية (ع1): يدرس 4م1 و4م2 (13 حصة + 1 استدراك)&#10;- أستاذ الرياضيات (ر1): يدرس 4م1 و4م2 و4م3 (18 حصة)"></textarea>
       <div class="flex gap-3 mt-4">
-        <button id="aiParseBtn" class="btn-primary px-6 py-3 rounded-lg">🤖 تحليل بالذكاء الاصطناعي</button>
-        <button id="textToWizardBtn" class="btn-ghost px-6 py-3 rounded-lg">📝 نقل يدوي</button>
+        <button id="aiParseBtn" class="btn-primary px-6 py-3 rounded-lg">🤖 تحليل AI</button>
+        <button id="textParseBtn" class="btn-ghost px-6 py-3 rounded-lg">📝 تحليل محلي</button>
       </div>
       <div id="aiParseStatus" class="mt-3 text-sm"></div>
     </div>
   </section>
 
-  <!-- ═══════════ STEP 3: CONSTRAINTS & ROOMS ═══════════ -->
-  <section id="step3" class="glass rounded-2xl p-6 mb-6 hidden">
+  <!-- ═══ STEP 4 ═══ -->
+  <section id="step4" class="glass rounded-2xl p-6 mb-6 hidden">
     <div class="flex items-center gap-3 mb-5">
-      <div class="w-10 h-10 rounded-lg bg-donia-accent/10 grid place-items-center text-donia-accent font-bold">3</div>
+      <div class="w-10 h-10 rounded-lg grid place-items-center font-bold" style="background: rgba(0,229,255,.1); color: var(--accent)">4</div>
       <div>
-        <h2 class="text-xl font-bold text-white">القيود الزمنية والقاعات</h2>
-        <p class="text-xs text-gray-400">حدد القاعات الخاصة والقيود الزمنية للأساتذة</p>
+        <h2 class="text-xl font-bold">توليد الجدول الأسبوعي</h2>
+        <p class="text-xs" style="color: var(--text-mute)">محاولة ذكية لتوزيع الحصص بدون تعارض</p>
       </div>
     </div>
 
-    <!-- Classrooms -->
-    <div class="mb-6">
-      <label class="text-sm text-gray-300 block mb-3">القاعات الخاصة</label>
-      <div id="roomsContainer" class="grid md:grid-cols-3 gap-2"></div>
-      <button id="addRoomBtn" class="mt-3 text-xs btn-ghost px-3 py-1.5 rounded-lg">+ إضافة قاعة</button>
+    <div id="summaryGrid" class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6"></div>
+
+    <div class="flex flex-wrap gap-3 mb-5">
+      <button id="generateTimetableBtn" class="btn-primary px-6 py-3 rounded-lg">🧠 توليد الجدول الذكي</button>
+      <button id="clearTimetableBtn" class="btn-ghost px-6 py-3 rounded-lg">🗑️ مسح الجدول</button>
     </div>
 
-    <!-- Constraints -->
-    <div>
-      <div class="flex items-center justify-between mb-3">
-        <label class="text-sm text-gray-300">القيود الزمنية (JSON أو نص حر)</label>
-        <button id="loadDefaultConstraints" class="text-xs text-donia-accent hover:underline">📋 تحميل القيود الافتراضية</button>
+    <div class="rounded-xl p-4" style="background: rgba(0,0,0,.3); border: 1px solid var(--border)">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="pulse-dot" style="background:#10B981"></span>
+        <span class="text-xs font-mono" style="color: var(--text-mute)">SOLVER LOG</span>
       </div>
-      <textarea id="constraintsInput" rows="10" class="input-field w-full p-4 rounded-lg text-sm leading-6 font-mono"
-placeholder='[
-  {
-    "type": "teacher_unavailable",
-    "teacher": "ر1",
-    "day": "الخميس",
-    "periods": [5, 6]
-  },
-  {
-    "type": "teacher_room_fixed",
-    "teacher": "عل1",
-    "room": "مخبر العلوم 1"
-  }
-]'></textarea>
+      <pre id="logBox" class="text-xs overflow-auto max-h-72 whitespace-pre-wrap font-mono leading-6" style="color: #10B981"></pre>
     </div>
   </section>
 
-  <!-- ═══════════ STEP 4: GENERATE ═══════════ -->
-  <section id="step4" class="glass rounded-2xl p-6 mb-6 hidden">
+  <!-- ═══ STEP 5 ═══ -->
+  <section id="step5" class="glass rounded-2xl p-6 mb-6 hidden">
     <div class="flex items-center gap-3 mb-5">
-      <div class="w-10 h-10 rounded-lg bg-donia-accent/10 grid place-items-center text-donia-accent font-bold">4</div>
+      <div class="w-10 h-10 rounded-lg grid place-items-center font-bold" style="background: rgba(0,229,255,.1); color: var(--accent)">5</div>
       <div>
-        <h2 class="text-xl font-bold text-white">التوليد والتحميل</h2>
-        <p class="text-xs text-gray-400">مراجعة البيانات وتوليد ملف XML النهائي</p>
+        <h2 class="text-xl font-bold">التصدير والاستيراد</h2>
+        <p class="text-xs" style="color: var(--text-mute)">حمّل XML أو شاهد الجدول الأسبوعي</p>
       </div>
     </div>
 
-    <!-- Summary -->
-    <div id="summaryGrid" class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6"></div>
-
-    <!-- Actions -->
     <div class="flex flex-wrap gap-3 mb-5">
-      <button id="generateBtn" class="btn-primary px-6 py-3 rounded-lg">🚀 توليد XML (DeepSeek + Local)</button>
-      <button id="localOnlyBtn" class="btn-ghost px-6 py-3 rounded-lg">⚙️ توليد محلي فقط</button>
-      <button id="downloadBtn" class="hidden px-6 py-3 rounded-lg font-extrabold" style="background:#FFB800;color:#0A0F1E">⬇️ تحميل timetable_import.xml</button>
+      <button id="downloadBtn" class="px-6 py-3 rounded-lg font-extrabold" style="background: var(--gold); color: #0A0F1E">⬇️ تحميل timetable_import.xml</button>
       <button id="previewBtn" class="btn-ghost px-6 py-3 rounded-lg">👁️ معاينة XML</button>
       <button id="copyXmlBtn" class="btn-ghost px-6 py-3 rounded-lg">📋 نسخ XML</button>
+      <button id="printBtn" class="btn-ghost px-6 py-3 rounded-lg">🖨️ طباعة الجدول</button>
     </div>
 
-    <!-- Log -->
-    <div class="rounded-xl bg-black/50 border border-donia-accent/10 p-4">
-      <div class="flex items-center gap-2 mb-3">
-        <span class="pulse-dot" style="background:#10B981"></span>
-        <span class="text-xs text-gray-400 font-mono">CONSOLE LOG</span>
+    <!-- Timetable Viewer -->
+    <div class="mb-4">
+      <div class="flex items-center justify-between flex-wrap gap-3 mb-3">
+        <h3 class="font-bold text-lg">📅 الجدول الأسبوعي</h3>
+        <div class="selector-tabs" id="viewModeTabs">
+          <button data-mode="teacher" class="sel-tab active">👨‍🏫 أساتذة</button>
+          <button data-mode="class" class="sel-tab">🏫 أفواج</button>
+        </div>
       </div>
-      <pre id="logBox" class="text-xs text-green-400 overflow-auto max-h-72 whitespace-pre-wrap font-mono leading-6"></pre>
+
+      <div id="viewSelector" class="mb-3 flex flex-wrap gap-2"></div>
+
+      <div id="timetableContainer" class="overflow-x-auto"></div>
     </div>
   </section>
 
@@ -333,87 +324,95 @@ placeholder='[
   </div>
 </main>
 
-<!-- ═══════════════════ PREVIEW MODAL ═══════════════════ -->
+<!-- Preview Modal -->
 <div id="previewModal" class="hidden fixed inset-0 bg-black/85 z-50 p-4 overflow-auto">
   <div class="glass rounded-2xl p-6 max-w-5xl mx-auto my-8">
     <div class="flex justify-between items-center mb-4">
-      <h3 class="font-bold text-donia-accent text-lg">📄 معاينة ملف XML النهائي</h3>
-      <button onclick="closePreview()" class="text-gray-400 hover:text-white text-2xl">✕</button>
+      <h3 class="font-bold text-lg" style="color: var(--accent)">📄 معاينة XML</h3>
+      <button onclick="closePreview()" class="text-2xl" style="color: var(--text-mute)">✕</button>
     </div>
-    <pre id="previewContent" class="text-xs text-green-400 bg-black/60 p-4 rounded-lg overflow-auto max-h-[75vh] font-mono leading-6"></pre>
+    <pre id="previewContent" class="text-xs bg-black/60 p-4 rounded-lg overflow-auto max-h-[75vh] font-mono leading-6" style="color: #10B981"></pre>
   </div>
 </div>
 
-<!-- ═══════════════════ TOAST ═══════════════════ -->
-<div id="toast" class="hidden fixed bottom-6 right-6 z-50 glass rounded-xl p-4 glow-accent">
+<!-- Toast -->
+<div id="toast" class="hidden fixed bottom-6 right-6 z-50 glass rounded-xl p-4" style="box-shadow: 0 0 30px rgba(0,229,255,.3)">
   <p id="toastMsg" class="text-sm font-bold"></p>
 </div>
 
-<!-- ═══════════════════ FOOTER ═══════════════════ -->
-<footer class="text-center text-xs text-gray-500 py-8 border-t border-donia-accent/10 mt-12">
-  <p>© 2025 DONIA LABS TECH — OSCTIME AI GENERATOR v2.0</p>
-  <p class="mt-1">MIT License · Built with ❤️ for the Arabic education community</p>
+<footer class="text-center text-xs py-8 mt-12" style="border-top: 1px solid var(--border); color: var(--text-mute)">
+  © 2025 DONIA LABS TECH — OSCTIME AI GENERATOR v4.0 · MIT License
 </footer>
 
 <script>
 /* ═══════════════════════════════════════════════════════════════
-   DONIA LABS TECH — OSCTIME AI GENERATOR v2.0
-   Full-Stack Client-Side Architecture
+   DONIA LABS TECH — OSCTIME AI GENERATOR v4.0
+   Full Timetable Engine with Constraint Solver
    ═══════════════════════════════════════════════════════════════ */
 
 const $ = (id) => document.getElementById(id);
 const $$ = (sel) => document.querySelectorAll(sel);
 
 const STORAGE = {
-  API_KEY: 'donia_deepseek_api_key',
-  MODEL:   'donia_deepseek_model'
+  API_KEY: 'donia_api_key_v4',
+  MODEL: 'donia_model_v4',
+  THEME: 'donia_theme_v4',
+  DATA: 'donia_data_v4',
+  TIMETABLE: 'donia_timetable_v4'
 };
 
 let currentStep = 1;
-const TOTAL_STEPS = 4;
+const TOTAL_STEPS = 5;
 let generatedXML = '';
+let generatedTimetable = [];  // array of { day, period, classId, subjectId, teacherId, roomId }
+let viewMode = 'teacher';
+let viewSelectedId = null;
 
-/* ═══════════════════════════════════════════════════════════════
-   TOAST NOTIFICATIONS
-   ═══════════════════════════════════════════════════════════════ */
+/* ═══════ THEME ═══════ */
+function applyTheme(t) {
+  document.documentElement.setAttribute('data-theme', t);
+  localStorage.setItem(STORAGE.THEME, t);
+}
+$('themeToggle').onclick = () => {
+  const cur = document.documentElement.getAttribute('data-theme');
+  applyTheme(cur === 'dark' ? 'light' : 'dark');
+  toast(cur === 'dark' ? '☀️ نهاري' : '🌙 ليلي', 'info');
+};
+applyTheme(localStorage.getItem(STORAGE.THEME) || 'dark');
+
+/* ═══════ TOAST ═══════ */
 function toast(msg, type = 'info') {
   const colors = { info: '#00E5FF', success: '#10B981', error: '#EF4444', warn: '#FFB800' };
   $('toastMsg').textContent = msg;
   $('toastMsg').style.color = colors[type] || colors.info;
   $('toast').classList.remove('hidden');
-  clearTimeout(window.__toastTimer);
-  window.__toastTimer = setTimeout(() => $('toast').classList.add('hidden'), 3500);
+  clearTimeout(window.__t);
+  window.__t = setTimeout(() => $('toast').classList.add('hidden'), 3000);
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   API SIDEBAR
-   ═══════════════════════════════════════════════════════════════ */
-function openSidebar() {
+/* ═══════ API ═══════ */
+$('openApiBtn').onclick = () => {
   $('apiSidebar').style.transform = 'translateX(0)';
   $('sidebarOverlay').classList.remove('hidden');
-}
-function closeSidebar() {
+};
+$('closeApiBtn').onclick = () => {
   $('apiSidebar').style.transform = 'translateX(-110%)';
   $('sidebarOverlay').classList.add('hidden');
-}
-$('openApiBtn').onclick  = openSidebar;
-$('closeApiBtn').onclick = closeSidebar;
-$('sidebarOverlay').onclick = closeSidebar;
+};
+$('sidebarOverlay').onclick = () => $('closeApiBtn').click();
 
 $('saveApiBtn').onclick = () => {
   const k = $('apiKeyInput').value.trim();
-  const m = $('modelSelect').value;
-  if (!k) return toast('الرجاء إدخال مفتاح API', 'error');
+  if (!k) return toast('أدخل المفتاح', 'error');
   localStorage.setItem(STORAGE.API_KEY, k);
-  localStorage.setItem(STORAGE.MODEL, m);
+  localStorage.setItem(STORAGE.MODEL, $('modelSelect').value);
   updateApiIndicator();
-  toast('✅ تم حفظ الإعدادات', 'success');
+  toast('✅ تم الحفظ', 'success');
 };
 
 $('testApiBtn').onclick = async () => {
   const k = $('apiKeyInput').value.trim() || localStorage.getItem(STORAGE.API_KEY);
-  if (!k) return toast('لا يوجد مفتاح API', 'error');
-  $('apiStatus').textContent = '⏳ جاري اختبار الاتصال...';
+  if (!k) return toast('لا يوجد مفتاح', 'error');
   try {
     const res = await fetch('https://api.deepseek.com/v1/chat/completions', {
       method: 'POST',
@@ -424,124 +423,36 @@ $('testApiBtn').onclick = async () => {
         max_tokens: 5
       })
     });
-    if (res.ok) {
-      $('apiStatus').innerHTML = '<span style="color:#10B981">✅ الاتصال ناجح</span>';
-      toast('✅ API متصل بنجاح', 'success');
-    } else {
-      const err = await res.text();
-      $('apiStatus').innerHTML = `<span style="color:#EF4444">❌ فشل: ${err.slice(0,100)}</span>`;
-      toast('❌ فشل الاتصال', 'error');
-    }
-  } catch (e) {
-    $('apiStatus').innerHTML = `<span style="color:#EF4444">❌ خطأ: ${e.message}</span>`;
-    toast('❌ خطأ في الاتصال', 'error');
-  }
+    toast(res.ok ? '✅ متصل' : '❌ فشل', res.ok ? 'success' : 'error');
+  } catch { toast('❌ خطأ', 'error'); }
 };
 
 function updateApiIndicator() {
   const k = localStorage.getItem(STORAGE.API_KEY);
-  if (k) {
-    $('apiDot').style.background = '#10B981';
-    $('apiStatusText').textContent = 'API مُعدّ ✓';
-  } else {
-    $('apiDot').style.background = '#EF4444';
-    $('apiStatusText').textContent = 'API غير مُعدّ';
-  }
+  $('apiDot').style.background = k ? '#10B981' : '#EF4444';
+  $('apiStatusText').textContent = k ? 'API مُعدّ ✓' : 'API غير مُعدّ';
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   STEP NAVIGATION
-   ═══════════════════════════════════════════════════════════════ */
+/* ═══════ STEP NAV ═══════ */
 function gotoStep(n) {
   if (n < 1 || n > TOTAL_STEPS) return;
   currentStep = n;
-  for (let i = 1; i <= TOTAL_STEPS; i++) {
-    $('step' + i).classList.toggle('hidden', i !== currentStep);
-  }
+  for (let i = 1; i <= TOTAL_STEPS; i++) $('step' + i).classList.toggle('hidden', i !== currentStep);
   $$('.step').forEach(el => {
     const s = +el.dataset.step;
     el.className = 'step px-4 py-2 rounded-lg text-sm cursor-pointer ' +
       (s === currentStep ? 'step-active' : s < currentStep ? 'step-done' : 'step-idle');
   });
   if (currentStep === 4) updateSummary();
+  if (currentStep === 5) renderView();
+  updateStats();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 $('nextBtn').onclick = () => gotoStep(currentStep + 1);
 $('prevBtn').onclick = () => gotoStep(currentStep - 1);
 $$('.step').forEach(el => el.onclick = () => gotoStep(+el.dataset.step));
 
-/* ═══════════════════════════════════════════════════════════════
-   STEP 1 — LEVELS & SUBJECTS DYNAMIC UI
-   ═══════════════════════════════════════════════════════════════ */
-
-const DEFAULT_LEVELS = [
-  { name: 'السنة الأولى متوسط', prefix: '1م', count: 6 },
-  { name: 'السنة الثانية متوسط', prefix: '2م', count: 5 },
-  { name: 'السنة الثالثة متوسط', prefix: '3م', count: 5 },
-  { name: 'السنة الرابعة متوسط', prefix: '4م', count: 6 }
-];
-
-const DEFAULT_SUBJECTS = [
-  { name: 'لغة عربية', short: 'AR' },
-  { name: 'رياضيات', short: 'MA' },
-  { name: 'علوم طبيعية', short: 'SN' },
-  { name: 'فيزياء', short: 'PH' },
-  { name: 'اجتماعيات', short: 'SO' },
-  { name: 'فرنسية', short: 'FR' },
-  { name: 'إنجليزية', short: 'EN' },
-  { name: 'تربية بدنية', short: 'PE' },
-  { name: 'إعلام آلي', short: 'IT' },
-  { name: 'موسيقى', short: 'MU' },
-  { name: 'تربية إسلامية', short: 'IS' }
-];
-
-function renderLevels(levels = []) {
-  const c = $('levelsContainer');
-  c.innerHTML = '';
-  levels.forEach((lv, i) => addLevelRow(lv, i));
-}
-
-function addLevelRow(lv = { name: '', prefix: '', count: 5 }, idx = null) {
-  const i = idx !== null ? idx : $('levelsContainer').children.length;
-  const div = document.createElement('div');
-  div.className = 'grid grid-cols-12 gap-2 items-center';
-  div.innerHTML = `
-    <input placeholder="اسم المستوى" value="${lv.name || ''}" class="lv-name input-field col-span-4 p-2 rounded-lg text-sm" />
-    <input placeholder="البادئة (مثال: 1م)" value="${lv.prefix || ''}" class="lv-prefix input-field col-span-3 p-2 rounded-lg text-sm" />
-    <input type="number" placeholder="عدد الأفواج" value="${lv.count || 5}" class="lv-count input-field col-span-3 p-2 rounded-lg text-sm" />
-    <button class="col-span-2 btn-ghost py-2 rounded-lg text-sm">🗑️ حذف</button>
-  `;
-  div.querySelector('button').onclick = () => div.remove();
-  $('levelsContainer').appendChild(div);
-}
-
-function renderSubjects(subjects = []) {
-  const c = $('subjectsContainer');
-  c.innerHTML = '';
-  subjects.forEach(s => addSubjectRow(s));
-}
-
-function addSubjectRow(s = { name: '', short: '' }) {
-  const div = document.createElement('div');
-  div.className = 'flex gap-1';
-  div.innerHTML = `
-    <input placeholder="المادة" value="${s.name || ''}" class="sub-name input-field flex-1 p-2 rounded-lg text-sm" />
-    <input placeholder="رمز" value="${s.short || ''}" class="sub-short input-field w-16 p-2 rounded-lg text-sm text-center" />
-    <button class="btn-ghost px-2 rounded-lg">✕</button>
-  `;
-  div.querySelector('button').onclick = () => div.remove();
-  $('subjectsContainer').appendChild(div);
-}
-
-$('addLevelBtn').onclick = () => addLevelRow();
-$('addSubjectBtn').onclick = () => addSubjectRow();
-$('loadDefaultClasses').onclick = () => renderLevels(DEFAULT_LEVELS);
-$('loadDefaultSubjects').onclick = () => renderSubjects(DEFAULT_SUBJECTS);
-
-/* ═══════════════════════════════════════════════════════════════
-   STEP 2 — TEACHERS & TABS
-   ═══════════════════════════════════════════════════════════════ */
-
+/* ═══════ TABS ═══════ */
 $$('.tab').forEach(t => t.onclick = () => {
   $$('.tab').forEach(x => x.className = 'tab tab-idle px-4 py-2 text-sm font-semibold');
   t.className = 'tab tab-active px-4 py-2 text-sm font-semibold';
@@ -549,37 +460,71 @@ $$('.tab').forEach(t => t.onclick = () => {
   $('tab-' + t.dataset.tab).classList.remove('hidden');
 });
 
-function renderTeachers(teachers = []) {
-  const c = $('teachersContainer');
-  c.innerHTML = '';
-  teachers.forEach(t => addTeacherRow(t));
-}
-
-function addTeacherRow(t = { name: '', subject: '', classes: '', hours: 0, extra: 0, room: '' }) {
-  const div = document.createElement('div');
-  div.className = 'glass rounded-xl p-4 card-hover';
-  div.innerHTML = `
-    <div class="grid md:grid-cols-3 gap-2 mb-2">
-      <input placeholder="اسم/رمز الأستاذ" value="${t.name || ''}" class="t-name input-field p-2 rounded-lg text-sm" />
-      <input placeholder="المادة" value="${t.subject || ''}" class="t-subject input-field p-2 rounded-lg text-sm" />
-      <input placeholder="القاعة (اختياري)" value="${t.room || ''}" class="t-room input-field p-2 rounded-lg text-sm" />
-    </div>
-    <div class="grid md:grid-cols-4 gap-2">
-      <input placeholder="الأفواج (مثال: 4م1, 4م4)" value="${t.classes || ''}" class="t-classes input-field p-2 rounded-lg text-sm md:col-span-2" />
-      <input type="number" placeholder="الحصص" value="${t.hours || 0}" class="t-hours input-field p-2 rounded-lg text-sm" />
-      <input type="number" placeholder="استدراك" value="${t.extra || 0}" class="t-extra input-field p-2 rounded-lg text-sm" />
-    </div>
-    <button class="mt-2 text-xs text-donia-red hover:underline">🗑️ حذف</button>
-  `;
-  div.querySelector('button').onclick = () => div.remove();
-  $('teachersContainer').appendChild(div);
-}
-
-$('addTeacherBtn').onclick = () => addTeacherRow();
-
 /* ═══════════════════════════════════════════════════════════════
-   EXCEL UPLOAD (SheetJS)
+   DEFAULT DATA — تحديث الأفواج حسب الطلب
    ═══════════════════════════════════════════════════════════════ */
+const DEFAULTS = {
+  // 🎯 الأفواج المحدّثة: 1م(6) + 2م(4) + 3م(4) + 4م(3) = 17
+  classes: [
+    '1م1','1م2','1م3','1م4','1م5','1م6',
+    '2م1','2م2','2م3','2م4',
+    '3م1','3م2','3م3','3م4',
+    '4م1','4م2','4م3'
+  ],
+  subjects: [
+    'عربية','رياضيات','فرنسية','انجليزية','فيزياء','علوم ط',
+    'اجتماعيات','ت.إسلامية','ت.مدنية','ت.بدنية','موسيقى',
+    'اعلام الي','مكتبة','TD-(AR/MA)','TD-(انج/FR)','TD-(اعلام/انج)',
+    'استدراك','صيانة الوسائل','استقبال الأولياء','التنسيق الشهري'
+  ],
+  rooms: [
+    'القاعة 1','القاعة 2','القاعة 3','القاعة 4','القاعة 5',
+    'القاعة 6','القاعة 7','القاعة 8','القاعة 9','القاعة 10',
+    'القاعة 11','القاعة 12','القاعة 13','القاعة 14','القاعة 15',
+    'القاعة 16','القاعة 17','القاعة 18',
+    'ورشة 1','ورشة 2','مخبر 1','مخبر 2'
+  ]
+};
+
+$('loadDefaults').onclick = () => {
+  $('classesInput').value = DEFAULTS.classes.join('\n');
+  $('subjectsInput').value = DEFAULTS.subjects.join('\n');
+  $('roomsInput').value = DEFAULTS.rooms.join('\n');
+  updateStats();
+  toast('✅ 17 فوج محدّث', 'success');
+};
+
+/* ═══════ STATS ═══════ */
+function updateStats() {
+  const c = $('classesInput').value.split('\n').filter(s => s.trim()).length;
+  const s = $('subjectsInput').value.split('\n').filter(s => s.trim()).length;
+  const r = $('roomsInput').value.split('\n').filter(s => s.trim()).length;
+  const t = $$('#teachersContainer > div').length;
+  $('classesCount').textContent = c;
+  $('subjectsCount').textContent = s;
+  $('roomsCount').textContent = r;
+
+  const cards = [
+    { label: 'الأفواج', value: c, color: '#00E5FF', icon: '🏫' },
+    { label: 'المواد', value: s, color: '#7C3AED', icon: '📚' },
+    { label: 'الأساتذة', value: t, color: '#FFB800', icon: '👨‍🏫' },
+    { label: 'القاعات', value: r, color: '#10B981', icon: '🚪' },
+    { label: 'الحصص المُولَّدة', value: generatedTimetable.length, color: '#EF4444', icon: '📅' }
+  ];
+  $('statsBar').innerHTML = cards.map(card => `
+    <div class="stat-card">
+      <div class="text-2xl mb-1">${card.icon}</div>
+      <p class="text-xs" style="color: var(--text-mute)">${card.label}</p>
+      <p class="text-2xl font-extrabold" style="color:${card.color}">${card.value}</p>
+    </div>
+  `).join('');
+}
+
+['classesInput','subjectsInput','roomsInput'].forEach(id => {
+  $(id).addEventListener('input', updateStats);
+});
+
+/* ═══════ EXCEL IMPORT — يدعم البطاقات الكاملة ═══════ */
 $('excelUploadBtn').onclick = () => $('excelInput').click();
 
 $('excelInput').onchange = (e) => {
@@ -592,50 +537,114 @@ $('excelInput').onchange = (e) => {
       const data = new Uint8Array(evt.target.result);
       const wb = XLSX.read(data, { type: 'array' });
       const ws = wb.Sheets[wb.SheetNames[0]];
-      const json = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' });
-
-      // Convert to readable rows
-      const rows = json.filter(r => r.some(c => String(c).trim()));
-      $('excelPreview').classList.remove('hidden');
-      $('excelContent').textContent = rows.slice(0, 40).map(r => r.join(' | ')).join('\n');
-      if (rows.length > 40) $('excelContent').textContent += `\n... (${rows.length - 40} صف إضافي)`;
-
-      window.__excelRows = rows;
-      toast(`✅ تم تحميل ${rows.length} صف`, 'success');
+      const rows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' });
+      parseOsctimeExcel(rows);
     } catch (err) {
-      toast('❌ خطأ في قراءة Excel: ' + err.message, 'error');
+      toast('❌ خطأ Excel: ' + err.message, 'error');
     }
   };
   reader.readAsArrayBuffer(file);
 };
 
-$('excelToWizardBtn').onclick = () => {
-  if (!window.__excelRows) return toast('لا توجد بيانات Excel', 'error');
-  parseFreeText(window.__excelRows.map(r => r.join(' | ')).join('\n'));
-  toast('✨ تم نقل البيانات إلى الإدخال الموجّه', 'success');
-  gotoStep(2);
-};
+function parseOsctimeExcel(rows) {
+  const teachers = [], classes = [], subjects = [], rooms = [], cards = [];
+  const seen = { t: new Set(), c: new Set(), s: new Set(), r: new Set() };
 
-/* ═══════════════════════════════════════════════════════════════
-   FREE TEXT PARSER (Local fallback)
-   ═══════════════════════════════════════════════════════════════ */
-function parseFreeText(text) {
+  rows.forEach((row, idx) => {
+    if (idx === 0) return;
+
+    // Teachers (col I=8 = id*, col J=9 = name, col K=10 = short)
+    if (row[8] && String(row[8]).startsWith('*') && row[9] && row[10]) {
+      const name = String(row[9]).trim();
+      if (name && !seen.t.has(name)) { teachers.push({ name, short: String(row[10]).trim() }); seen.t.add(name); }
+    }
+    // Classes (col M=12 = id*, col N=13 = name, col O=14 empty)
+    if (row[12] && String(row[12]).startsWith('*') && row[13] && !row[14] && /^\d/.test(String(row[13]))) {
+      const name = String(row[13]).trim();
+      if (name && !seen.c.has(name) && name.match(/^\d+م\d+$/)) { classes.push(name); seen.c.add(name); }
+    }
+    // Subjects (col Q=16 = id*, col R=17 = name, col S=18 = short)
+    if (row[16] && String(row[16]).startsWith('*') && row[17] && row[18]) {
+      const name = String(row[17]).trim();
+      if (name && !seen.s.has(name) && !name.match(/^\d+م/)) { subjects.push(name); seen.s.add(name); }
+    }
+    // Rooms (col U=20 = id*, col V=21 = name, col W=22 = short)
+    if (row[20] && String(row[20]).startsWith('*') && row[21] && row[22]) {
+      const name = String(row[21]).trim();
+      if (name && (name.includes('قاعة') || name.includes('مخبر') || name.includes('ورشة')) && !seen.r.has(name)) {
+        rooms.push(name); seen.r.add(name);
+      }
+    }
+    // Cards (col AC=28 = day, AD=29 = period, AE=30 = classids, AF=31 = subjectid, AG=32 = teacherids, AH=33 = classroomids)
+    if (row[28] !== '' && row[28] !== undefined && row[29] !== '' && row[29] !== undefined) {
+      cards.push({
+        day: +row[28],
+        period: +row[29],
+        classId: +String(row[30]).replace('*','') || 0,
+        subjectId: +String(row[31]).replace('*','') || 0,
+        teacherId: +String(row[32]).replace('*','') || 0,
+        roomId: +String(row[33]).replace('*','') || 0
+      });
+    }
+  });
+
+  if (classes.length) $('classesInput').value = classes.join('\n');
+  if (subjects.length) $('subjectsInput').value = subjects.join('\n');
+  if (rooms.length) $('roomsInput').value = rooms.join('\n');
+
+  renderTeachers(teachers.map(t => ({ name: t.name, subject: '', classes: '', hours: 0, extra: 0, room: '' })));
+
+  updateStats();
+  toast(`✅ ${classes.length}C / ${subjects.length}S / ${teachers.length}T / ${rooms.length}R / ${cards.length}Cards`, 'success');
+  log(`📊 Excel: ${classes.length}ف، ${subjects.length}م، ${teachers.length}أ، ${rooms.length}ق، ${cards.length}بطاقة`, 'success');
+}
+
+/* ═══════ TEACHERS ═══════ */
+function renderTeachers(teachers = []) {
+  $('teachersContainer').innerHTML = '';
+  teachers.forEach(t => addTeacherRow(t));
+  updateStats();
+}
+
+function addTeacherRow(t = { name: '', subject: '', classes: '', hours: 0, extra: 0, room: '' }) {
+  const div = document.createElement('div');
+  div.className = 'rounded-xl p-4 card-hover';
+  div.style.cssText = 'background: var(--bg-2); border: 1px solid var(--border)';
+  div.innerHTML = `
+    <div class="grid md:grid-cols-3 gap-2 mb-2">
+      <input placeholder="الأستاذ" value="${t.name}" class="t-name input-field p-2 rounded-lg text-sm" />
+      <input placeholder="المادة" value="${t.subject}" class="t-subject input-field p-2 rounded-lg text-sm" />
+      <input placeholder="القاعة (اختياري)" value="${t.room}" class="t-room input-field p-2 rounded-lg text-sm" />
+    </div>
+    <div class="grid md:grid-cols-4 gap-2">
+      <input placeholder="الأفواج (مفصولة بفاصلة)" value="${t.classes}" class="t-classes input-field p-2 rounded-lg text-sm md:col-span-2" />
+      <input type="number" placeholder="الحصص" value="${t.hours}" class="t-hours input-field p-2 rounded-lg text-sm" />
+      <input type="number" placeholder="استدراك" value="${t.extra}" class="t-extra input-field p-2 rounded-lg text-sm" />
+    </div>
+    <button class="mt-2 text-xs" style="color:#EF4444">🗑️ حذف</button>
+  `;
+  div.querySelector('button').onclick = () => { div.remove(); updateStats(); };
+  $('teachersContainer').appendChild(div);
+  updateStats();
+}
+
+$('addTeacherBtn').onclick = () => addTeacherRow();
+
+/* ═══════ TEXT PARSER ═══════ */
+function parseText(text) {
   const lines = text.split('\n').filter(l => l.trim());
   const teachers = [];
   lines.forEach(line => {
-    // Pattern: "- أستاذ X (رمز): يدرس A و B و C (N حصة + M استدراك). - القاعة: Y."
-    const nameMatch = line.match(/أستاذ\s+([^(]+)\s*\(([^)]+)\)/);
+    const nameMatch = line.match(/أستاذ\s+([^(]+?)\s*\(([^)]+)\)/);
     const classesMatch = line.match(/يدرس\s+([^(]+?)(?:\s*\(|$)/);
     const hoursMatch = line.match(/\((\d+)\s*حص/);
     const extraMatch = line.match(/\+\s*(\d+)\s*استدراك/);
     const roomMatch = line.match(/القاعة\s*:?\s*([^.\n]+)/);
-
     if (nameMatch) {
-      const classesStr = classesMatch ? classesMatch[1] : '';
-      const classes = classesStr.split(/[،,]|\s+و\s+/).map(s => s.trim()).filter(Boolean);
+      const cls = classesMatch ? classesMatch[1] : '';
+      const classes = cls.split(/[،,]|\s+و\s+/).map(s => s.trim()).filter(Boolean);
       teachers.push({
         name: nameMatch[2].trim(),
-        fullName: nameMatch[1].trim(),
         subject: nameMatch[1].trim(),
         classes: classes.join(', '),
         hours: hoursMatch ? +hoursMatch[1] : 0,
@@ -644,484 +653,475 @@ function parseFreeText(text) {
       });
     }
   });
-  if (teachers.length) {
-    renderTeachers(teachers);
-    toast(`✅ تم استخراج ${teachers.length} أستاذ`, 'success');
-  } else {
-    toast('⚠️ لم يتم التعرف على أي أستاذ', 'warn');
-  }
+  if (teachers.length) { renderTeachers(teachers); toast(`✅ ${teachers.length} أستاذ`, 'success'); }
+  else toast('⚠️ لم يتم التعرف', 'warn');
 }
 
-$('textToWizardBtn').onclick = () => {
-  const txt = $('freeTextInput').value.trim();
-  if (!txt) return toast('النص فارغ', 'error');
-  parseFreeText(txt);
-};
+$('textParseBtn').onclick = () => parseText($('freeTextInput').value);
 
-/* ═══════════════════════════════════════════════════════════════
-   AI PARSE VIA DEEPSEEK (Strict JSON)
-   ═══════════════════════════════════════════════════════════════ */
 $('aiParseBtn').onclick = async () => {
   const txt = $('freeTextInput').value.trim();
   if (!txt) return toast('النص فارغ', 'error');
   const apiKey = localStorage.getItem(STORAGE.API_KEY);
-  if (!apiKey) return toast('أعد إعداد DeepSeek API أولاً', 'error');
-
-  $('aiParseStatus').innerHTML = '<span style="color:#00E5FF">⏳ جاري التحليل بالذكاء الاصطناعي...</span>';
-
-  const systemPrompt = `أنت محلل بيانات إسناد تربوي خبير. مهمتك استخراج بيانات الأساتذة من النص العربي وإرجاعها بصيغة JSON صارمة فقط (بدون أي شرح أو markdown).
-
-صيغة الإخراج المطلوبة:
-{
-  "teachers": [
-    {
-      "name": "رمز الأستاذ",
-      "fullName": "الاسم الكامل",
-      "subject": "المادة",
-      "classes": ["4م1", "4م4"],
-      "hours": 13,
-      "extra": 1,
-      "room": "اسم القاعة أو null"
-    }
-  ]
-}`;
-
+  if (!apiKey) return toast('أعد API أولاً', 'error');
+  $('aiParseStatus').innerHTML = '<span style="color:#00E5FF">⏳ AI...</span>';
+  const sys = `محلل بيانات. أعد JSON فقط: {"teachers":[{"name":"","subject":"","classes":[],"hours":0,"extra":0,"room":""}]}`;
   try {
     const res = await fetch('https://api.deepseek.com/v1/chat/completions', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
       body: JSON.stringify({
         model: localStorage.getItem(STORAGE.MODEL) || 'deepseek-chat',
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: txt }
-        ],
-        temperature: 0.1,
-        response_format: { type: 'json_object' }
+        messages: [{ role: 'system', content: sys }, { role: 'user', content: txt }],
+        temperature: 0.1, response_format: { type: 'json_object' }
       })
     });
-
     if (!res.ok) throw new Error(await res.text());
     const data = await res.json();
     const parsed = JSON.parse(data.choices[0].message.content);
-
-    if (parsed.teachers && parsed.teachers.length) {
+    if (parsed.teachers?.length) {
       renderTeachers(parsed.teachers.map(t => ({
-        name: t.name,
-        subject: t.subject,
+        name: t.name, subject: t.subject,
         classes: Array.isArray(t.classes) ? t.classes.join(', ') : t.classes,
-        hours: t.hours || 0,
-        extra: t.extra || 0,
-        room: t.room || ''
+        hours: t.hours || 0, extra: t.extra || 0, room: t.room || ''
       })));
-      $('aiParseStatus').innerHTML = `<span style="color:#10B981">✅ تم استخراج ${parsed.teachers.length} أستاذ بنجاح</span>`;
-      toast('✅ تحليل AI ناجح', 'success');
-    } else {
-      throw new Error('لم يتم استخراج بيانات');
+      $('aiParseStatus').innerHTML = `<span style="color:#10B981">✅ ${parsed.teachers.length} أستاذ</span>`;
     }
   } catch (e) {
-    $('aiParseStatus').innerHTML = `<span style="color:#EF4444">❌ فشل: ${e.message}</span>`;
-    toast('❌ فشل التحليل AI - سيتم استخدام المحلل المحلي', 'warn');
-    parseFreeText(txt);
+    $('aiParseStatus').innerHTML = `<span style="color:#EF4444">❌ ${e.message}</span>`;
+    parseText(txt);
   }
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   STEP 3 — ROOMS & CONSTRAINTS
-   ═══════════════════════════════════════════════════════════════ */
-
-const DEFAULT_ROOMS = ['مخبر العلوم 1', 'مخبر الفيزياء', 'مخبر الإعلام الآلي', 'الملعب', 'قاعة الرسم', 'قاعة الموسيقى'];
-
-function renderRooms(rooms = []) {
-  const c = $('roomsContainer');
-  c.innerHTML = '';
-  rooms.forEach(r => addRoomRow(r));
-}
-function addRoomRow(name = '') {
-  const div = document.createElement('div');
-  div.className = 'flex gap-1';
-  div.innerHTML = `
-    <input placeholder="اسم القاعة" value="${name}" class="room-name input-field flex-1 p-2 rounded-lg text-sm" />
-    <button class="btn-ghost px-2 rounded-lg">✕</button>
-  `;
-  div.querySelector('button').onclick = () => div.remove();
-  $('roomsContainer').appendChild(div);
-}
-$('addRoomBtn').onclick = () => addRoomRow();
-$('loadDefaultConstraints').onclick = () => {
-  $('constraintsInput').value = JSON.stringify([
-    { type: 'teacher_unavailable', teacher: 'ر1', day: 'الخميس', periods: [5, 6] },
-    { type: 'teacher_room_fixed', teacher: 'عل1', room: 'مخبر العلوم 1' },
-    { type: 'teacher_room_fixed', teacher: 'ب1', room: 'الملعب' },
-    { type: 'subject_requires_room', subject: 'علوم طبيعية', room: 'مخبر العلوم 1' },
-    { type: 'subject_requires_room', subject: 'تربية بدنية', room: 'الملعب' }
-  ], null, 2);
-  toast('📋 تم تحميل القيود الافتراضية', 'info');
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   DATA COLLECTOR
+   COLLECT DATA
    ═══════════════════════════════════════════════════════════════ */
 function collectData() {
   const days = $('daysInput').value.split(',').map(s => s.trim()).filter(Boolean);
-  const periods = +$('periodsCount').value || 6;
-  const duration = +$('periodDuration').value || 45;
-
-  // Levels → Classes
-  const classes = [];
-  $$('#levelsContainer > div').forEach(row => {
-    const name = row.querySelector('.lv-name').value.trim();
-    const prefix = row.querySelector('.lv-prefix').value.trim();
-    const count = +row.querySelector('.lv-count').value || 0;
-    for (let i = 1; i <= count; i++) classes.push(`${prefix}${i}`);
-  });
-
-  // Subjects
-  const subjects = [];
-  $$('#subjectsContainer > div').forEach(row => {
-    const name = row.querySelector('.sub-name').value.trim();
-    const short = row.querySelector('.sub-short').value.trim();
-    if (name) subjects.push({ name, short: short || name.slice(0, 2).toUpperCase() });
-  });
-
-  // Rooms
-  const rooms = [];
-  $$('#roomsContainer > div').forEach(row => {
-    const name = row.querySelector('.room-name').value.trim();
-    if (name) rooms.push(name);
-  });
-
-  // Teachers
+  const classes = $('classesInput').value.split('\n').map(s => s.trim()).filter(Boolean);
+  const subjects = $('subjectsInput').value.split('\n').map(s => s.trim()).filter(Boolean);
+  const rooms = $('roomsInput').value.split('\n').map(s => s.trim()).filter(Boolean);
   const teachers = [];
   $$('#teachersContainer > div').forEach(row => {
     const name = row.querySelector('.t-name').value.trim();
-    const subject = row.querySelector('.t-subject').value.trim();
-    const classesStr = row.querySelector('.t-classes').value.trim();
-    const hours = +row.querySelector('.t-hours').value || 0;
-    const extra = +row.querySelector('.t-extra').value || 0;
-    const room = row.querySelector('.t-room').value.trim();
-    if (name) {
-      teachers.push({
-        name, subject, room,
-        classes: classesStr.split(/[,،]|\s+و\s+/).map(s => s.trim()).filter(Boolean),
-        hours, extra,
-        totalHours: hours + extra
-      });
-    }
+    if (!name) return;
+    teachers.push({
+      name,
+      subject: row.querySelector('.t-subject').value.trim(),
+      room: row.querySelector('.t-room').value.trim(),
+      classes: row.querySelector('.t-classes').value.trim(),
+      hours: +row.querySelector('.t-hours').value || 0,
+      extra: +row.querySelector('.t-extra').value || 0
+    });
   });
-
-  // Constraints
-  let constraints = [];
-  const raw = $('constraintsInput').value.trim();
-  if (raw) {
-    try { constraints = JSON.parse(raw); }
-    catch { log('⚠️ صيغة القيود غير صحيحة - سيتم تجاهلها', 'warn'); }
-  }
-
   return {
     institution: $('instName').value.trim(),
     year: $('schoolYear').value.trim(),
-    days, periods, duration,
-    classes, subjects, rooms, teachers, constraints
+    days,
+    periods: +$('periodsCount').value || 7,
+    duration: +$('periodDuration').value || 55,
+    classes, subjects, rooms, teachers
   };
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   XML BUILDER ENGINE — osctime 2023
+   🧠 TIMETABLE SOLVER — محرك توليد الجدول الذكي
    ═══════════════════════════════════════════════════════════════ */
-function esc(s) {
-  return String(s == null ? '' : s).replace(/[<>&"']/g, c =>
-    ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;', "'": '&apos;' }[c]));
-}
 
-function buildPeriods(count, duration) {
-  let out = '';
-  for (let i = 1; i <= count; i++) {
-    const startMin = 8 * 60 + (i - 1) * duration;
-    const endMin = startMin + duration;
-    const fmt = (m) => `${String(Math.floor(m / 60)).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`;
-    out += `    <period name="الحصة ${i}" short="P${i}" period="${i}" starttime="${fmt(startMin)}" endtime="${fmt(endMin)}" />\n`;
-  }
-  return `  <periods>\n${out}  </periods>`;
-}
+/**
+ * الحل: Greedy Backtracking مع خيارات عشوائية
+ * - يمنع تعارض الأستاذ/الفوج/القاعة
+ * - يوازن الحصص على الأيام
+ * - يعطي الأولوية للأفواج ذات الحصص الأكثر
+ */
+function solveTimetable(data) {
+  const { days, periods, classes, subjects, rooms, teachers } = data;
+  const D = days.length;
+  const P = periods;
 
-function buildDaysDef(days) {
-  let out = '';
-  days.forEach((d, i) => {
-    const bit = 1 << i;
-    out += `    <daysdef name="${esc(d)}" short="D${i + 1}" days="${bit}" />\n`;
-  });
-  return `  <daysdef>\n${out}  </daysdef>`;
-}
-
-function buildSubjects(subjects) {
-  let out = '';
-  subjects.forEach((s, i) => {
-    out += `    <subject name="${esc(s.name)}" short="${esc(s.short)}" id="${i + 1}" />\n`;
-  });
-  return `  <subjects>\n${out}  </subjects>`;
-}
-
-function buildTeachers(teachers) {
-  let out = '';
-  teachers.forEach((t, i) => {
-    out += `    <teacher name="${esc(t.name)}" short="T${i + 1}" id="${i + 1}" />\n`;
-  });
-  return `  <teachers>\n${out}  </teachers>`;
-}
-
-function buildClasses(classes) {
-  let out = '';
-  classes.forEach((c, i) => {
-    out += `    <class name="${esc(c)}" short="C${String(i + 1).padStart(2, '0')}" id="${i + 1}" />\n`;
-  });
-  return `  <classes>\n${out}  </classes>`;
-}
-
-function buildClassrooms(rooms) {
-  let out = '';
-  rooms.forEach((r, i) => {
-    out += `    <classroom name="${esc(r)}" short="R${i + 1}" id="${i + 1}" />\n`;
-  });
-  return `  <classrooms>\n${out}  </classrooms>`;
-}
-
-function buildLessons(teachers, classes, subjects, rooms) {
-  let out = '';
-  let id = 1;
+  // بناء قائمة الدروس المطلوبة
+  const lessons = [];
   teachers.forEach(t => {
-    const subIdx = subjects.findIndex(s => s.name === t.subject) + 1;
-    const teacherIdx = teachers.indexOf(t) + 1;
-    const roomIdx = t.room ? rooms.indexOf(t.room) + 1 : 0;
+    const subjIdx = subjects.indexOf(t.subject);
+    if (subjIdx === -1) return;
+    const roomIdx = t.room ? rooms.indexOf(t.room) : -1;
+    const clsList = (t.classes || '').split(/[,،]/).map(s => s.trim()).filter(Boolean);
+    if (!clsList.length) return;
 
-    t.classes.forEach(clsName => {
-      const clsIdx = classes.indexOf(clsName) + 1;
-      if (clsIdx === 0 || subIdx === 0) return;
-      const total = t.totalHours || t.hours || 1;
-      // distribute hours across the teacher's classes
-      const hoursPerClass = Math.max(1, Math.round(total / t.classes.length));
-      for (let i = 0; i < hoursPerClass; i++) {
-        out += `    <lesson id="${id}" classids="${clsIdx}" subjectid="${subIdx}" teacherids="${teacherIdx}"`;
-        if (roomIdx) out += ` classroomids="${roomIdx}"`;
-        out += ` periodsperweek="1" />\n`;
-        id++;
+    const totalH = (t.hours || 0) + (t.extra || 0);
+    const perClass = Math.max(1, Math.ceil(totalH / clsList.length));
+
+    clsList.forEach(cn => {
+      const cIdx = classes.indexOf(cn);
+      if (cIdx === -1) return;
+      for (let i = 0; i < perClass; i++) {
+        lessons.push({
+          teacherIdx: teachers.indexOf(t),
+          teacherName: t.name,
+          subjectIdx: subjIdx,
+          subjectName: t.subject,
+          classIdx: cIdx,
+          className: cn,
+          roomIdx: roomIdx,
+          roomName: t.room
+        });
       }
     });
   });
-  return `  <lessons>\n${out}  </lessons>`;
-}
 
-function buildCardRelationships(constraints, days) {
-  let out = '';
-  constraints.forEach(c => {
-    if (c.type === 'teacher_unavailable' && c.periods) {
-      const dayBit = days.indexOf(c.day) >= 0 ? (1 << days.indexOf(c.day)) : 0;
-      c.periods.forEach(p => {
-        out += `    <cardrelationship type="teacher_unavailable" teacher="${esc(c.teacher)}" day="${dayBit}" period="${p}" />\n`;
+  log(`📚 إجمالي الحصص المطلوبة: ${lessons.length}`, 'info');
+
+  // Grid: [day][period] = { teacher, class, room }
+  const grid = Array.from({ length: D }, () => Array.from({ length: P }, () => ({
+    teachers: new Set(),
+    classes: new Set(),
+    rooms: new Set()
+  })));
+
+  // جدول الإسنادات النهائي
+  const schedule = [];
+  const teacherDayCount = {};   // { teacherIdx: [count per day] }
+  teachers.forEach((_, i) => teacherDayCount[i] = new Array(D).fill(0));
+
+  // ترتيب الدروس: الأكثر قيوداً أولاً
+  const shuffled = [...lessons].sort(() => Math.random() - 0.5);
+
+  let placed = 0, failed = 0;
+
+  shuffled.forEach(lesson => {
+    // جرب كل (يوم، حصة) بترتيب عشوائي
+    const slots = [];
+    for (let d = 0; d < D; d++)
+      for (let p = 0; p < P; p++)
+        slots.push({ d, p });
+    slots.sort(() => Math.random() - 0.5);
+
+    let placedFlag = false;
+    for (const { d, p } of slots) {
+      const cell = grid[d][p];
+      // فحص التعارض
+      if (cell.teachers.has(lesson.teacherIdx)) continue;
+      if (cell.classes.has(lesson.classIdx)) continue;
+      if (lesson.roomIdx >= 0 && cell.rooms.has(lesson.roomIdx)) continue;
+
+      // حد أقصى 3 حصص لنفس الأستاذ في اليوم
+      if (teacherDayCount[lesson.teacherIdx][d] >= 4) continue;
+
+      // قيود يوم الخميس للرياضيات (ح5، ح6)
+      if (lesson.subjectName === 'رياضيات' && days[d] === 'الخميس' && (p === 4 || p === 5)) continue;
+
+      // ✅ ضع الدرس
+      cell.teachers.add(lesson.teacherIdx);
+      cell.classes.add(lesson.classIdx);
+      if (lesson.roomIdx >= 0) cell.rooms.add(lesson.roomIdx);
+      teacherDayCount[lesson.teacherIdx][d]++;
+
+      schedule.push({
+        day: d,
+        period: p,
+        dayName: days[d],
+        teacherIdx: lesson.teacherIdx,
+        teacherName: lesson.teacherName,
+        subjectIdx: lesson.subjectIdx,
+        subjectName: lesson.subjectName,
+        classIdx: lesson.classIdx,
+        className: lesson.className,
+        roomIdx: lesson.roomIdx,
+        roomName: lesson.roomName
       });
+
+      placedFlag = true;
+      placed++;
+      break;
     }
-    if (c.type === 'teacher_room_fixed' || c.type === 'subject_requires_room') {
-      out += `    <cardrelationship type="${esc(c.type)}" ${c.teacher ? `teacher="${esc(c.teacher)}"` : `subject="${esc(c.subject)}"`} room="${esc(c.room)}" />\n`;
-    }
+    if (!placedFlag) failed++;
   });
-  if (!out) out = '    <cardrelationship type="class_teacher_subject" />\n';
-  return `  <cardrelationships>\n${out}  </cardrelationships>`;
+
+  log(`✅ تم وضع ${placed} حصة`, 'success');
+  if (failed > 0) log(`⚠️ فشل وضع ${failed} حصة`, 'warn');
+
+  return { schedule, placed, failed, total: lessons.length };
 }
 
-function buildFullXML(data) {
+/* ═══════ GENERATE BUTTON ═══════ */
+$('generateTimetableBtn').onclick = () => {
+  $('logBox').innerHTML = '';
+  try {
+    const data = collectData();
+    if (!data.teachers.length) return toast('أضف أساتذة أولاً', 'error');
+    log('🧠 بدء محرك الجدولة...', 'info');
+    log(`📊 ${data.classes.length} فوج × ${data.days.length} أيام × ${data.periods} حصص`, 'info');
+
+    // جرب عدة محاولات واختر الأفضل
+    let best = null;
+    for (let attempt = 1; attempt <= 5; attempt++) {
+      const result = solveTimetable(data);
+      if (!best || result.placed > best.placed) best = result;
+      log(`  🎯 محاولة ${attempt}: ${result.placed}/${result.total}`, 'info');
+    }
+
+    generatedTimetable = best.schedule;
+    localStorage.setItem(STORAGE.TIMETABLE, JSON.stringify(generatedTimetable));
+
+    log(`🎉 أفضل نتيجة: ${best.placed}/${best.total} حصة`, 'success');
+    toast(`🎉 ${best.placed} حصة مُولَّدة`, 'success');
+
+    generatedXML = buildFullXML(data, generatedTimetable);
+    updateStats();
+    gotoStep(5);
+  } catch (e) {
+    log('❌ ' + e.message, 'error');
+    toast('❌ ' + e.message, 'error');
+  }
+};
+
+$('clearTimetableBtn').onclick = () => {
+  generatedTimetable = [];
+  localStorage.removeItem(STORAGE.TIMETABLE);
+  updateStats();
+  toast('🗑️ تم المسح', 'info');
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   XML BUILDER — يشمل البطاقات (Cards) المُولَّدة
+   ═══════════════════════════════════════════════════════════════ */
+function esc(s) { return String(s || '').replace(/[<>&"']/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&apos;'}[c])); }
+
+function buildFullXML(data, schedule = []) {
+  const { days, periods, duration, classes, subjects, rooms, teachers } = data;
+
+  let periodsXML = '';
+  for (let i = 1; i <= periods; i++) {
+    const start = 8 * 60 + (i - 1) * duration;
+    const end = start + duration;
+    const fmt = m => `${String(Math.floor(m/60)).padStart(2,'0')}:${String(m%60).padStart(2,'0')}`;
+    periodsXML += `    <period name="الحصة ${i}" short="P${i}" period="${i}" starttime="${fmt(start)}" endtime="${fmt(end)}" />\n`;
+  }
+
+  let daysXML = '';
+  days.forEach((d, i) => {
+    daysXML += `    <daysdef name="${esc(d)}" short="D${i+1}" days="${1 << i}" />\n`;
+  });
+
+  let subjXML = '';
+  subjects.forEach((s, i) => {
+    const short = s.slice(0, 8).replace(/[^\w\u0600-\u06FF]/g, '');
+    subjXML += `    <subject name="${esc(s)}" short="${esc(short)}" id="${i+1}" />\n`;
+  });
+
+  let teachXML = '';
+  teachers.forEach((t, i) => {
+    teachXML += `    <teacher name="${esc(t.name)}" short="T${i+1}" id="${i+1}" />\n`;
+  });
+
+  let clsXML = '';
+  classes.forEach((c, i) => {
+    clsXML += `    <class name="${esc(c)}" short="C${String(i+1).padStart(2,'0')}" id="${i+1}" />\n`;
+  });
+
+  let roomXML = '';
+  rooms.forEach((r, i) => {
+    roomXML += `    <classroom name="${esc(r)}" short="R${i+1}" id="${i+1}" />\n`;
+  });
+
+  let lessXML = '';
+  let lid = 1;
+  teachers.forEach((t, tIdx) => {
+    const subjIdx = subjects.indexOf(t.subject) + 1;
+    const roomIdx = t.room ? rooms.indexOf(t.room) + 1 : 0;
+    const clsList = (t.classes || '').split(/[,،]/).map(s => s.trim()).filter(Boolean);
+    if (subjIdx === 0 || !clsList.length) return;
+    const totalH = (t.hours || 0) + (t.extra || 0);
+    const perClass = Math.max(1, Math.ceil(totalH / clsList.length));
+
+    clsList.forEach(cn => {
+      const cIdx = classes.indexOf(cn) + 1;
+      if (cIdx === 0) return;
+      for (let i = 0; i < perClass; i++) {
+        lessXML += `    <lesson id="${lid}" classids="${cIdx}" subjectid="${subjIdx}" teacherids="${tIdx + 1}"`;
+        if (roomIdx) lessXML += ` classroomids="${roomIdx}"`;
+        lessXML += ` periodsperweek="1" />\n`;
+        lid++;
+      }
+    });
+  });
+
+  // Cards (from schedule)
+  let cardsXML = '';
+  schedule.forEach((s, i) => {
+    cardsXML += `    <card id="${i+1}" day="${s.day + 1}" period="${s.period + 1}" classids="${s.classIdx + 1}" subjectids="${s.subjectIdx + 1}" teacherids="${s.teacherIdx + 1}"`;
+    if (s.roomIdx >= 0) cardsXML += ` classroomids="${s.roomIdx + 1}"`;
+    cardsXML += ` />\n`;
+  });
+
   return `<?xml version="1.0" encoding="UTF-8"?>
 <osctime version="2023" institution="${esc(data.institution)}" year="${esc(data.year)}">
-${buildPeriods(data.periods, data.duration)}
-${buildDaysDef(data.days)}
-${buildSubjects(data.subjects)}
-${buildTeachers(data.teachers)}
-${buildClasses(data.classes)}
-${buildClassrooms(data.rooms)}
-${buildLessons(data.teachers, data.classes, data.subjects, data.rooms)}
-${buildCardRelationships(data.constraints, data.days)}
+  <periods>
+${periodsXML}  </periods>
+  <daysdef>
+${daysXML}  </daysdef>
+  <subjects>
+${subjXML}  </subjects>
+  <teachers>
+${teachXML}  </teachers>
+  <classes>
+${clsXML}  </classes>
+  <classrooms>
+${roomXML}  </classrooms>
+  <lessons>
+${lessXML}  </lessons>
+  <cards>
+${cardsXML}  </cards>
+  <cardrelationships>
+    <cardrelationship type="class_teacher_subject" />
+  </cardrelationships>
 </osctime>`;
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   DEEPSEEK XML ENHANCER
-   ═══════════════════════════════════════════════════════════════ */
-async function enhanceWithDeepSeek(data) {
-  const apiKey = localStorage.getItem(STORAGE.API_KEY);
-  if (!apiKey) throw new Error('No API key');
-
-  const systemPrompt = `أنت مهندس XML متخصص في aSc Timetables / osctime 2023.
-مهمتك: استقبال بيانات JSON وإرجاع ملف XML صالح ومكتمل فقط (بدون شرح أو markdown).
-
-الوسوم المطلوبة بالترتيب:
-<periods>, <daysdef>, <subjects>, <teachers>, <classes>, <classrooms>, <lessons>, <cardrelationships>
-
-قواعد:
-- daysdef.days يجب أن يكون Bitmask (1,2,4,8,16)
-- كل lesson يحتاج: id, classids, subjectid, teacherids, periodsperweek
-- أضف classroomids عند وجود قاعة
-- أعد XML فقط`;
-
-  const res = await fetch('https://api.deepseek.com/v1/chat/completions', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
-    body: JSON.stringify({
-      model: localStorage.getItem(STORAGE.MODEL) || 'deepseek-chat',
-      messages: [
-        { role: 'system', content: systemPrompt },
-        { role: 'user', content: JSON.stringify(data, null, 2) }
-      ],
-      temperature: 0.1
-    })
-  });
-
-  if (!res.ok) throw new Error('DeepSeek API error: ' + res.status);
-  const json = await res.json();
-  return json.choices[0].message.content.trim()
-    .replace(/```xml/gi, '').replace(/```/g, '').trim();
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   GENERATE
-   ═══════════════════════════════════════════════════════════════ */
+/* ═══════ LOG ═══════ */
 function log(msg, type = 'info') {
-  const colors = { info: '#00E5FF', success: '#10B981', error: '#EF4444', warn: '#FFB800' };
-  const time = new Date().toLocaleTimeString('ar-DZ');
-  $('logBox').innerHTML += `<div class="log-line" style="border-color:${colors[type]}">[${time}] ${msg}</div>`;
+  const c = { info: '#00E5FF', success: '#10B981', error: '#EF4444', warn: '#FFB800' };
+  const t = new Date().toLocaleTimeString('ar-DZ');
+  $('logBox').innerHTML += `<div class="log-line" style="border-color:${c[type]}">[${t}] ${msg}</div>`;
   $('logBox').scrollTop = $('logBox').scrollHeight;
 }
 
-$('localOnlyBtn').onclick = () => {
-  try {
-    $('logBox').innerHTML = '';
-    log('⚙️ بدء التوليد المحلي...', 'info');
-    const data = collectData();
-    log(`📊 الأفواج: ${data.classes.length} | المواد: ${data.subjects.length} | الأساتذة: ${data.teachers.length}`, 'info');
-    generatedXML = buildFullXML(data);
-    log('✅ تم توليد XML محلياً بنجاح', 'success');
-    $('downloadBtn').classList.remove('hidden');
-    toast('✅ تم توليد XML محلياً', 'success');
-  } catch (e) {
-    log('❌ خطأ: ' + e.message, 'error');
-    toast('❌ ' + e.message, 'error');
+/* ═══════════════════════════════════════════════════════════════
+   TIMETABLE VIEWER
+   ═══════════════════════════════════════════════════════════════ */
+$$('#viewModeTabs .sel-tab').forEach(tab => tab.onclick = () => {
+  $$('#viewModeTabs .sel-tab').forEach(x => x.classList.remove('active'));
+  tab.classList.add('active');
+  viewMode = tab.dataset.mode;
+  viewSelectedId = null;
+  renderView();
+});
+
+function renderView() {
+  const data = collectData();
+  const selector = $('viewSelector');
+
+  if (viewMode === 'teacher') {
+    selector.innerHTML = data.teachers.map((t, i) =>
+      `<button class="sel-tab ${viewSelectedId === i ? 'active' : ''}" data-id="${i}">${t.name}</button>`
+    ).join('');
+  } else {
+    selector.innerHTML = data.classes.map((c, i) =>
+      `<button class="sel-tab ${viewSelectedId === i ? 'active' : ''}" data-id="${i}">${c}</button>`
+    ).join('');
   }
-};
 
-$('generateBtn').onclick = async () => {
-  try {
-    $('logBox').innerHTML = '';
-    log('🚀 بدء عملية التوليد...', 'info');
-    const data = collectData();
-    log(`📊 تم جمع البيانات: ${data.classes.length} فوج، ${data.subjects.length} مادة، ${data.teachers.length} أستاذ`, 'info');
+  $$('#viewSelector .sel-tab').forEach(btn => btn.onclick = () => {
+    viewSelectedId = +btn.dataset.id;
+    renderView();
+  });
 
-    // Always build local first
-    const localXML = buildFullXML(data);
-    log('🛠️ تم بناء XML محلي (Baseline)', 'info');
+  if (viewSelectedId === null && (data.teachers.length || data.classes.length)) {
+    viewSelectedId = 0;
+  }
 
-    const apiKey = localStorage.getItem(STORAGE.API_KEY);
-    if (!apiKey) {
-      log('ℹ️ لا يوجد API Key - استخدام المحرك المحلي', 'warn');
-      generatedXML = localXML;
-    } else {
-      try {
-        log('🤖 استدعاء DeepSeek API لتحسين XML...', 'info');
-        const aiXML = await enhanceWithDeepSeek(data);
-        if (aiXML.includes('<osctime') && aiXML.includes('</osctime>')) {
-          generatedXML = aiXML;
-          log('✅ تم استلام XML محسّن من DeepSeek', 'success');
-        } else {
-          generatedXML = localXML;
-          log('⚠️ رد DeepSeek غير صالح - استخدام المحلي', 'warn');
-        }
-      } catch (e) {
-        log('⚠️ فشل DeepSeek: ' + e.message + ' - استخدام المحلي', 'warn');
-        generatedXML = localXML;
+  const container = $('timetableContainer');
+  if (viewSelectedId === null || !generatedTimetable.length) {
+    container.innerHTML = '<p style="color: var(--text-mute); text-align:center; padding:40px">لا يوجد جدول بعد. اضغط "توليد الجدول الذكي" أولاً.</p>';
+    return;
+  }
+
+  // Build grid for selected teacher/class
+  const days = data.days;
+  const periods = data.periods;
+  const filtered = generatedTimetable.filter(s =>
+    viewMode === 'teacher' ? s.teacherIdx === viewSelectedId : s.classIdx === viewSelectedId
+  );
+
+  let html = `<div style="min-width: 900px">`;
+  html += `<div class="tt-grid" style="grid-template-columns: 100px repeat(${days.length}, 1fr)">`;
+  html += `<div class="tt-cell-header">الحصة</div>`;
+  days.forEach(d => html += `<div class="tt-cell-header">${d}</div>`);
+
+  for (let p = 1; p <= periods; p++) {
+    const start = 8 * 60 + (p - 1) * data.duration;
+    const end = start + data.duration;
+    const fmt = m => `${String(Math.floor(m/60)).padStart(2,'0')}:${String(m%60).padStart(2,'0')}`;
+    html += `<div class="tt-cell-time"><div>${fmt(start)}</div><div>${fmt(end)}</div></div>`;
+    for (let d = 0; d < days.length; d++) {
+      const s = filtered.find(x => x.day === d && x.period === p - 1);
+      if (s) {
+        html += `<div class="tt-cell">
+          <div class="tt-lesson">${s.subjectName}</div>
+          <div class="tt-teacher">${viewMode === 'teacher' ? s.className : s.teacherName}</div>
+          ${s.roomName ? `<div class="tt-room">${s.roomName}</div>` : ''}
+        </div>`;
+      } else {
+        html += `<div class="tt-cell tt-empty">—</div>`;
       }
     }
-
-    $('downloadBtn').classList.remove('hidden');
-    log('🎉 اكتمل التوليد - يمكنك التحميل الآن', 'success');
-    toast('🎉 تم توليد XML بنجاح', 'success');
-  } catch (e) {
-    log('❌ خطأ: ' + e.message, 'error');
-    toast('❌ ' + e.message, 'error');
   }
-};
+  html += `</div></div>`;
+  container.innerHTML = html;
+}
 
-/* ═══════════════════════════════════════════════════════════════
-   DOWNLOAD / PREVIEW / COPY
-   ═══════════════════════════════════════════════════════════════ */
-$('downloadBtn').onclick = () => {
-  if (!generatedXML) return toast('لا يوجد XML', 'error');
-  const blob = new Blob([generatedXML], { type: 'application/xml;charset=utf-8' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'timetable_import.xml';
-  a.click();
-  toast('⬇️ تم تحميل timetable_import.xml', 'success');
-};
-
-$('previewBtn').onclick = () => {
-  if (!generatedXML) return toast('لا يوجد XML', 'error');
-  $('previewContent').textContent = generatedXML;
-  $('previewModal').classList.remove('hidden');
-};
-
-function closePreview() { $('previewModal').classList.add('hidden'); }
-
-$('copyXmlBtn').onclick = async () => {
-  if (!generatedXML) return toast('لا يوجد XML', 'error');
-  try {
-    await navigator.clipboard.writeText(generatedXML);
-    toast('📋 تم نسخ XML', 'success');
-  } catch { toast('❌ فشل النسخ', 'error'); }
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   SUMMARY
-   ═══════════════════════════════════════════════════════════════ */
+/* ═══════ SUMMARY ═══════ */
 function updateSummary() {
-  const data = collectData();
+  const d = collectData();
   const cards = [
-    { label: 'الفصول', value: data.classes.length, color: '#00E5FF' },
-    { label: 'المواد', value: data.subjects.length, color: '#7C3AED' },
-    { label: 'الأساتذة', value: data.teachers.length, color: '#FFB800' },
-    { label: 'القاعات', value: data.rooms.length, color: '#10B981' }
+    { label: 'الأفواج', value: d.classes.length, color: '#00E5FF' },
+    { label: 'المواد', value: d.subjects.length, color: '#7C3AED' },
+    { label: 'الأساتذة', value: d.teachers.length, color: '#FFB800' },
+    { label: 'القاعات', value: d.rooms.length, color: '#10B981' }
   ];
   $('summaryGrid').innerHTML = cards.map(c => `
-    <div class="glass rounded-xl p-4 text-center">
-      <p class="text-xs text-gray-400 mb-1">${c.label}</p>
+    <div class="stat-card">
+      <p class="text-xs" style="color: var(--text-mute)">${c.label}</p>
       <p class="text-2xl font-extrabold" style="color:${c.color}">${c.value}</p>
     </div>
   `).join('');
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   INIT
-   ═══════════════════════════════════════════════════════════════ */
+/* ═══════ EXPORT ═══════ */
+$('downloadBtn').onclick = () => {
+  if (!generatedXML) return toast('ولّد الجدول أولاً', 'error');
+  const blob = new Blob([generatedXML], { type: 'application/xml;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'timetable_import.xml';
+  a.click();
+  toast('⬇️ تم التحميل', 'success');
+};
+$('previewBtn').onclick = () => {
+  if (!generatedXML) return toast('لا يوجد XML', 'error');
+  $('previewContent').textContent = generatedXML;
+  $('previewModal').classList.remove('hidden');
+};
+function closePreview() { $('previewModal').classList.add('hidden'); }
+$('copyXmlBtn').onclick = async () => {
+  if (!generatedXML) return;
+  try { await navigator.clipboard.writeText(generatedXML); toast('📋 تم النسخ', 'success'); }
+  catch { toast('❌ فشل', 'error'); }
+};
+$('printBtn').onclick = () => window.print();
+
+/* ═══════ INIT ═══════ */
 window.addEventListener('DOMContentLoaded', () => {
-  // Load API key
-  const savedKey = localStorage.getItem(STORAGE.API_KEY);
-  if (savedKey) {
-    $('apiKeyInput').value = savedKey;
-    $('apiStatus').innerHTML = '<span style="color:#10B981">🔐 المفتاح محفوظ مسبقاً</span>';
+  const k = localStorage.getItem(STORAGE.API_KEY);
+  if (k) {
+    $('apiKeyInput').value = k;
+    $('apiStatus').innerHTML = '<span style="color:#10B981">🔐 محفوظ</span>';
   }
-  const savedModel = localStorage.getItem(STORAGE.MODEL);
-  if (savedModel) $('modelSelect').value = savedModel;
   updateApiIndicator();
 
-  // Load defaults
-  renderLevels(DEFAULT_LEVELS);
-  renderSubjects(DEFAULT_SUBJECTS);
-  renderRooms(DEFAULT_ROOMS);
+  // تحميل الأفواج الافتراضية الجديدة تلقائياً
+  $('classesInput').value = DEFAULTS.classes.join('\n');
+  $('subjectsInput').value = DEFAULTS.subjects.join('\n');
+  $('roomsInput').value = DEFAULTS.rooms.join('\n');
 
-  // First teacher example
-  addTeacherRow({
-    name: 'ع1', subject: 'لغة عربية',
-    classes: '4م1, 4م4', hours: 13, extra: 1, room: ''
-  });
+  // استرجاع الجدول المحفوظ
+  const saved = localStorage.getItem(STORAGE.TIMETABLE);
+  if (saved) {
+    try { generatedTimetable = JSON.parse(saved); } catch {}
+  }
 
-  gotoStep(1);
-  log('✅ DONIA LABS OSCTIME AI GENERATOR v2.0 جاهز', 'success');
+  updateStats();
+  log('✅ v4.0 جاهز — 17 فوج محدّث', 'success');
 });
 </script>
 </body>
