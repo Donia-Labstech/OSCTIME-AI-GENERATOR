@@ -3,7 +3,14 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>DONIA LABS | OSCTIME AI GENERATOR v6.0</title>
+
+<!-- 🚨 منع Cache نهائياً -->
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+
+<title>DONIA LABS OSCTIME AI v7.0</title>
+<meta name="description" content="مولّد جداول aSc Timetables 2023 - DONIA LABS TECH" />
 
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
@@ -28,13 +35,13 @@
     --cell-bg: #FFFFFF; --cell-border: rgba(0,80,120,.2);
     --success: #059669; --warn: #D97706; --error: #DC2626;
   }
-  * { font-family: 'Cairo', sans-serif; transition: background .25s, color .25s, border-color .25s; }
-  body { background: var(--bg); color: var(--text); min-height: 100vh; }
+  * { font-family: 'Cairo', sans-serif; transition: background .25s, color .25s, border-color .25s; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); min-height: 100vh; margin: 0; }
   .glass { background: var(--glass); backdrop-filter: blur(16px); border: 1px solid var(--border); }
-  .btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #0A0F1E; font-weight: 800; transition: all .2s; }
+  .btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #0A0F1E; font-weight: 800; transition: all .2s; border: none; cursor: pointer; }
   [data-theme="light"] .btn-primary { color: #fff; }
   .btn-primary:hover { transform: translateY(-1px); filter: brightness(1.1); }
-  .btn-ghost { border: 1px solid var(--border); color: var(--accent); background: transparent; }
+  .btn-ghost { border: 1px solid var(--border); color: var(--accent); background: transparent; cursor: pointer; }
   .btn-ghost:hover { background: rgba(0,229,255,.08); }
   .input-field { background: var(--bg); border: 1px solid var(--border); color: var(--text); }
   .input-field:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,229,255,.15); }
@@ -45,9 +52,9 @@
   ::-webkit-scrollbar { width: 8px; height: 8px; }
   ::-webkit-scrollbar-track { background: var(--bg); }
   ::-webkit-scrollbar-thumb { background: rgba(0,229,255,.3); border-radius: 8px; }
-  .pulse-dot { width: 8px; height: 8px; border-radius: 50%; animation: pulse 1.5s infinite; }
+  .pulse-dot { width: 8px; height: 8px; border-radius: 50%; animation: pulse 1.5s infinite; display: inline-block; }
   @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:.3; } }
-  .log-line { border-right: 3px solid var(--accent); padding-right: 12px; margin-bottom: 6px; font-size: 12px; }
+  .log-line { border-right: 3px solid var(--accent); padding-right: 12px; margin-bottom: 6px; font-size: 12px; font-family: monospace; }
   .card-hover { transition: all .2s; }
   .card-hover:hover { transform: translateY(-2px); border-color: var(--accent); }
   .theme-toggle { width: 56px; height: 28px; border-radius: 14px; background: var(--bg-3); border: 1px solid var(--border); position: relative; cursor: pointer; }
@@ -77,17 +84,21 @@
   .teacher-chip { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; background: var(--bg-3); border: 1px solid var(--border); color: var(--text); margin: 2px; }
   .teacher-chip.ok { border-color: var(--success); }
   .teacher-chip.err { border-color: var(--error); }
+  #versionBadge { background: rgba(0,229,255,.1); color: var(--accent); padding: 2px 8px; border-radius: 6px; font-size: 10px; font-family: monospace; }
 </style>
 </head>
 <body>
 
+<!-- ═══════════ HEADER ═══════════ -->
 <header class="glass sticky top-0 z-40" style="border-bottom: 1px solid var(--border)">
-  <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between flex-wrap gap-3">
+  <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between flex-wrap gap-3">
     <div class="flex items-center gap-3">
       <div class="w-11 h-11 rounded-xl btn-primary grid place-items-center text-2xl font-black">D</div>
       <div>
         <h1 class="text-base font-extrabold leading-tight">DONIA LABS TECH</h1>
-        <p class="text-xs" style="color: var(--accent)">OSCTIME AI GENERATOR · v6.0</p>
+        <p class="text-xs" style="color: var(--accent)">
+          OSCTIME AI GENERATOR · <span id="versionBadge">تحميل...</span>
+        </p>
       </div>
     </div>
     <div class="flex items-center gap-3">
@@ -95,12 +106,13 @@
         <span id="apiDot" class="pulse-dot" style="background:#EF4444"></span>
         <span id="apiStatusText">API غير مُعدّ</span>
       </div>
-      <button id="themeToggle" class="theme-toggle"></button>
+      <button id="themeToggle" class="theme-toggle" title="الوضع الليلي/النهاري"></button>
       <button id="openApiBtn" class="btn-primary px-4 py-2 rounded-lg text-sm">🔑 API</button>
     </div>
   </div>
 </header>
 
+<!-- ═══════════ API SIDEBAR ═══════════ -->
 <aside id="apiSidebar" class="fixed top-0 left-0 h-full w-96 glass z-50 p-6 transition-transform duration-300 overflow-y-auto" style="transform: translateX(-110%)">
   <div class="flex justify-between items-center mb-6">
     <h2 class="text-lg font-bold" style="color: var(--accent)">🔐 DeepSeek API</h2>
@@ -117,6 +129,7 @@
 </aside>
 <div id="sidebarOverlay" class="hidden fixed inset-0 bg-black/60 z-40"></div>
 
+<!-- ═══════════ MAIN ═══════════ -->
 <main class="max-w-7xl mx-auto px-4 py-6">
 
   <div id="statsBar" class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-6"></div>
@@ -187,7 +200,6 @@
       <div class="w-10 h-10 rounded-lg grid place-items-center font-bold" style="background: rgba(0,229,255,.1); color: var(--accent)">2</div>
       <div>
         <h2 class="text-xl font-bold">الأفواج والمواد والقاعات</h2>
-        <p class="text-xs" style="color: var(--text-mute)">مراجعة البيانات المستوردة</p>
       </div>
     </div>
 
@@ -224,7 +236,6 @@
       <div class="w-10 h-10 rounded-lg grid place-items-center font-bold" style="background: rgba(0,229,255,.1); color: var(--accent)">3</div>
       <div>
         <h2 class="text-xl font-bold">الإسناد التربوي</h2>
-        <p class="text-xs" style="color: var(--text-mute)">مراجعة وتعديل الأساتذة</p>
       </div>
     </div>
 
@@ -267,7 +278,7 @@
     </div>
 
     <div class="flex flex-wrap gap-3 mb-5">
-      <button id="downloadBtn" class="px-6 py-3 rounded-lg font-extrabold" style="background: var(--gold); color: #0A0F1E">⬇️ تحميل XML</button>
+      <button id="downloadBtn" class="px-6 py-3 rounded-lg font-extrabold" style="background: var(--gold); color: #0A0F1E; border: none; cursor: pointer">⬇️ تحميل XML</button>
       <button id="previewBtn" class="btn-ghost px-6 py-3 rounded-lg">👁️ معاينة</button>
       <button id="exportReportBtn" class="btn-ghost px-6 py-3 rounded-lg" style="border-color: var(--success); color: var(--success)">📊 تقرير Excel</button>
     </div>
@@ -275,7 +286,7 @@
     <div class="mb-4">
       <div class="flex items-center justify-between flex-wrap gap-3 mb-3">
         <h3 class="font-bold text-lg">📅 الجدول الأسبوعي</h3>
-        <div class="selector-tabs flex gap-1" id="viewModeTabs">
+        <div id="viewModeTabs" class="flex gap-1">
           <button data-mode="teacher" class="sel-tab active">👨‍🏫 أساتذة</button>
           <button data-mode="class" class="sel-tab">🏫 أفواج</button>
         </div>
@@ -291,7 +302,7 @@
   </div>
 </main>
 
-<!-- ② Modal Preview -->
+<!-- Preview Modal -->
 <div id="sheetPreviewModal" class="hidden fixed inset-0 bg-black/85 z-50 p-4 overflow-auto">
   <div class="glass rounded-2xl p-6 max-w-6xl mx-auto my-8">
     <div class="flex justify-between items-center mb-5 flex-wrap gap-3">
@@ -299,7 +310,7 @@
         <h3 class="font-bold text-xl" style="color: var(--accent)">📋 معاينة الأوراق المستوردة</h3>
         <p class="text-xs mt-1" style="color: var(--text-mute)">راجع قبل القبول</p>
       </div>
-      <button onclick="closeSheetPreview()" class="text-2xl" style="color: var(--text-mute)">✕</button>
+      <button onclick="closeSheetPreview()" class="text-2xl" style="color: var(--text-mute); background: none; border: none; cursor: pointer">✕</button>
     </div>
 
     <div id="previewSummary" class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5"></div>
@@ -317,7 +328,7 @@
   <div class="glass rounded-2xl p-6 max-w-5xl mx-auto my-8">
     <div class="flex justify-between items-center mb-4">
       <h3 class="font-bold text-lg" style="color: var(--accent)">📄 معاينة XML</h3>
-      <button onclick="closePreview()" class="text-2xl" style="color: var(--text-mute)">✕</button>
+      <button onclick="closePreview()" class="text-2xl" style="color: var(--text-mute); background: none; border: none; cursor: pointer">✕</button>
     </div>
     <pre id="previewContent" class="text-xs bg-black/60 p-4 rounded-lg overflow-auto max-h-[75vh] font-mono" style="color: #10B981"></pre>
   </div>
@@ -328,17 +339,23 @@
 </div>
 
 <footer class="text-center text-xs py-8 mt-12" style="border-top: 1px solid var(--border); color: var(--text-mute)">
-  © 2025 DONIA LABS TECH — v6.0
+  © 2025 DONIA LABS TECH — <span id="footerVersion">v7.0</span> · MIT License
 </footer>
 
 <script>
+'use strict';
+
 /* ═══════════════════════════════════════════════════════════════
-   v6.0 — Full Multi-Sheet Parser + Preview + Reports
+   DONIA LABS TECH — OSCTIME AI GENERATOR v7.0
+   🚨 Built with anti-cache, dynamic version, multi-sheet parser
    ═══════════════════════════════════════════════════════════════ */
+
+const APP_VERSION = 'v7.0';
+const BUILD_TIME = new Date().toISOString().slice(0, 16).replace('T', ' ');
 
 const $ = (id) => document.getElementById(id);
 const $$ = (sel) => document.querySelectorAll(sel);
-const STORAGE = { API_KEY: 'donia_api_v6', THEME: 'donia_theme_v6', TT: 'donia_tt_v6' };
+const STORAGE = { API_KEY: 'donia_api_v7', THEME: 'donia_theme_v7', TT: 'donia_tt_v7' };
 
 let currentStep = 1;
 const TOTAL_STEPS = 5;
@@ -348,6 +365,18 @@ let viewMode = 'teacher';
 let viewSelectedId = null;
 let pendingImport = null;
 let importIssues = [];
+
+/* ═══════ VERSION DISPLAY (يُثبت التحديث) ═══════ */
+document.addEventListener('DOMContentLoaded', () => {
+  const vText = `${APP_VERSION} (${BUILD_TIME})`;
+  const vBadge = document.getElementById('versionBadge');
+  if (vBadge) vBadge.textContent = vText;
+  const fBadge = document.getElementById('footerVersion');
+  if (fBadge) fBadge.textContent = APP_VERSION;
+  console.log(`🚀 DONIA LABS OSCTIME AI GENERATOR ${vText}`);
+  console.log(`📅 Build: ${BUILD_TIME}`);
+  console.log(`🔗 URL: ${window.location.href}`);
+});
 
 /* ═══════ THEME ═══════ */
 function applyTheme(t) {
@@ -374,8 +403,10 @@ function toast(msg, type = 'info') {
 function log(msg, type = 'info') {
   const c = { info: '#00E5FF', success: '#10B981', error: '#EF4444', warn: '#FFB800' };
   const t = new Date().toLocaleTimeString('ar-DZ');
-  $('logBox').innerHTML += `<div class="log-line" style="border-color:${c[type]}">[${t}] ${msg}</div>`;
-  $('logBox').scrollTop = $('logBox').scrollHeight;
+  const box = $('logBox');
+  if (!box) return;
+  box.innerHTML += `<div class="log-line" style="border-color:${c[type]}">[${t}] ${msg}</div>`;
+  box.scrollTop = box.scrollHeight;
 }
 
 /* ═══════ API ═══════ */
@@ -397,15 +428,19 @@ $('saveApiBtn').onclick = () => {
 };
 function updateApiIndicator() {
   const k = localStorage.getItem(STORAGE.API_KEY);
-  $('apiDot').style.background = k ? '#10B981' : '#EF4444';
-  $('apiStatusText').textContent = k ? 'API مُعدّ ✓' : 'API غير مُعدّ';
+  const dot = $('apiDot'), txt = $('apiStatusText');
+  if (dot) dot.style.background = k ? '#10B981' : '#EF4444';
+  if (txt) txt.textContent = k ? 'API مُعدّ ✓' : 'API غير مُعدّ';
 }
 
 /* ═══════ STEPS ═══════ */
 function gotoStep(n) {
   if (n < 1 || n > TOTAL_STEPS) return;
   currentStep = n;
-  for (let i = 1; i <= TOTAL_STEPS; i++) $('step' + i).classList.toggle('hidden', i !== currentStep);
+  for (let i = 1; i <= TOTAL_STEPS; i++) {
+    const el = $('step' + i);
+    if (el) el.classList.toggle('hidden', i !== currentStep);
+  }
   $$('.step').forEach(el => {
     const s = +el.dataset.step;
     el.className = 'step px-4 py-2 rounded-lg text-sm cursor-pointer ' +
@@ -423,7 +458,7 @@ $$('.step').forEach(el => el.onclick = () => gotoStep(+el.dataset.step));
 /* ═══════ DEFAULTS ═══════ */
 const DEFAULTS = {
   classes: ['1م1','1م2','1م3','1م4','1م5','1م6','2م1','2م2','2م3','2م4','2م5','3م1','3م2','3م3','3م4','3م5','4م1','4م2','4م3','4م4','4م5','4م6'],
-  subjects: ['عربية','رياضيات','فرنسية','انجليزية','فيزياء','علوم ط','اجتماعيات','ت.إسلامية','ت.مدنية','ت.بدنية','موسيقى','إعلام آلي'],
+  subjects: ['عربية','رياضيات','فرنسية','إنجليزية','علوم طبيعية','فيزياء','اجتماعيات','تربية إسلامية','تربية مدنية','تربية بدنية','موسيقى','إعلام آلي'],
   rooms: ['القاعة 1','القاعة 2','القاعة 3','القاعة 4','القاعة 5','القاعة 6','القاعة 7','القاعة 8','القاعة 9','القاعة 10','القاعة 11','القاعة 12','القاعة 13','القاعة 14','القاعة 15','القاعة 16','القاعة 17','القاعة 18','ورشة 1','ورشة 2','مخبر 1','مخبر 2']
 };
 $('loadDefaults').onclick = () => {
@@ -436,13 +471,13 @@ $('loadDefaults').onclick = () => {
 
 /* ═══════ STATS ═══════ */
 function updateStats() {
-  const c = $('classesInput').value.split('\n').filter(s => s.trim()).length;
-  const s = $('subjectsInput').value.split('\n').filter(s => s.trim()).length;
-  const r = $('roomsInput').value.split('\n').filter(s => s.trim()).length;
+  const c = ($('classesInput').value || '').split('\n').filter(s => s.trim()).length;
+  const s = ($('subjectsInput').value || '').split('\n').filter(s => s.trim()).length;
+  const r = ($('roomsInput').value || '').split('\n').filter(s => s.trim()).length;
   const t = $$('#teachersContainer > div').length;
-  $('classesCount').textContent = c;
-  $('subjectsCount').textContent = s;
-  $('roomsCount').textContent = r;
+  const cc = $('classesCount'); if (cc) cc.textContent = c;
+  const sc = $('subjectsCount'); if (sc) sc.textContent = s;
+  const rc = $('roomsCount'); if (rc) rc.textContent = r;
 
   const cards = [
     { label: 'الأفواج', value: c, color: '#00E5FF', icon: '🏫' },
@@ -451,18 +486,21 @@ function updateStats() {
     { label: 'القاعات', value: r, color: '#10B981', icon: '🚪' },
     { label: 'الحصص', value: generatedTimetable.length, color: '#EF4444', icon: '📅' }
   ];
-  $('statsBar').innerHTML = cards.map(c => `
+  $('statsBar').innerHTML = cards.map(card => `
     <div class="stat-card">
-      <div class="text-2xl mb-1">${c.icon}</div>
-      <p class="text-xs" style="color: var(--text-mute)">${c.label}</p>
-      <p class="text-2xl font-extrabold" style="color:${c.color}">${c.value}</p>
+      <div class="text-2xl mb-1">${card.icon}</div>
+      <p class="text-xs" style="color: var(--text-mute)">${card.label}</p>
+      <p class="text-2xl font-extrabold" style="color:${card.color}">${card.value}</p>
     </div>
   `).join('');
 }
-['classesInput','subjectsInput','roomsInput'].forEach(id => $(id).addEventListener('input', updateStats));
+['classesInput','subjectsInput','roomsInput'].forEach(id => {
+  const el = $(id);
+  if (el) el.addEventListener('input', updateStats);
+});
 
 /* ═══════════════════════════════════════════════════════════════
-   ① SMART PARSER — يقرأ كل الأوراق + يستخرج الأفواج تلقائياً
+   SMART EXCEL PARSER — يقرأ كل الأوراق
    ═══════════════════════════════════════════════════════════════ */
 $('excelUploadBtn').onclick = () => $('excelInput').click();
 
@@ -476,12 +514,13 @@ $('excelInput').onchange = (e) => {
     try {
       const data = new Uint8Array(evt.target.result);
       const wb = XLSX.read(data, { type: 'array' });
-      log(`📊 ملف: ${wb.SheetNames.length} ورقة`, 'info');
+      log(`📊 ملف Excel: ${wb.SheetNames.length} ورقة`, 'info');
       log(`📋 الأوراق: ${wb.SheetNames.join(' | ')}`, 'info');
       processAllSheets(wb);
     } catch (err) {
       console.error(err);
-      toast('❌ ' + err.message, 'error');
+      toast('❌ خطأ: ' + err.message, 'error');
+      log('❌ ' + err.message, 'error');
     }
   };
   reader.readAsArrayBuffer(file);
@@ -494,12 +533,12 @@ function processAllSheets(workbook) {
   const sheetReports = [];
   importIssues = [];
 
-  // 📋 المرور على كل الأوراق
+  // 🔑 المرور على كل الأوراق — هذا هو الإصلاح الأساسي
   workbook.SheetNames.forEach(sheetName => {
     const ws = workbook.Sheets[sheetName];
     const rows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '', blankrows: false });
 
-    log(`\n📄 "${sheetName}" (${rows.length} صف)`, 'info');
+    log(`\n📄 ورقة "${sheetName}" (${rows.length} صف)`, 'info');
     const result = parseHumanSheet(rows, sheetName);
 
     allTeachers.push(...result.teachers);
@@ -518,21 +557,16 @@ function processAllSheets(workbook) {
   const classes = Array.from(allClassesSet).sort(sortClasses);
   const subjects = Array.from(allSubjectsSet);
 
-  // 🏫 استخراج القاعات من الإسناد (مثلاً: مخبر، ملعب)
+  // 🏫 القاعات: من الإسناد أو الافتراضية
   const roomsFromData = new Set();
-  allTeachers.forEach(t => {
-    if (t.room) roomsFromData.add(t.room);
-  });
-  // إضافة القاعات الافتراضية إذا كانت فارغة
-  const rooms = roomsFromData.size > 0
-    ? Array.from(roomsFromData)
-    : DEFAULTS.rooms.slice(0, 22);
+  allTeachers.forEach(t => { if (t.room) roomsFromData.add(t.room); });
+  const rooms = roomsFromData.size > 0 ? Array.from(roomsFromData) : DEFAULTS.rooms.slice(0, 22);
 
   pendingImport = { sheets: sheetReports, teachers: allTeachers, classes, subjects, rooms };
   showSheetPreview(pendingImport);
 }
 
-/* 🎯 المحلّل الذكي */
+/* 🎯 المحلّل الذكي — يكتشف البنية تلقائياً */
 function parseHumanSheet(rows, sheetName) {
   const teachers = [];
   const classesSet = new Set();
@@ -541,7 +575,7 @@ function parseHumanSheet(rows, sheetName) {
 
   let currentSubject = cleanSubjectName(sheetName);
 
-  // ① كشف العنوان الرئيسي
+  // ① كشف العنوان الرئيسي (صف بخلية واحدة)
   for (let i = 0; i < Math.min(6, rows.length); i++) {
     const nonEmpty = rows[i].filter(c => String(c).trim() !== '');
     if (nonEmpty.length === 1) {
@@ -555,13 +589,13 @@ function parseHumanSheet(rows, sheetName) {
   // ② ابحث عن "الأستاذ"
   let headerRowIdx = -1, colTeacher = -1, colHours = -1, colExtra = -1, classCols = [];
 
-  for (let i = 0; i < Math.min(10, rows.length); i++) {
+  for (let i = 0; i < Math.min(12, rows.length); i++) {
     const row = rows[i];
     const idx = row.findIndex(c => String(c).trim() === 'الأستاذ');
     if (idx >= 0) {
       headerRowIdx = i;
       colTeacher = idx;
-      // ابحث عن الحجم الساعي في نفس الصف أو التالي
+      // ابحث في نفس الصف والصف التالي
       for (let k = i; k < Math.min(i + 2, rows.length); k++) {
         rows[k].forEach((cell, j) => {
           const c = String(cell).trim();
@@ -584,7 +618,7 @@ function parseHumanSheet(rows, sheetName) {
   for (let j = colTeacher + 1; j < endClass; j++) classCols.push(j);
 
   log(`  ├─ المادة: ${currentSubject}`, 'info');
-  log(`  ├─ الأستاذ: col ${colTeacher} | الأقسام: ${classCols.join(',')} | الساعات: ${colHours}`, 'info');
+  log(`  ├─ الأستاذ col ${colTeacher} | الأقسام [${classCols.join(',')}] | الساعات col ${colHours}`, 'info');
 
   // ④ معالجة الصفوف
   for (let i = headerRowIdx + 1; i < rows.length; i++) {
@@ -593,7 +627,7 @@ function parseHumanSheet(rows, sheetName) {
     if (!teacherName) continue;
     if (['الأستاذ','الأقسام'].includes(teacherName)) continue;
 
-    // عنوان فرعي (مثل "موسيقى" في ورقة "إعلام+موسيقى+ت.إسلامية")
+    // عنوان فرعي (موسيقى وسط الورقة)
     const nonEmptyCount = row.filter(c => String(c).trim() !== '').length;
     if (nonEmptyCount <= 1) {
       const title = String(row.find(c => String(c).trim() !== '') || '').trim();
@@ -610,27 +644,14 @@ function parseHumanSheet(rows, sheetName) {
     classCols.forEach(j => {
       const val = String(row[j] || '').trim();
       if (!val) return;
-      // ✅ صيغة صحيحة: 1م1، 2م3، 4م6
       if (/^\d+م\d+$/.test(val)) {
         teacherClasses.push(val);
         classesSet.add(val);
-      }
-      // ⚠️ صيغة ناقصة: "2م" بدون رقم
-      else if (/^\d+م$/.test(val)) {
-        issues.push({
-          type: 'warn',
-          msg: `فوج غير مكتمل "${val}" للأستاذ "${teacherName}" — تجاهل`,
-          teacher: teacherName, value: val
-        });
-      }
-      // ❌ صيغة معكوسة: "م2" بدل "2م2"
-      else if (/^م\d+$/.test(val)) {
+      } else if (/^\d+م$/.test(val)) {
+        issues.push({ type: 'warn', msg: `فوج غير مكتمل "${val}" للأستاذ "${teacherName}"`, teacher: teacherName, value: val });
+      } else if (/^م\d+$/.test(val)) {
         const fix = val.replace('م','') + 'م' + val.replace('م','');
-        issues.push({
-          type: 'error',
-          msg: `صيغة خاطئة "${val}" للأستاذ "${teacherName}" — الصحيح: ${fix}`,
-          teacher: teacherName, value: val
-        });
+        issues.push({ type: 'error', msg: `صيغة خاطئة "${val}" → الصحيح "${fix}"`, teacher: teacherName, value: val });
       }
     });
 
@@ -640,11 +661,7 @@ function parseHumanSheet(rows, sheetName) {
     const extra = colExtra > 0 ? (parseInt(row[colExtra]) || 0) : 0;
 
     if (hours === 0 && !extra) {
-      issues.push({
-        type: 'warn',
-        msg: `الحجم الساعي مفقود للأستاذ "${teacherName}"`,
-        teacher: teacherName
-      });
+      issues.push({ type: 'warn', msg: `الحجم الساعي مفقود للأستاذ "${teacherName}"`, teacher: teacherName });
     }
 
     teachers.push({
@@ -664,7 +681,7 @@ function parseHumanSheet(rows, sheetName) {
 }
 
 function cleanSubjectName(name) {
-  return name.replace(/\s*\+\s*/g, '+').trim();
+  return String(name).replace(/\s*\+\s*/g, '+').trim();
 }
 
 function sortClasses(a, b) {
@@ -678,7 +695,7 @@ function sortClasses(a, b) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   ② معاينة الأوراق
+   معاينة الأوراق
    ═══════════════════════════════════════════════════════════════ */
 function showSheetPreview(data) {
   const errCount = data.sheets.reduce((acc, s) => acc + s.issues.filter(i => i.type === 'error').length, 0);
@@ -708,9 +725,7 @@ function showSheetPreview(data) {
           <div class="flex items-center gap-2">
             <span class="text-lg">${errN > 0 ? '❌' : (warnN > 0 ? '⚠️' : '✅')}</span>
             <span class="font-bold">${sheet.name}</span>
-            <span class="badge px-2 py-1 rounded-full text-xs" style="background: var(--bg-3); color: var(--text-mute)">
-              ${sheet.subjects.join(' / ')}
-            </span>
+            <span style="background: var(--bg-3); color: var(--text-mute); padding: 2px 8px; border-radius: 999px; font-size: 11px">${sheet.subjects.join(' / ')}</span>
           </div>
           <div class="flex gap-2 text-xs" style="color: var(--text-mute)">
             <span>👨‍🏫 ${sheet.teachers.length}</span>
@@ -720,7 +735,7 @@ function showSheetPreview(data) {
 
         <div class="flex flex-wrap gap-1 mb-2">
           ${sheet.teachers.slice(0, 15).map(t =>
-            `<span class="teacher-chip ${t.classes ? 'ok' : 'err'}" title="${t.classes}">${t.name} (${t.hours}h${t.extra?`+${t.extra}`:''})</span>`
+            `<span class="teacher-chip ok" title="${t.classes}">${t.name} (${t.hours}h${t.extra ? '+' + t.extra : ''})</span>`
           ).join('')}
           ${sheet.teachers.length > 15 ? `<span class="teacher-chip">+${sheet.teachers.length - 15}</span>` : ''}
         </div>
@@ -753,7 +768,6 @@ function acceptSheetPreview() {
   if (pendingImport.rooms.length) $('roomsInput').value = pendingImport.rooms.join('\n');
 
   renderTeachers(pendingImport.teachers);
-
   updateStats();
   toast(`✅ ${pendingImport.teachers.length} أستاذ، ${pendingImport.classes.length} فوج`, 'success');
   log(`\n🎉 الإجمالي: ${pendingImport.teachers.length} أستاذ، ${pendingImport.classes.length} فوج من ${pendingImport.sheets.length} ورقة`, 'success');
@@ -766,7 +780,7 @@ window.closeSheetPreview = closeSheetPreview;
 window.acceptSheetPreview = acceptSheetPreview;
 
 /* ═══════════════════════════════════════════════════════════════
-   ③ تصدير تقرير Excel
+   تصدير تقرير Excel
    ═══════════════════════════════════════════════════════════════ */
 function exportIssuesReport() {
   if (!pendingImport && !importIssues.length) return toast('لا توجد بيانات', 'warn');
@@ -776,6 +790,7 @@ function exportIssuesReport() {
   // ورقة 1: الملخص
   const summary = [
     ['DONIA LABS TECH — تقرير استيراد Excel'],
+    ['الإصدار', APP_VERSION],
     ['التاريخ', new Date().toLocaleString('ar-DZ')],
     [],
     ['البيان', 'القيمة'],
@@ -787,7 +802,7 @@ function exportIssuesReport() {
     ['إجمالي التنبيهات', importIssues.filter(i => i.type === 'warn').length]
   ];
   const ws1 = XLSX.utils.aoa_to_sheet(summary);
-  ws1['!cols'] = [{ wch: 25 }, { wch: 40 }];
+  ws1['!cols'] = [{ wch: 25 }, { wch: 45 }];
   XLSX.utils.book_append_sheet(wb, ws1, 'الملخص');
 
   // ورقة 2: الأخطاء
@@ -826,7 +841,8 @@ window.exportIssuesReport = exportIssuesReport;
 
 /* ═══════ TEACHERS ═══════ */
 function renderTeachers(teachers = []) {
-  $('teachersContainer').innerHTML = '';
+  const container = $('teachersContainer');
+  container.innerHTML = '';
   teachers.forEach(t => addTeacherRow(t));
   updateStats();
 }
@@ -839,14 +855,14 @@ function addTeacherRow(t = { name: '', subject: '', classes: '', hours: 0, extra
     <div class="grid md:grid-cols-3 gap-2 mb-2">
       <input placeholder="الأستاذ" value="${t.name}" class="t-name input-field p-2 rounded-lg text-sm" />
       <input placeholder="المادة" value="${t.subject}" class="t-subject input-field p-2 rounded-lg text-sm" />
-      <input placeholder="القاعة" value="${t.room || ''}" class="t-room input-field p-2 rounded-lg text-sm" />
+      <input placeholder="القاعة (اختياري)" value="${t.room || ''}" class="t-room input-field p-2 rounded-lg text-sm" />
     </div>
     <div class="grid md:grid-cols-4 gap-2">
-      <input placeholder="الأفواج" value="${t.classes}" class="t-classes input-field p-2 rounded-lg text-sm md:col-span-2" />
+      <input placeholder="الأفواج (مفصولة بفاصلة)" value="${t.classes}" class="t-classes input-field p-2 rounded-lg text-sm md:col-span-2" />
       <input type="number" placeholder="حصص" value="${t.hours}" class="t-hours input-field p-2 rounded-lg text-sm" />
       <input type="number" placeholder="استدراك" value="${t.extra}" class="t-extra input-field p-2 rounded-lg text-sm" />
     </div>
-    <button class="mt-2 text-xs" style="color:#EF4444">🗑️ حذف</button>
+    <button class="mt-2 text-xs" style="color:#EF4444; background: none; border: none; cursor: pointer">🗑️ حذف</button>
   `;
   div.querySelector('button').onclick = () => { div.remove(); updateStats(); };
   $('teachersContainer').appendChild(div);
@@ -860,7 +876,7 @@ $('clearTeachersBtn').onclick = () => {
   updateStats();
 };
 
-/* ═══════ DATA ═══════ */
+/* ═══════ DATA COLLECTION ═══════ */
 function collectData() {
   const days = $('daysInput').value.split(',').map(s => s.trim()).filter(Boolean);
   const classes = $('classesInput').value.split('\n').map(s => s.trim()).filter(Boolean);
@@ -897,48 +913,42 @@ function solveTimetable(data) {
   const D = days.length, P = periods;
 
   const lessons = [];
-  teachers.forEach(t => {
+  teachers.forEach((t, tIdx) => {
     const subjIdx = subjects.indexOf(t.subject);
     if (subjIdx === -1) return;
     const roomIdx = t.room ? rooms.indexOf(t.room) : -1;
     const clsList = (t.classes || '').split(/[,،]/).map(s => s.trim()).filter(Boolean);
     if (!clsList.length) return;
 
-    // 🎯 الحصص المزدوجة: إذا كانت الحصص المطلوبة > 4، قد تكون مزدوجة
     const totalH = (t.hours || 0) + (t.extra || 0);
     const perClass = Math.max(1, Math.ceil(totalH / clsList.length));
-    // 🔥 كشف المزدوجة: إذا كانت المادة تدعم ذلك (فيزياء، علوم)
-    const isDouble = /فيزياء|علوم ط/.test(t.subject) && perClass >= 2;
+    const isDouble = /فيزياء|علوم/.test(t.subject) && perClass >= 2;
 
     clsList.forEach(cn => {
       const cIdx = classes.indexOf(cn);
       if (cIdx === -1) return;
 
       if (isDouble && perClass >= 2) {
-        // 🎯 حصة مزدوجة: ساعتان متتاليتان
         lessons.push({
-          teacherIdx: teachers.indexOf(t), teacherName: t.name,
+          teacherIdx: tIdx, teacherName: t.name,
           subjectIdx: subjIdx, subjectName: t.subject,
           classIdx: cIdx, className: cn,
           roomIdx, roomName: t.room,
           isDouble: true, duration: 2
         });
-        // الباقي كحصة فردية
-        if (perClass > 2) {
-          for (let i = 0; i < perClass - 2; i++) {
-            lessons.push({
-              teacherIdx: teachers.indexOf(t), teacherName: t.name,
-              subjectIdx: subjIdx, subjectName: t.subject,
-              classIdx: cIdx, className: cn,
-              roomIdx, roomName: t.room,
-              isDouble: false, duration: 1
-            });
-          }
+        for (let i = 0; i < perClass - 2; i++) {
+          lessons.push({
+            teacherIdx: tIdx, teacherName: t.name,
+            subjectIdx: subjIdx, subjectName: t.subject,
+            classIdx: cIdx, className: cn,
+            roomIdx, roomName: t.room,
+            isDouble: false, duration: 1
+          });
         }
       } else {
         for (let i = 0; i < perClass; i++) {
           lessons.push({
-            teacherIdx: teachers.indexOf(t), teacherName: t.name,
+            teacherIdx: tIdx, teacherName: t.name,
             subjectIdx: subjIdx, subjectName: t.subject,
             classIdx: cIdx, className: cn,
             roomIdx, roomName: t.room,
@@ -949,7 +959,7 @@ function solveTimetable(data) {
     });
   });
 
-  log(`📚 إجمالي الحصص: ${lessons.length}`, 'info');
+  log(`📚 إجمالي الحصص المطلوبة: ${lessons.length}`, 'info');
 
   const grid = Array.from({ length: D }, () => Array.from({ length: P }, () => ({
     teachers: new Set(), classes: new Set(), rooms: new Set()
@@ -966,7 +976,6 @@ function solveTimetable(data) {
     const slots = [];
     for (let d = 0; d < D; d++) {
       for (let p = 0; p < P; p++) {
-        // للحصص المزدوجة: يجب توفر خليتين متتاليتين
         if (lesson.isDouble && p + 1 >= P) continue;
         slots.push({ d, p });
       }
@@ -975,7 +984,6 @@ function solveTimetable(data) {
 
     let placedFlag = false;
     for (const { d, p } of slots) {
-      // فحص الخلية الحالية
       const cell = grid[d][p];
       if (cell.teachers.has(lesson.teacherIdx)) continue;
       if (cell.classes.has(lesson.classIdx)) continue;
@@ -983,7 +991,6 @@ function solveTimetable(data) {
       if (teacherDayCount[lesson.teacherIdx][d] >= 4) continue;
       if (lesson.subjectName === 'رياضيات' && days[d] === 'الخميس' && (p === 4 || p === 5)) continue;
 
-      // للحصص المزدوجة: فحص الخلية التالية
       if (lesson.isDouble) {
         const nextCell = grid[d][p + 1];
         if (nextCell.teachers.has(lesson.teacherIdx)) continue;
@@ -991,7 +998,6 @@ function solveTimetable(data) {
         if (lesson.roomIdx >= 0 && nextCell.rooms.has(lesson.roomIdx)) continue;
       }
 
-      // ✅ ضع الدرس
       cell.teachers.add(lesson.teacherIdx);
       cell.classes.add(lesson.classIdx);
       if (lesson.roomIdx >= 0) cell.rooms.add(lesson.roomIdx);
@@ -1030,33 +1036,38 @@ $('generateTimetableBtn').onclick = () => {
   try {
     const data = collectData();
     if (!data.teachers.length) return toast('أضف أساتذة', 'error');
-    log('🧠 بدء المحرك...', 'info');
+    log('🧠 بدء محرك الجدولة (5 محاولات)...', 'info');
+    log(`📊 ${data.classes.length} فوج × ${data.days.length} أيام × ${data.periods} حصص`, 'info');
 
     let best = null;
     for (let i = 1; i <= 5; i++) {
       const r = solveTimetable(data);
       if (!best || r.placed > best.placed) best = r;
-      log(`  🎯 ${i}: ${r.placed}`, 'info');
+      log(`  🎯 محاولة ${i}: ${r.placed}/${r.total}`, 'info');
     }
 
     generatedTimetable = best.schedule;
     localStorage.setItem(STORAGE.TT, JSON.stringify(generatedTimetable));
-    log(`🎉 ${best.placed} حصة`, 'success');
-    toast(`🎉 ${best.placed} حصة`, 'success');
+    log(`🎉 أفضل نتيجة: ${best.placed}/${best.total}`, 'success');
+    toast(`🎉 ${best.placed} حصة مُولَّدة`, 'success');
 
     generatedXML = buildFullXML(data, generatedTimetable);
     updateStats();
     gotoStep(5);
-  } catch (e) { log('❌ ' + e.message, 'error'); }
+  } catch (e) {
+    log('❌ ' + e.message, 'error');
+    toast('❌ ' + e.message, 'error');
+  }
 };
 
 $('clearTimetableBtn').onclick = () => {
   generatedTimetable = [];
   localStorage.removeItem(STORAGE.TT);
   updateStats();
+  toast('🗑️ تم المسح', 'info');
 };
 
-/* ═══════ XML ═══════ */
+/* ═══════ XML BUILDER ═══════ */
 function esc(s) { return String(s || '').replace(/[<>&"']/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&apos;'}[c])); }
 
 function buildFullXML(data, schedule = []) {
@@ -1075,7 +1086,7 @@ function buildFullXML(data, schedule = []) {
 
   let sX = '';
   subjects.forEach((s, i) => {
-    const short = s.slice(0, 8).replace(/[^\w\u0600-\u06FF]/g, '');
+    const short = s.slice(0, 8).replace(/[^\w\u0600-\u06FF]/g, '') || 'S' + (i + 1);
     sX += `    <subject name="${esc(s)}" short="${esc(short)}" id="${i+1}" />\n`;
   });
 
@@ -1119,6 +1130,7 @@ function buildFullXML(data, schedule = []) {
   });
 
   return `<?xml version="1.0" encoding="UTF-8"?>
+<!-- DONIA LABS TECH — ${APP_VERSION} — ${BUILD_TIME} -->
 <osctime version="2023" institution="${esc(data.institution)}" year="${esc(data.year)}">
   <periods>
 ${pX}  </periods>
@@ -1168,7 +1180,7 @@ function renderView() {
 
   const container = $('timetableContainer');
   if (viewSelectedId === null || !generatedTimetable.length) {
-    container.innerHTML = '<p style="color: var(--text-mute); text-align:center; padding:40px">لا يوجد جدول</p>';
+    container.innerHTML = '<p style="color: var(--text-mute); text-align:center; padding:40px">لا يوجد جدول بعد</p>';
     return;
   }
 
@@ -1213,20 +1225,21 @@ function updateSummary() {
 }
 
 $('downloadBtn').onclick = () => {
-  if (!generatedXML) return toast('ولّد الجدول', 'error');
+  if (!generatedXML) return toast('ولّد الجدول أولاً', 'error');
   const blob = new Blob([generatedXML], { type: 'application/xml;charset=utf-8' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = 'timetable_import.xml';
   a.click();
-  toast('⬇️ تم', 'success');
+  toast('⬇️ تم التحميل', 'success');
 };
 $('previewBtn').onclick = () => {
-  if (!generatedXML) return toast('لا XML', 'error');
+  if (!generatedXML) return toast('لا يوجد XML', 'error');
   $('previewContent').textContent = generatedXML;
   $('previewModal').classList.remove('hidden');
 };
 function closePreview() { $('previewModal').classList.add('hidden'); }
+window.closePreview = closePreview;
 
 /* ═══════ INIT ═══════ */
 window.addEventListener('DOMContentLoaded', () => {
@@ -1242,7 +1255,8 @@ window.addEventListener('DOMContentLoaded', () => {
   if (saved) { try { generatedTimetable = JSON.parse(saved); } catch {} }
 
   updateStats();
-  log('✅ v6.0 جاهز — ارفع ملف Excel', 'success');
+  log(`✅ ${APP_VERSION} جاهز — ${BUILD_TIME}`, 'success');
+  log(`📊 ارفع ملف Excel متعدد الأوراق`, 'info');
 });
 </script>
 </body>
