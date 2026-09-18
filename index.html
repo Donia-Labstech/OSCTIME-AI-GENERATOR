@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-<title>DONIA LABS OSCTIME AI v12.0</title>
+<title>DONIA LABS OSCTIME AI v13.0</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
@@ -39,10 +39,9 @@
   .btn-ghost:hover { background: rgba(0,229,255,.08); }
   .btn-osctime { background: linear-gradient(135deg, #10B981, #059669); color: #fff; font-weight: 900; border: none; cursor: pointer; box-shadow: 0 8px 24px rgba(16,185,129,.35); }
   .btn-osctime:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(16,185,129,.5); }
-  .btn-excel { background: linear-gradient(135deg, #F59E0B, #D97706); color: #fff; font-weight: 900; border: none; cursor: pointer; box-shadow: 0 8px 24px rgba(245,158,11,.35); }
-  .btn-excel:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(245,158,11,.5); }
-  .btn-print { background: linear-gradient(135deg, #7C3AED, #6366F1); color: #fff; font-weight: 900; border: none; cursor: pointer; box-shadow: 0 8px 24px rgba(124,58,237,.35); }
-  .btn-print:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(124,58,237,.5); }
+  .btn-excel { background: linear-gradient(135deg, #F59E0B, #D97706); color: #fff; font-weight: 900; border: none; cursor: pointer; }
+  .btn-print { background: linear-gradient(135deg, #7C3AED, #6366F1); color: #fff; font-weight: 900; border: none; cursor: pointer; }
+  .btn-danger { background: linear-gradient(135deg, #EF4444, #DC2626); color: #fff; font-weight: 900; border: none; cursor: pointer; }
   .input-field { background: var(--bg); border: 1px solid var(--border); color: var(--text); }
   .input-field:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,229,255,.15); }
   .step-active { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #0A0F1E; font-weight: 800; }
@@ -65,12 +64,6 @@
   .sel-tab.active { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #0A0F1E; font-weight: 800; border-color: transparent; }
   [data-theme="light"] .sel-tab.active { color: #fff; }
   .sheet-card { background: var(--bg-2); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
-  .sheet-card.ok { border-color: var(--success); }
-  .sheet-card.has-warn { border-color: var(--warn); }
-  .sheet-card.has-error { border-color: var(--error); }
-  .issue-row { padding: 6px 10px; border-radius: 6px; font-size: 11px; margin-top: 4px; }
-  .issue-row.error { background: rgba(239,68,68,.15); color: var(--error); }
-  .issue-row.warn { background: rgba(255,184,0,.15); color: var(--warn); }
   .teacher-chip { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; background: var(--bg-3); border: 1px solid var(--border); color: var(--text); margin: 2px; }
   #versionBadge { background: rgba(0,229,255,.1); color: var(--accent); padding: 2px 8px; border-radius: 6px; font-size: 10px; font-family: monospace; }
   
@@ -79,39 +72,49 @@
   .timetable { width: 100%; border-collapse: collapse; min-width: 900px; }
   .timetable th {
     background: linear-gradient(135deg, var(--accent), var(--accent-2));
-    color: #0A0F1E; font-weight: 800; padding: 12px 8px;
-    border: 1px solid var(--border); font-size: 13px;
+    color: #0A0F1E; font-weight: 800; padding: 10px 6px;
+    border: 1px solid var(--border); font-size: 12px;
   }
   [data-theme="light"] .timetable th { color: #fff; }
   .timetable td {
     border: 1px solid var(--border);
-    padding: 8px 6px; text-align: center;
-    font-size: 11px; vertical-align: top;
-    min-height: 70px; background: var(--cell-bg);
+    padding: 6px 4px; text-align: center;
+    font-size: 10px; vertical-align: top;
+    min-height: 60px; background: var(--cell-bg);
   }
   .timetable .time-col {
     background: var(--bg-3); font-weight: 700;
     font-size: 10px; color: var(--text-mute);
-    min-width: 80px;
+    min-width: 70px;
   }
   .lesson-cell {
-    border-radius: 6px; padding: 4px;
+    border-radius: 5px; padding: 3px;
     background: linear-gradient(135deg, rgba(0,229,255,.1), rgba(124,58,237,.08));
     border-right: 3px solid var(--accent);
-    margin: 2px 0;
+    margin: 1px 0;
   }
-  .lesson-subject { color: var(--accent); font-weight: 700; font-size: 12px; }
-  .lesson-info { color: var(--gold); font-size: 10px; margin-top: 2px; }
-  .lesson-room { color: var(--success); font-size: 9px; }
-  .empty-cell { color: var(--text-mute); font-size: 14px; opacity: .4; }
+  .lesson-subject { color: var(--accent); font-weight: 700; font-size: 11px; }
+  .lesson-info { color: var(--gold); font-size: 9px; margin-top: 1px; }
+  .lesson-room { color: var(--success); font-size: 8px; }
+  .empty-cell { color: var(--text-mute); font-size: 12px; opacity: .4; }
+  .rest-cell { background: rgba(239,68,68,.08) !important; color: var(--error); font-weight: 700; }
   
-  /* Stats Row */
   .timetable-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; margin-bottom: 12px; }
   .stat-mini { background: var(--bg-2); border: 1px solid var(--border); border-radius: 8px; padding: 8px; text-align: center; }
   .stat-mini .label { font-size: 10px; color: var(--text-mute); }
   .stat-mini .value { font-size: 18px; font-weight: 800; color: var(--accent); }
   
-  /* Print styles */
+  /* Constraints Builder */
+  .constraint-row {
+    background: var(--bg-2); border: 1px solid var(--border);
+    border-radius: 10px; padding: 12px; margin-bottom: 8px;
+    display: grid; grid-template-columns: 2fr 2fr 2fr 1fr auto; gap: 8px; align-items: center;
+  }
+  @media (max-width: 768px) {
+    .constraint-row { grid-template-columns: 1fr 1fr; }
+  }
+  
+  /* Print */
   @media print {
     body * { visibility: hidden; }
     #printArea, #printArea * { visibility: visible; }
@@ -119,6 +122,7 @@
     .no-print { display: none !important; }
     .timetable th { background: #0891B2 !important; color: #fff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     .timetable td { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .lesson-cell { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   }
   
   .osctime-import-box { background: linear-gradient(135deg, rgba(16,185,129,.1), rgba(5,150,105,.05)); border: 2px dashed var(--success); border-radius: 16px; padding: 24px; margin-top: 16px; }
@@ -136,10 +140,6 @@
       </div>
     </div>
     <div class="flex items-center gap-3">
-      <div id="apiIndicator" class="hidden md:flex items-center gap-2 text-xs" style="color: var(--text-mute)">
-        <span id="apiDot" class="pulse-dot" style="background:#EF4444"></span>
-        <span id="apiStatusText">API غير مُعدّ</span>
-      </div>
       <button id="themeToggle" class="theme-toggle"></button>
       <button id="openApiBtn" class="btn-primary px-4 py-2 rounded-lg text-sm">🔑 API</button>
     </div>
@@ -152,10 +152,7 @@
     <button id="closeApiBtn" class="text-2xl" style="color: var(--text-mute); background: none; border: none; cursor: pointer">✕</button>
   </div>
   <div class="space-y-4">
-    <div>
-      <label class="block text-sm mb-2">مفتاح API</label>
-      <input id="apiKeyInput" type="password" placeholder="sk-..." class="input-field w-full p-3 rounded-lg text-sm" />
-    </div>
+    <input id="apiKeyInput" type="password" placeholder="sk-..." class="input-field w-full p-3 rounded-lg text-sm" />
     <button id="saveApiBtn" class="btn-primary w-full py-3 rounded-lg">💾 حفظ</button>
   </div>
 </aside>
@@ -168,11 +165,13 @@
     <div data-step="1" class="step step-active px-4 py-2 rounded-lg text-sm cursor-pointer">1️⃣ الأساسيات</div>
     <div data-step="2" class="step step-idle px-4 py-2 rounded-lg text-sm cursor-pointer">2️⃣ الأفواج</div>
     <div data-step="3" class="step step-idle px-4 py-2 rounded-lg text-sm cursor-pointer">3️⃣ الإسناد</div>
-    <div data-step="4" class="step step-idle px-4 py-2 rounded-lg text-sm cursor-pointer">4️⃣ التوليد</div>
-    <div data-step="5" class="step step-idle px-4 py-2 rounded-lg text-sm cursor-pointer">5️⃣ التصدير</div>
-    <div data-step="6" class="step step-idle px-4 py-2 rounded-lg text-sm cursor-pointer" style="background: linear-gradient(135deg, #F59E0B, #D97706); color: #fff;">6️⃣ 📅 الجداول الزمنية</div>
+    <div data-step="4" class="step step-idle px-4 py-2 rounded-lg text-sm cursor-pointer">4️⃣ القيود</div>
+    <div data-step="5" class="step step-idle px-4 py-2 rounded-lg text-sm cursor-pointer">5️⃣ التوليد</div>
+    <div data-step="6" class="step step-idle px-4 py-2 rounded-lg text-sm cursor-pointer">6️⃣ الجداول</div>
+    <div data-step="7" class="step step-idle px-4 py-2 rounded-lg text-sm cursor-pointer">7️⃣ التصدير</div>
   </div>
 
+  <!-- STEP 1 -->
   <section id="step1" class="glass rounded-2xl p-6 mb-6">
     <div class="flex items-center gap-3 mb-5">
       <div class="w-10 h-10 rounded-lg grid place-items-center font-bold" style="background: rgba(0,229,255,.1); color: var(--accent)">1</div>
@@ -185,7 +184,7 @@
           <div class="text-3xl">📊</div>
           <div>
             <h3 class="font-bold">استيراد ملف Excel</h3>
-            <p class="text-xs" style="color: var(--text-mute)">كل ورقة = مادة (نموذج العقيد-الحواس)</p>
+            <p class="text-xs" style="color: var(--text-mute)">كل ورقة = مادة</p>
           </div>
         </div>
         <input type="file" id="excelInput" accept=".xlsx,.xls,.csv" class="hidden" />
@@ -216,11 +215,12 @@
       </div>
       <div>
         <label class="text-sm">عدد الحصص اليومية</label>
-        <input id="periodsCount" type="number" value="7" min="1" max="12" class="input-field w-full p-3 mt-2 rounded-lg" />
+        <input id="periodsCount" type="number" value="6" min="1" max="12" class="input-field w-full p-3 mt-2 rounded-lg" />
       </div>
     </div>
   </section>
 
+  <!-- STEP 2 -->
   <section id="step2" class="glass rounded-2xl p-6 mb-6 hidden">
     <div class="flex items-center gap-3 mb-5">
       <div class="w-10 h-10 rounded-lg grid place-items-center font-bold" style="background: rgba(0,229,255,.1); color: var(--accent)">2</div>
@@ -254,6 +254,7 @@
     <button id="loadDefaults" class="btn-primary px-5 py-2 rounded-lg text-sm mt-4">📋 تحميل الافتراضي</button>
   </section>
 
+  <!-- STEP 3 -->
   <section id="step3" class="glass rounded-2xl p-6 mb-6 hidden">
     <div class="flex items-center gap-3 mb-5">
       <div class="w-10 h-10 rounded-lg grid place-items-center font-bold" style="background: rgba(0,229,255,.1); color: var(--accent)">3</div>
@@ -268,9 +269,60 @@
     <div id="teachersContainer" class="space-y-3"></div>
   </section>
 
+  <!-- STEP 4 — القيود (جديد!) -->
   <section id="step4" class="glass rounded-2xl p-6 mb-6 hidden">
     <div class="flex items-center gap-3 mb-5">
-      <div class="w-10 h-10 rounded-lg grid place-items-center font-bold" style="background: rgba(0,229,255,.1); color: var(--accent)">4</div>
+      <div class="w-10 h-10 rounded-lg grid place-items-center font-bold" style="background: rgba(245,158,11,.15); color: var(--gold)">4</div>
+      <div>
+        <h2 class="text-xl font-bold">⚙️ القيود والحصص المزدوجة</h2>
+        <p class="text-xs" style="color: var(--text-mute)">حدد أيام الراحة، الحصص الممنوعة، والحصص المزدوجة</p>
+      </div>
+    </div>
+
+    <!-- Global Constraints -->
+    <div class="grid md:grid-cols-2 gap-4 mb-6">
+      <div class="rounded-xl p-4" style="background: var(--bg-2); border: 1px solid var(--border)">
+        <h3 class="font-bold mb-3" style="color: var(--gold)">📅 أيام العطلة الرسمية</h3>
+        <div id="holidaysContainer" class="space-y-2"></div>
+        <button id="addHolidayBtn" class="btn-ghost px-4 py-2 rounded-lg text-sm mt-3">+ إضافة يوم عطلة</button>
+      </div>
+
+      <div class="rounded-xl p-4" style="background: var(--bg-2); border: 1px solid var(--border)">
+        <h3 class="font-bold mb-3" style="color: var(--gold)">🚫 حظر نوافذ زمنية</h3>
+        <div id="timeBlocksContainer" class="space-y-2"></div>
+        <button id="addTimeBlockBtn" class="btn-ghost px-4 py-2 rounded-lg text-sm mt-3">+ إضافة حظر</button>
+      </div>
+    </div>
+
+    <!-- Teacher Constraints -->
+    <div class="rounded-xl p-4 mb-6" style="background: var(--bg-2); border: 1px solid var(--border)">
+      <h3 class="font-bold mb-3" style="color: var(--gold)">👨‍🏫 أيام راحة الأساتذة</h3>
+      <p class="text-xs mb-3" style="color: var(--text-mute)">حدد يوم الراحة لكل أستاذ (يوم لا يعمل فيه)</p>
+      <div id="teacherRestContainer" class="space-y-2"></div>
+      <button id="addTeacherRestBtn" class="btn-ghost px-4 py-2 rounded-lg text-sm mt-3">+ إضافة يوم راحة</button>
+    </div>
+
+    <!-- Subject Constraints -->
+    <div class="rounded-xl p-4 mb-6" style="background: var(--bg-2); border: 1px solid var(--border)">
+      <h3 class="font-bold mb-3" style="color: var(--gold)">📚 أيام راحة المواد</h3>
+      <p class="text-xs mb-3" style="color: var(--text-mute)">مثال: الرياضيات لا تُدرَّس الخميس، العربية لا تُدرَّس الاثنين</p>
+      <div id="subjectRestContainer" class="space-y-2"></div>
+      <button id="addSubjectRestBtn" class="btn-ghost px-4 py-2 rounded-lg text-sm mt-3">+ إضافة يوم راحة لمادة</button>
+    </div>
+
+    <!-- Double Periods -->
+    <div class="rounded-xl p-4" style="background: var(--bg-2); border: 1px solid var(--border)">
+      <h3 class="font-bold mb-3" style="color: var(--gold)">🔗 الحصص المزدوجة</h3>
+      <p class="text-xs mb-3" style="color: var(--text-mute)">المواد التي تُدرَّس في حصتين متتاليتين</p>
+      <div id="doublePeriodsContainer" class="space-y-2"></div>
+      <button id="addDoublePeriodBtn" class="btn-ghost px-4 py-2 rounded-lg text-sm mt-3">+ إضافة مادة مزدوجة</button>
+    </div>
+  </section>
+
+  <!-- STEP 5 — التوليد -->
+  <section id="step5" class="glass rounded-2xl p-6 mb-6 hidden">
+    <div class="flex items-center gap-3 mb-5">
+      <div class="w-10 h-10 rounded-lg grid place-items-center font-bold" style="background: rgba(0,229,255,.1); color: var(--accent)">5</div>
       <div><h2 class="text-xl font-bold">توليد الجدول</h2></div>
     </div>
 
@@ -286,45 +338,15 @@
     </div>
   </section>
 
-  <section id="step5" class="glass rounded-2xl p-6 mb-6 hidden">
-    <div class="flex items-center gap-3 mb-5">
-      <div class="w-10 h-10 rounded-lg grid place-items-center font-bold" style="background: rgba(0,229,255,.1); color: var(--accent)">5</div>
-      <div><h2 class="text-xl font-bold">التصدير إلى aSc Timetables</h2></div>
-    </div>
-
-    <div class="osctime-import-box text-center">
-      <div class="text-4xl mb-3">🎯</div>
-      <h3 class="text-lg font-extrabold mb-2" style="color: var(--success)">تصدير XML (الصيغة الرسمية)</h3>
-      <button id="downloadBtn" class="btn-osctime px-8 py-4 rounded-xl text-lg">⬇️ تحميل timetable_import.xml</button>
-    </div>
-
-    <div class="flex flex-wrap gap-3 mt-6 justify-center">
-      <button id="downloadExcelBtn" class="btn-excel px-5 py-2 rounded-lg text-sm">📊 تصدير Excel</button>
-      <button id="downloadCsvBtn" class="btn-ghost px-5 py-2 rounded-lg text-sm">📄 CSV</button>
-      <button id="previewBtn" class="btn-ghost px-5 py-2 rounded-lg text-sm">👁️ معاينة XML</button>
-      <button id="copyXmlBtn" class="btn-ghost px-5 py-2 rounded-lg text-sm">📋 نسخ XML</button>
-    </div>
-
-    <div class="mt-6 p-4 rounded-xl" style="background: rgba(16,185,129,.08); border: 1px solid var(--success)">
-      <p class="text-sm">
-        💡 <strong>الآن انتقل إلى التبويب 6</strong> لعرض الجداول الزمنية الكاملة (أساتذة، أفواج، جماعي).
-      </p>
-    </div>
-  </section>
-
-  <!-- ═══════════════════════════════════════════════════════════════
-       🆕 v12.0 — التبويب 6: الجداول الزمنية
-       ═══════════════════════════════════════════════════════════════ -->
+  <!-- STEP 6 — الجداول -->
   <section id="step6" class="glass rounded-2xl p-6 mb-6 hidden">
     <div class="flex items-center gap-3 mb-5">
-      <div class="w-10 h-10 rounded-lg grid place-items-center font-bold" style="background: linear-gradient(135deg, #F59E0B, #D97706); color: #fff">6</div>
+      <div class="w-10 h-10 rounded-lg grid place-items-center font-bold" style="background: rgba(245,158,11,.15); color: var(--gold)">6</div>
       <div>
         <h2 class="text-xl font-bold">📅 الجداول الزمنية</h2>
-        <p class="text-xs" style="color: var(--text-mute)">عرض وطباعة جداول الأساتذة والأفواج</p>
       </div>
     </div>
 
-    <!-- Tabs -->
     <div class="flex flex-wrap gap-2 mb-6 no-print">
       <button data-view="teacher" class="sel-tab active view-tab">👨‍🏫 جدول أستاذ</button>
       <button data-view="class" class="sel-tab view-tab">🎓 جدول فوج</button>
@@ -332,22 +354,43 @@
       <button data-view="all-teachers" class="sel-tab view-tab">📊 كل الأساتذة</button>
     </div>
 
-    <!-- Selector -->
     <div id="entitySelector" class="mb-4 no-print"></div>
 
-    <!-- Actions -->
     <div class="flex flex-wrap gap-2 mb-4 no-print">
       <button id="printTimetableBtn" class="btn-print px-5 py-2 rounded-lg text-sm">🖨️ طباعة</button>
-      <button id="pdfTimetableBtn" class="btn-print px-5 py-2 rounded-lg text-sm">📄 تصدير PDF</button>
-      <button id="excelTimetableBtn" class="btn-excel px-5 py-2 rounded-lg text-sm">📊 تصدير Excel</button>
+      <button id="pdfTimetableBtn" class="btn-print px-5 py-2 rounded-lg text-sm">📄 PDF</button>
+      <button id="excelTimetableBtn" class="btn-excel px-5 py-2 rounded-lg text-sm">📊 Excel</button>
     </div>
 
-    <!-- Statistics -->
     <div id="timetableStats" class="timetable-stats"></div>
 
-    <!-- Timetable -->
     <div id="printArea" class="timetable-wrap">
       <div id="timetableContent"></div>
+    </div>
+  </section>
+
+  <!-- STEP 7 — التصدير -->
+  <section id="step7" class="glass rounded-2xl p-6 mb-6 hidden">
+    <div class="flex items-center gap-3 mb-5">
+      <div class="w-10 h-10 rounded-lg grid place-items-center font-bold" style="background: rgba(0,229,255,.1); color: var(--accent)">7</div>
+      <div><h2 class="text-xl font-bold">التصدير</h2></div>
+    </div>
+
+    <div class="osctime-import-box text-center mb-4">
+      <div class="text-4xl mb-3">📊</div>
+      <h3 class="text-lg font-extrabold mb-2" style="color: var(--success)">تصدير Excel (موصى به)</h3>
+      <button id="downloadExcelBtn" class="btn-excel px-8 py-4 rounded-xl text-lg">📊 تصدير Excel</button>
+    </div>
+
+    <div class="osctime-import-box text-center">
+      <div class="text-4xl mb-3">🎯</div>
+      <h3 class="text-lg font-extrabold mb-2" style="color: var(--success)">تصدير XML</h3>
+      <button id="downloadBtn" class="btn-osctime px-8 py-4 rounded-xl text-lg">⬇️ تحميل XML</button>
+    </div>
+
+    <div class="flex flex-wrap gap-3 mt-6 justify-center">
+      <button id="downloadCsvBtn" class="btn-ghost px-5 py-2 rounded-lg text-sm">📄 CSV</button>
+      <button id="previewBtn" class="btn-ghost px-5 py-2 rounded-lg text-sm">👁️ معاينة XML</button>
     </div>
   </section>
 
@@ -359,7 +402,7 @@
 
 <div id="sheetPreviewModal" class="hidden fixed inset-0 bg-black/85 z-50 p-4 overflow-auto">
   <div class="glass rounded-2xl p-6 max-w-6xl mx-auto my-8">
-    <div class="flex justify-between items-center mb-5 flex-wrap gap-3">
+    <div class="flex justify-between items-center mb-5">
       <h3 class="font-bold text-xl" style="color: var(--accent)">📋 معاينة الأوراق</h3>
       <button onclick="closeSheetPreview()" class="text-2xl" style="color: var(--text-mute); background: none; border: none; cursor: pointer">✕</button>
     </div>
@@ -387,33 +430,53 @@
 </div>
 
 <footer class="text-center text-xs py-8 mt-12 no-print" style="border-top: 1px solid var(--border); color: var(--text-mute)">
-  © 2025 DONIA LABS TECH — <span id="footerVersion">v12.0</span> · MIT License
+  © 2025 DONIA LABS TECH — <span id="footerVersion">v13.0</span> · MIT License
 </footer>
 
 <script>
 'use strict';
 
-const APP_VERSION = 'v12.0';
+const APP_VERSION = 'v13.0';
 const BUILD_TIME = new Date().toISOString().slice(0, 16).replace('T', ' ');
 
 const $ = (id) => document.getElementById(id);
 const $$ = (sel) => document.querySelectorAll(sel);
-const STORAGE = { API_KEY: 'donia_api_v12', THEME: 'donia_theme_v12', TT: 'donia_tt_v12' };
+const STORAGE = { API_KEY: 'donia_api_v13', THEME: 'donia_theme_v13', TT: 'donia_tt_v13', CONSTRAINTS: 'donia_constraints_v13' };
 
 let currentStep = 1;
-const TOTAL_STEPS = 6;
+const TOTAL_STEPS = 7;
 let generatedXML = '';
 let generatedTimetable = [];
-let viewMode = 'teacher';
-let viewSelectedId = 0;
 let currentViewType = 'teacher';
+let viewSelectedId = 0;
 let pendingImport = null;
 
+// ═══ CONSTRAINTS SYSTEM ═══
+let constraints = {
+  holidays: [],           // ['الجمعة', 'السبت']
+  timeBlocks: [],         // [{day: 'الثلاثاء', startPeriod: 4, endPeriod: 6}]
+  teacherRest: [],        // [{teacher: 'ر1', day: 'الخميس'}]
+  subjectRest: [],        // [{subject: 'رياضيات', day: 'الخميس'}]
+  doublePeriods: []       // ['فيزياء', 'علوم طبيعية']
+};
+
+function saveConstraints() {
+  localStorage.setItem(STORAGE.CONSTRAINTS, JSON.stringify(constraints));
+}
+
+function loadConstraints() {
+  const saved = localStorage.getItem(STORAGE.CONSTRAINTS);
+  if (saved) {
+    try { constraints = JSON.parse(saved); } catch {}
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-  const vText = `${APP_VERSION} (${BUILD_TIME})`;
-  $('versionBadge').textContent = vText;
+  $('versionBadge').textContent = `${APP_VERSION} (${BUILD_TIME})`;
   $('footerVersion').textContent = APP_VERSION;
-  console.log(`🚀 ${vText}`);
+  console.log(`🚀 ${APP_VERSION}`);
+  loadConstraints();
+  renderAllConstraints();
 });
 
 function applyTheme(t) {
@@ -455,14 +518,8 @@ $('closeApiBtn').onclick = () => {
 $('sidebarOverlay').onclick = () => $('closeApiBtn').click();
 $('saveApiBtn').onclick = () => {
   localStorage.setItem(STORAGE.API_KEY, $('apiKeyInput').value.trim());
-  updateApiIndicator();
   toast('✅ تم الحفظ', 'success');
 };
-function updateApiIndicator() {
-  const k = localStorage.getItem(STORAGE.API_KEY);
-  $('apiDot').style.background = k ? '#10B981' : '#EF4444';
-  $('apiStatusText').textContent = k ? 'API مُعدّ ✓' : 'API غير مُعدّ';
-}
 
 function gotoStep(n) {
   if (n < 1 || n > TOTAL_STEPS) return;
@@ -476,7 +533,8 @@ function gotoStep(n) {
     el.className = 'step px-4 py-2 rounded-lg text-sm cursor-pointer ' +
       (s === currentStep ? 'step-active' : s < currentStep ? 'step-done' : 'step-idle');
   });
-  if (currentStep === 4) updateSummary();
+  if (currentStep === 4) renderAllConstraints();
+  if (currentStep === 5) updateSummary();
   if (currentStep === 6) renderTimetables();
   updateStats();
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -485,6 +543,7 @@ $('nextBtn').onclick = () => gotoStep(currentStep + 1);
 $('prevBtn').onclick = () => gotoStep(currentStep - 1);
 $$('.step').forEach(el => el.onclick = () => gotoStep(+el.dataset.step));
 
+/* DEFAULTS */
 const DEFAULTS = {
   classes: ['1م1','1م2','1م3','1م4','1م5','1م6','2م1','2م2','2م3','2م4','2م5','3م1','3م2','3م3','3م4','3م5','4م1','4م2','4م3','4م4','4م5','4م6'],
   subjects: ['عربية','رياضيات','فرنسية','إنجليزية','علوم طبيعية','فيزياء','اجتماعيات','تربية إسلامية','تربية مدنية','تربية بدنية','موسيقى','إعلام آلي'],
@@ -527,7 +586,9 @@ function updateStats() {
   if (el) el.addEventListener('input', updateStats);
 });
 
-/* Excel Parser */
+/* ═══════════════════════════════════════════════════════════════
+   EXCEL PARSER
+   ═══════════════════════════════════════════════════════════════ */
 $('excelUploadBtn').onclick = () => $('excelInput').click();
 
 $('excelInput').onchange = (e) => {
@@ -559,7 +620,7 @@ function processAllSheets(workbook) {
     allTeachers.push(...result.teachers);
     result.classes.forEach(c => allClassesSet.add(c));
     result.subjects.forEach(s => allSubjectsSet.add(s));
-    sheetReports.push({ name: sheetName, teachers: result.teachers, classes: result.classes, subjects: result.subjects, issues: result.issues });
+    sheetReports.push({ name: sheetName, teachers: result.teachers, classes: result.classes, subjects: result.subjects });
   });
 
   const classes = Array.from(allClassesSet).sort(sortClasses);
@@ -574,7 +635,6 @@ function parseHumanSheet(rows, sheetName) {
   const teachers = [];
   const classesSet = new Set();
   const subjectsSet = new Set();
-  const issues = [];
   let currentSubject = sheetName;
 
   for (let i = 0; i < Math.min(6, rows.length); i++) {
@@ -603,7 +663,7 @@ function parseHumanSheet(rows, sheetName) {
     }
   }
 
-  if (headerRowIdx === -1) return { teachers, classes: [], subjects: [], issues };
+  if (headerRowIdx === -1) return { teachers, classes: [], subjects: [] };
 
   const maxCol = Math.max(...rows.slice(headerRowIdx).map(r => r.length));
   const endClass = colHours > 0 ? colHours : maxCol;
@@ -639,7 +699,7 @@ function parseHumanSheet(rows, sheetName) {
     subjectsSet.add(currentSubject);
   }
 
-  return { teachers, classes: Array.from(classesSet), subjects: Array.from(subjectsSet), issues };
+  return { teachers, classes: Array.from(classesSet), subjects: Array.from(subjectsSet) };
 }
 
 function sortClasses(a, b) {
@@ -662,28 +722,19 @@ function showSheetPreview(data) {
     </div>
   `).join('');
 
-  $('sheetsPreview').innerHTML = data.sheets.map(sheet => {
-    const errN = sheet.issues.filter(i => i.type === 'error').length;
-    const warnN = sheet.issues.filter(i => i.type === 'warn').length;
-    const status = errN > 0 ? 'has-error' : (warnN > 0 ? 'has-warn' : 'ok');
-    return `
-      <div class="sheet-card ${status}">
-        <div class="flex justify-between items-center flex-wrap gap-2 mb-2">
-          <div class="flex items-center gap-2">
-            <span class="text-lg">${errN > 0 ? '❌' : (warnN > 0 ? '⚠️' : '✅')}</span>
-            <span class="font-bold">${sheet.name}</span>
-          </div>
-          <div class="flex gap-2 text-xs" style="color: var(--text-mute)">
-            <span>👨‍🏫 ${sheet.teachers.length}</span>
-            <span>🏫 ${sheet.classes.length}</span>
-          </div>
-        </div>
-        <div class="flex flex-wrap gap-1 mb-2">
-          ${sheet.teachers.slice(0, 15).map(t => `<span class="teacher-chip">${t.name} (${t.hours}h)</span>`).join('')}
+  $('sheetsPreview').innerHTML = data.sheets.map(sheet => `
+    <div class="sheet-card ok">
+      <div class="flex justify-between items-center mb-2">
+        <span class="font-bold">✅ ${sheet.name}</span>
+        <div class="text-xs" style="color: var(--text-mute)">
+          <span>👨‍🏫 ${sheet.teachers.length}</span> · <span>🏫 ${sheet.classes.length}</span>
         </div>
       </div>
-    `;
-  }).join('');
+      <div class="flex flex-wrap gap-1">
+        ${sheet.teachers.slice(0, 15).map(t => `<span class="teacher-chip">${t.name} (${t.hours}h)</span>`).join('')}
+      </div>
+    </div>
+  `).join('');
 
   $('sheetPreviewModal').classList.remove('hidden');
 }
@@ -738,6 +789,214 @@ $('clearTeachersBtn').onclick = () => {
   updateStats();
 };
 
+/* ═══════════════════════════════════════════════════════════════
+   🎯 CONSTRAINTS UI
+   ═══════════════════════════════════════════════════════════════ */
+
+const ALL_DAYS = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+
+function renderAllConstraints() {
+  renderHolidays();
+  renderTimeBlocks();
+  renderTeacherRest();
+  renderSubjectRest();
+  renderDoublePeriods();
+}
+
+function renderHolidays() {
+  const container = $('holidaysContainer');
+  container.innerHTML = '';
+  constraints.holidays.forEach((day, idx) => {
+    const div = document.createElement('div');
+    div.className = 'flex items-center justify-between gap-2 p-2 rounded-lg';
+    div.style.cssText = 'background: var(--bg-3)';
+    div.innerHTML = `
+      <span class="font-bold" style="color: var(--error)">🚫 ${day}</span>
+      <button onclick="removeHoliday(${idx})" class="btn-danger px-3 py-1 rounded-lg text-xs">🗑️</button>
+    `;
+    container.appendChild(div);
+  });
+  if (constraints.holidays.length === 0) {
+    container.innerHTML = '<p class="text-xs text-center" style="color: var(--text-mute); padding: 8px">لا توجد أيام عطلة</p>';
+  }
+}
+
+$('addHolidayBtn').onclick = () => {
+  const day = prompt('اسم اليوم (مثال: الجمعة):');
+  if (!day) return;
+  if (constraints.holidays.includes(day)) return toast('⚠️ اليوم مُضاف', 'warn');
+  constraints.holidays.push(day);
+  saveConstraints();
+  renderHolidays();
+  toast('✅ تمت الإضافة', 'success');
+};
+
+function removeHoliday(idx) {
+  constraints.holidays.splice(idx, 1);
+  saveConstraints();
+  renderHolidays();
+}
+
+function renderTimeBlocks() {
+  const container = $('timeBlocksContainer');
+  container.innerHTML = '';
+  constraints.timeBlocks.forEach((block, idx) => {
+    const div = document.createElement('div');
+    div.className = 'flex items-center justify-between gap-2 p-2 rounded-lg';
+    div.style.cssText = 'background: var(--bg-3)';
+    div.innerHTML = `
+      <div class="text-xs">
+        <span class="font-bold" style="color: var(--warn)">${block.day}</span>
+        <span style="color: var(--text-mute)"> من P${block.startPeriod} إلى P${block.endPeriod}</span>
+      </div>
+      <button onclick="removeTimeBlock(${idx})" class="btn-danger px-3 py-1 rounded-lg text-xs">🗑️</button>
+    `;
+    container.appendChild(div);
+  });
+  if (constraints.timeBlocks.length === 0) {
+    container.innerHTML = '<p class="text-xs text-center" style="color: var(--text-mute); padding: 8px">لا توجد حظر</p>';
+  }
+}
+
+$('addTimeBlockBtn').onclick = () => {
+  const day = prompt('اليوم (مثال: الثلاثاء):');
+  if (!day) return;
+  const start = parseInt(prompt('من الحصة رقم:'));
+  const end = parseInt(prompt('إلى الحصة رقم:'));
+  if (!start || !end) return;
+  constraints.timeBlocks.push({ day, startPeriod: start, endPeriod: end });
+  saveConstraints();
+  renderTimeBlocks();
+  toast('✅ تمت الإضافة', 'success');
+};
+
+function removeTimeBlock(idx) {
+  constraints.timeBlocks.splice(idx, 1);
+  saveConstraints();
+  renderTimeBlocks();
+}
+
+function renderTeacherRest() {
+  const container = $('teacherRestContainer');
+  container.innerHTML = '';
+  constraints.teacherRest.forEach((item, idx) => {
+    const div = document.createElement('div');
+    div.className = 'flex items-center justify-between gap-2 p-2 rounded-lg';
+    div.style.cssText = 'background: var(--bg-3)';
+    div.innerHTML = `
+      <div class="text-xs">
+        <span class="font-bold" style="color: var(--gold)">👨‍🏫 ${item.teacher}</span>
+        <span style="color: var(--text-mute)"> — يوم راحة: </span>
+        <span class="font-bold" style="color: var(--error)">${item.day}</span>
+      </div>
+      <button onclick="removeTeacherRest(${idx})" class="btn-danger px-3 py-1 rounded-lg text-xs">🗑️</button>
+    `;
+    container.appendChild(div);
+  });
+  if (constraints.teacherRest.length === 0) {
+    container.innerHTML = '<p class="text-xs text-center" style="color: var(--text-mute); padding: 8px">لم تُحدَّد أيام راحة للأساتذة</p>';
+  }
+}
+
+$('addTeacherRestBtn').onclick = () => {
+  const teacher = prompt('اسم الأستاذ:');
+  if (!teacher) return;
+  const day = prompt('يوم الراحة (مثال: الخميس):');
+  if (!day) return;
+  constraints.teacherRest.push({ teacher, day });
+  saveConstraints();
+  renderTeacherRest();
+  toast('✅ تمت الإضافة', 'success');
+};
+
+function removeTeacherRest(idx) {
+  constraints.teacherRest.splice(idx, 1);
+  saveConstraints();
+  renderTeacherRest();
+}
+
+function renderSubjectRest() {
+  const container = $('subjectRestContainer');
+  container.innerHTML = '';
+  constraints.subjectRest.forEach((item, idx) => {
+    const div = document.createElement('div');
+    div.className = 'flex items-center justify-between gap-2 p-2 rounded-lg';
+    div.style.cssText = 'background: var(--bg-3)';
+    div.innerHTML = `
+      <div class="text-xs">
+        <span class="font-bold" style="color: var(--accent)">📚 ${item.subject}</span>
+        <span style="color: var(--text-mute)"> — يوم راحة: </span>
+        <span class="font-bold" style="color: var(--error)">${item.day}</span>
+      </div>
+      <button onclick="removeSubjectRest(${idx})" class="btn-danger px-3 py-1 rounded-lg text-xs">🗑️</button>
+    `;
+    container.appendChild(div);
+  });
+  if (constraints.subjectRest.length === 0) {
+    container.innerHTML = '<p class="text-xs text-center" style="color: var(--text-mute); padding: 8px">لم تُحدَّد أيام راحة للمواد</p>';
+  }
+}
+
+$('addSubjectRestBtn').onclick = () => {
+  const subject = prompt('اسم المادة (مثال: رياضيات):');
+  if (!subject) return;
+  const day = prompt('يوم الراحة (مثال: الخميس):');
+  if (!day) return;
+  constraints.subjectRest.push({ subject, day });
+  saveConstraints();
+  renderSubjectRest();
+  toast('✅ تمت الإضافة', 'success');
+};
+
+function removeSubjectRest(idx) {
+  constraints.subjectRest.splice(idx, 1);
+  saveConstraints();
+  renderSubjectRest();
+}
+
+function renderDoublePeriods() {
+  const container = $('doublePeriodsContainer');
+  container.innerHTML = '';
+  constraints.doublePeriods.forEach((subject, idx) => {
+    const div = document.createElement('div');
+    div.className = 'flex items-center justify-between gap-2 p-2 rounded-lg';
+    div.style.cssText = 'background: var(--bg-3)';
+    div.innerHTML = `
+      <span class="font-bold" style="color: var(--accent)">🔗 ${subject}</span>
+      <button onclick="removeDoublePeriod(${idx})" class="btn-danger px-3 py-1 rounded-lg text-xs">🗑️</button>
+    `;
+    container.appendChild(div);
+  });
+  if (constraints.doublePeriods.length === 0) {
+    container.innerHTML = '<p class="text-xs text-center" style="color: var(--text-mute); padding: 8px">لا توجد مواد مزدوجة</p>';
+  }
+}
+
+$('addDoublePeriodBtn').onclick = () => {
+  const subject = prompt('اسم المادة (مثال: فيزياء):');
+  if (!subject) return;
+  if (constraints.doublePeriods.includes(subject)) return toast('⚠️ مُضافة', 'warn');
+  constraints.doublePeriods.push(subject);
+  saveConstraints();
+  renderDoublePeriods();
+  toast('✅ تمت الإضافة', 'success');
+};
+
+function removeDoublePeriod(idx) {
+  constraints.doublePeriods.splice(idx, 1);
+  saveConstraints();
+  renderDoublePeriods();
+}
+
+window.removeHoliday = removeHoliday;
+window.removeTimeBlock = removeTimeBlock;
+window.removeTeacherRest = removeTeacherRest;
+window.removeSubjectRest = removeSubjectRest;
+window.removeDoublePeriod = removeDoublePeriod;
+
+/* ═══════════════════════════════════════════════════════════════
+   🎯 COLLECT DATA
+   ═══════════════════════════════════════════════════════════════ */
 function collectData() {
   const days = $('daysInput').value.split(',').map(s => s.trim()).filter(Boolean);
   const classes = $('classesInput').value.split('\n').map(s => s.trim()).filter(Boolean);
@@ -759,16 +1018,20 @@ function collectData() {
   return {
     institution: $('instName').value.trim(),
     year: $('schoolYear').value.trim(),
-    days, periods: +$('periodsCount').value || 7, duration: +$('periodDuration').value || 55,
+    days, periods: +$('periodsCount').value || 6, duration: +$('periodDuration').value || 55,
     classes, subjects, rooms, teachers
   };
 }
 
-/* SOLVER */
+/* ═══════════════════════════════════════════════════════════════
+   🎯 SOLVER v13 — مع القيود الذكية
+   ═══════════════════════════════════════════════════════════════ */
+
 function solveTimetable(data) {
   const { days, periods, classes, subjects, teachers } = data;
   const D = days.length, P = periods;
 
+  // بناء الدروس
   const lessons = [];
   teachers.forEach((t, tIdx) => {
     const subjIdx = subjects.indexOf(t.subject);
@@ -781,23 +1044,51 @@ function solveTimetable(data) {
     clsList.forEach(cn => {
       const cIdx = classes.indexOf(cn);
       if (cIdx === -1) return;
-      lessons.push({ teacherIdx: tIdx, teacherName: t.name, subjectIdx: subjIdx, subjectName: t.subject, classIdx: cIdx, className: cn, roomIdx: -1, roomName: t.room, count: perClass });
+      lessons.push({
+        teacherIdx: tIdx, teacherName: t.name,
+        subjectIdx: subjIdx, subjectName: t.subject,
+        classIdx: cIdx, className: cn,
+        roomName: t.room,
+        count: perClass
+      });
     });
   });
 
+  log(`📚 ${lessons.length} إسناد`, 'info');
+
+  // Grid
   const grid = Array.from({ length: D }, () => Array.from({ length: P }, () => ({
     teachers: new Set(), classes: new Set()
   })));
 
-  const schedule = [];
-  const teacherDayCount = {};
-  teachers.forEach((_, i) => teacherDayCount[i] = new Array(D).fill(0));
+  // Helpers للتحقق من القيود
+  const isHoliday = (dayName) => constraints.holidays.includes(dayName);
 
+  const isTimeBlocked = (dayName, periodNum) => {
+    return constraints.timeBlocks.some(b =>
+      b.day === dayName && periodNum >= b.startPeriod && periodNum <= b.endPeriod
+    );
+  };
+
+  const isTeacherRest = (teacherName, dayName) => {
+    return constraints.teacherRest.some(r => r.teacher === teacherName && r.day === dayName);
+  };
+
+  const isSubjectRest = (subjectName, dayName) => {
+    return constraints.subjectRest.some(r => r.subject === subjectName && r.day === dayName);
+  };
+
+  // توسيع الدروس
   const expanded = [];
   lessons.forEach(l => { for (let i = 0; i < l.count; i++) expanded.push(l); });
 
+  // خلط
   const shuffled = [...expanded].sort(() => Math.random() - 0.5);
   let placed = 0, failed = 0;
+
+  const schedule = [];
+  const teacherDayCount = {};
+  teachers.forEach((_, i) => teacherDayCount[i] = new Array(D).fill(0));
 
   shuffled.forEach(lesson => {
     const slots = [];
@@ -806,23 +1097,93 @@ function solveTimetable(data) {
 
     let placedFlag = false;
     for (const { d, p } of slots) {
+      const dayName = days[d];
+      const periodNum = p + 1;
+
+      // 🚫 فحص أيام العطلة
+      if (isHoliday(dayName)) continue;
+
+      // 🚫 فحص حظر الوقت
+      if (isTimeBlocked(dayName, periodNum)) continue;
+
+      // 🚫 فحص يوم راحة الأستاذ
+      if (isTeacherRest(lesson.teacherName, dayName)) continue;
+
+      // 🚫 فحص يوم راحة المادة
+      if (isSubjectRest(lesson.subjectName, dayName)) continue;
+
+      // 🚫 فحص التعارض
       const cell = grid[d][p];
       if (cell.teachers.has(lesson.teacherIdx)) continue;
       if (cell.classes.has(lesson.classIdx)) continue;
+
+      // حد أقصى 5 حصص لأستاذ في اليوم
       if (teacherDayCount[lesson.teacherIdx][d] >= 5) continue;
 
+      // ✅ ضع
       cell.teachers.add(lesson.teacherIdx);
       cell.classes.add(lesson.classIdx);
       teacherDayCount[lesson.teacherIdx][d]++;
 
-      schedule.push({ day: d, period: p, teacherIdx: lesson.teacherIdx, teacherName: lesson.teacherName, subjectIdx: lesson.subjectIdx, subjectName: lesson.subjectName, classIdx: lesson.classIdx, className: lesson.className, roomName: lesson.roomName });
-      placedFlag = true; placed++; break;
+      schedule.push({
+        day: d, period: p,
+        teacherIdx: lesson.teacherIdx, teacherName: lesson.teacherName,
+        subjectIdx: lesson.subjectIdx, subjectName: lesson.subjectName,
+        classIdx: lesson.classIdx, className: lesson.className,
+        roomName: lesson.roomName
+      });
+
+      placedFlag = true;
+      placed++;
+      break;
     }
     if (!placedFlag) failed++;
   });
 
-  log(`✅ ${placed} حصة | ${failed} فشل`, 'success');
+  log(`✅ ${placed} حصة | ⚠️ ${failed} فشل`, 'success');
+  if (failed > 0) log(`⚠️ فشل ${failed} حصة بسبب القيود`, 'warn');
+
+  // 🎯 معالجة الفراغات: نقل الحصص لتقليل الفراغات
+  compactSchedule(schedule, D, P);
+
   return { schedule, placed, failed };
+}
+
+/**
+ * 🎯 تقليل الفراغات: نقل الحصص لملء الفراغات
+ */
+function compactSchedule(schedule, D, P) {
+  for (let d = 0; d < D; d++) {
+    for (let c = 0; c < 100; c++) { // الأفواج (نفترض أقل من 100)
+      const classLessons = schedule.filter(s => s.day === d && s.classIdx === c);
+      if (classLessons.length === 0) continue;
+
+      // احصل على الحصص مرتبة
+      const periods = classLessons.map(l => l.period).sort((a, b) => a - b);
+
+      // ابحث عن فجوة
+      for (let i = 0; i < periods.length - 1; i++) {
+        if (periods[i + 1] - periods[i] > 1) {
+          // توجد فجوة - حاول نقل الحصة الأخيرة للأمام
+          const lastLesson = classLessons.find(l => l.period === periods[periods.length - 1]);
+          if (lastLesson) {
+            // ابحث عن أول فراغ
+            let targetPeriod = -1;
+            for (let p = 0; p < P; p++) {
+              const cell = schedule.find(s => s.day === d && s.period === p && s.classIdx === c);
+              if (!cell && !schedule.find(s => s.day === d && s.period === p && s.teacherIdx === lastLesson.teacherIdx)) {
+                targetPeriod = p;
+                break;
+              }
+            }
+            if (targetPeriod >= 0 && targetPeriod < lastLesson.period) {
+              lastLesson.period = targetPeriod;
+            }
+          }
+        }
+      }
+    }
+  }
 }
 
 $('generateTimetableBtn').onclick = () => {
@@ -831,15 +1192,24 @@ $('generateTimetableBtn').onclick = () => {
     const data = collectData();
     if (!data.teachers.length) return toast('أضف أساتذة', 'error');
 
+    log('🧠 بدء محرك الجدولة مع القيود...', 'info');
+    log(`📅 أيام العطلة: ${constraints.holidays.join(', ') || 'لا يوجد'}`, 'info');
+    log(`🚫 حظر الوقت: ${constraints.timeBlocks.length}`, 'info');
+    log(`👨‍🏫 أيام راحة الأساتذة: ${constraints.teacherRest.length}`, 'info');
+    log(`📚 أيام راحة المواد: ${constraints.subjectRest.length}`, 'info');
+
     let best = null;
-    for (let i = 1; i <= 5; i++) {
+    for (let i = 1; i <= 10; i++) {
       const r = solveTimetable(data);
       if (!best || r.placed > best.placed) best = r;
+      log(`  🎯 محاولة ${i}: ${r.placed} حصة`, 'info');
     }
 
     generatedTimetable = best.schedule;
     localStorage.setItem(STORAGE.TT, JSON.stringify(generatedTimetable));
+    log(`🎉 أفضل نتيجة: ${best.placed} حصة`, 'success');
     toast(`🎉 ${best.placed} حصة`, 'success');
+
     generatedXML = buildFullXML(data, generatedTimetable);
     updateStats();
     gotoStep(6);
@@ -850,10 +1220,11 @@ $('clearTimetableBtn').onclick = () => {
   generatedTimetable = [];
   localStorage.removeItem(STORAGE.TT);
   updateStats();
+  toast('🗑️ تم المسح', 'info');
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   🎯 v12.0 — TIMETABLE RENDERER
+   🎯 TIMETABLE RENDERER
    ═══════════════════════════════════════════════════════════════ */
 
 $$('.view-tab').forEach(tab => tab.onclick = () => {
@@ -868,7 +1239,6 @@ function renderTimetables() {
   const data = collectData();
   const selector = $('entitySelector');
 
-  // Selector حسب النوع
   if (currentViewType === 'teacher') {
     selector.innerHTML = data.teachers.map((t, i) =>
       `<button class="sel-tab ${viewSelectedId === i ? 'active' : ''}" data-id="${i}">${t.name} (${t.subject})</button>`
@@ -887,26 +1257,18 @@ function renderTimetables() {
   });
 
   if (!generatedTimetable.length) {
-    $('timetableContent').innerHTML = '<p style="text-align: center; padding: 40px; color: var(--text-mute)">⚠️ لا يوجد جدول — عد للخطوة 4 وولّد الجدول</p>';
+    $('timetableContent').innerHTML = '<p style="text-align: center; padding: 40px; color: var(--text-mute)">⚠️ لا يوجد جدول — عد للخطوة 5 وولّد الجدول</p>';
     $('timetableStats').innerHTML = '';
     return;
   }
 
-  if (currentViewType === 'teacher') {
-    renderSingleTimetable('teacher', viewSelectedId);
-  } else if (currentViewType === 'class') {
-    renderSingleTimetable('class', viewSelectedId);
-  } else if (currentViewType === 'all-classes') {
-    renderAllClassesTable();
-  } else if (currentViewType === 'all-teachers') {
-    renderAllTeachersTable();
-  }
+  if (currentViewType === 'teacher') renderSingle('teacher', viewSelectedId);
+  else if (currentViewType === 'class') renderSingle('class', viewSelectedId);
+  else if (currentViewType === 'all-classes') renderAllClasses();
+  else if (currentViewType === 'all-teachers') renderAllTeachers();
 }
 
-/**
- * 🎯 عرض جدول أستاذ أو فوج واحد
- */
-function renderSingleTimetable(type, id) {
+function renderSingle(type, id) {
   const data = collectData();
   const isTeacher = type === 'teacher';
   const entityName = isTeacher ? data.teachers[id]?.name : data.classes[id];
@@ -914,127 +1276,110 @@ function renderSingleTimetable(type, id) {
 
   const filtered = generatedTimetable.filter(s => isTeacher ? s.teacherIdx === id : s.classIdx === id);
 
-  // Statistics
-  const totalHours = filtered.length;
-  const uniqueSubjects = new Set(filtered.map(s => s.subjectName)).size;
-  const uniqueEntities = new Set(filtered.map(s => isTeacher ? s.className : s.teacherName)).size;
-
   $('timetableStats').innerHTML = `
-    <div class="stat-mini">
-      <div class="label">${isTeacher ? 'الأستاذ' : 'الفوج'}</div>
-      <div class="value" style="font-size: 14px">${entityName}</div>
-    </div>
-    <div class="stat-mini">
-      <div class="label">الساعات الأسبوعية</div>
-      <div class="value">${totalHours}</div>
-    </div>
-    <div class="stat-mini">
-      <div class="label">المواد</div>
-      <div class="value" style="color: #7C3AED">${uniqueSubjects}</div>
-    </div>
-    <div class="stat-mini">
-      <div class="label">${isTeacher ? 'الأفواج' : 'الأساتذة'}</div>
-      <div class="value" style="color: #FFB800">${uniqueEntities}</div>
-    </div>
+    <div class="stat-mini"><div class="label">${isTeacher ? 'الأستاذ' : 'الفوج'}</div><div class="value" style="font-size: 14px">${entityName}</div></div>
+    <div class="stat-mini"><div class="label">الحصص</div><div class="value">${filtered.length}</div></div>
+    <div class="stat-mini"><div class="label">المواد</div><div class="value" style="color: #7C3AED">${new Set(filtered.map(s => s.subjectName)).size}</div></div>
+    <div class="stat-mini"><div class="label">${isTeacher ? 'الأفواج' : 'الأساتذة'}</div><div class="value" style="color: #FFB800">${new Set(filtered.map(s => isTeacher ? s.className : s.teacherName)).size}</div></div>
   `;
 
-  // Header
   let html = `<div style="text-align: center; margin-bottom: 16px;">
     <h2 style="font-size: 20px; font-weight: 900; color: var(--accent); margin: 0;">
-      ${isTeacher ? '👨‍🏫 جدول الأستاذ:' : '🎓 جدول الفوج:'} ${entityName}
+      ${isTeacher ? '👨‍🏫' : '🎓'} ${entityName} ${entitySub ? `— ${entitySub}` : ''}
     </h2>
-    ${entitySub ? `<p style="font-size: 14px; color: var(--gold); margin: 4px 0;">${entitySub}</p>` : ''}
     <p style="font-size: 12px; color: var(--text-mute);">${data.institution} — ${data.year}</p>
   </div>`;
 
-  // Table
-  html += `<table class="timetable"><thead><tr><th style="min-width:80px">الحصة</th>`;
-  data.days.forEach(d => html += `<th>${d}</th>`);
+  html += `<table class="timetable"><thead><tr><th style="min-width:70px">الحصة</th>`;
+  data.days.forEach(d => {
+    const isHoliday = constraints.holidays.includes(d);
+    html += `<th style="${isHoliday ? 'background: linear-gradient(135deg, #EF4444, #DC2626);' : ''}">${d}${isHoliday ? ' 🚫' : ''}</th>`;
+  });
   html += `</tr></thead><tbody>`;
 
   for (let p = 1; p <= data.periods; p++) {
     const start = 8 * 60 + (p - 1) * data.duration;
     const end = start + data.duration;
     const f = m => `${String(Math.floor(m / 60)).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`;
-
     html += `<tr>`;
-    html += `<td class="time-col"><div style="font-weight: 800; color: var(--accent)">P${p}</div><div>${f(start)}</div><div>${f(end)}</div></td>`;
+    html += `<td class="time-col"><div style="font-weight: 800; color: var(--accent)">P${p}</div><div>${f(start)}</div></td>`;
 
     for (let d = 0; d < data.days.length; d++) {
+      const dayName = data.days[d];
+      const isHoliday = constraints.holidays.includes(dayName);
+      const isBlocked = constraints.timeBlocks.some(b => b.day === dayName && p >= b.startPeriod && p <= b.endPeriod);
+
+      if (isHoliday) {
+        html += `<td class="rest-cell">🚫 عطلة</td>`;
+        continue;
+      }
+
+      if (isBlocked) {
+        html += `<td class="rest-cell">🚫 محظور</td>`;
+        continue;
+      }
+
       const lesson = filtered.find(x => x.day === d && x.period === p - 1);
       if (lesson) {
-        html += `<td>
-          <div class="lesson-cell">
-            <div class="lesson-subject">${lesson.subjectName}</div>
-            <div class="lesson-info">${isTeacher ? lesson.className : lesson.teacherName}</div>
-            ${lesson.roomName ? `<div class="lesson-room">📍 ${lesson.roomName}</div>` : ''}
-          </div>
-        </td>`;
+        html += `<td><div class="lesson-cell">
+          <div class="lesson-subject">${lesson.subjectName}</div>
+          <div class="lesson-info">${isTeacher ? lesson.className : lesson.teacherName}</div>
+        </div></td>`;
       } else {
         html += `<td><span class="empty-cell">—</span></td>`;
       }
     }
     html += `</tr>`;
   }
-
   html += `</tbody></table>`;
   $('timetableContent').innerHTML = html;
 }
 
-/**
- * 🎯 عرض كل الأفواج (جدول مقارن)
- */
-function renderAllClassesTable() {
+function renderAllClasses() {
   const data = collectData();
-  const filteredClasses = data.classes;
 
-  let html = `<div style="text-align: center; margin-bottom: 16px;">
-    <h2 style="font-size: 20px; font-weight: 900; color: var(--accent); margin: 0;">📊 الجدول الجماعي — كل الأفواج</h2>
-    <p style="font-size: 12px; color: var(--text-mute);">${data.institution} — ${data.year} — ${filteredClasses.length} فوج</p>
-  </div>`;
-
-  // Statistics
   $('timetableStats').innerHTML = `
-    <div class="stat-mini">
-      <div class="label">عدد الأفواج</div>
-      <div class="value">${filteredClasses.length}</div>
-    </div>
-    <div class="stat-mini">
-      <div class="label">مجموع الحصص</div>
-      <div class="value" style="color: #7C3AED">${generatedTimetable.length}</div>
-    </div>
-    <div class="stat-mini">
-      <div class="label">عدد الأيام</div>
-      <div class="value" style="color: #FFB800">${data.days.length}</div>
-    </div>
-    <div class="stat-mini">
-      <div class="label">الحصص اليومية</div>
-      <div class="value" style="color: #10B981">${data.periods}</div>
-    </div>
+    <div class="stat-mini"><div class="label">الأفواج</div><div class="value">${data.classes.length}</div></div>
+    <div class="stat-mini"><div class="label">الحصص</div><div class="value" style="color: #7C3AED">${generatedTimetable.length}</div></div>
+    <div class="stat-mini"><div class="label">الأيام</div><div class="value" style="color: #FFB800">${data.days.length}</div></div>
+    <div class="stat-mini"><div class="label">الحصص/يوم</div><div class="value" style="color: #10B981">${data.periods}</div></div>
   `;
 
+  let html = `<div style="text-align: center; margin-bottom: 16px;">
+    <h2 style="font-size: 18px; font-weight: 900; color: var(--accent); margin: 0;">📊 الجدول الجماعي — كل الأفواج</h2>
+    <p style="font-size: 11px; color: var(--text-mute);">${data.institution} — ${data.year}</p>
+  </div>`;
+
   html += `<div style="overflow-x: auto;"><table class="timetable"><thead><tr>
-    <th>الفوج</th>
-    <th>عدد الحصص</th>
-    ${data.days.map(d => `<th>${d}</th>`).join('')}
+    <th style="min-width:60px">الفوج</th>
+    ${data.days.map(d => {
+      const isH = constraints.holidays.includes(d);
+      return `<th style="${isH ? 'background: linear-gradient(135deg, #EF4444, #DC2626);' : ''}">${d}${isH ? ' 🚫' : ''}</th>`;
+    }).join('')}
   </tr></thead><tbody>`;
 
-  filteredClasses.forEach((cls, cIdx) => {
+  data.classes.forEach((cls, cIdx) => {
     const clsLessons = generatedTimetable.filter(s => s.classIdx === cIdx);
     html += `<tr>`;
     html += `<td style="font-weight: 800; color: var(--accent); background: var(--bg-3)">${cls}</td>`;
-    html += `<td style="font-weight: 700; color: var(--gold)">${clsLessons.length}</td>`;
 
     data.days.forEach((day, dIdx) => {
-      const dayLessons = clsLessons.filter(s => s.day === dIdx);
-      html += `<td style="font-size: 10px">
-        ${dayLessons.map(l => `<div style="padding: 2px; border-bottom: 1px dashed var(--border)">
+      const isH = constraints.holidays.includes(day);
+      if (isH) {
+        html += `<td class="rest-cell">🚫</td>`;
+        return;
+      }
+      const dayLessons = clsLessons.filter(s => s.day === dIdx).sort((a, b) => a.period - b.period);
+      html += `<td style="font-size: 9px; padding: 2px">`;
+      dayLessons.forEach(l => {
+        html += `<div style="border-bottom: 1px dashed var(--border); padding: 1px 0">
           <strong style="color: var(--accent)">${l.subjectName}</strong>
           <div style="color: var(--gold)">${l.teacherName}</div>
-        </div>`).join('') || '<span class="empty-cell">—</span>'}
-      </td>`;
+        </div>`;
+      });
+      if (dayLessons.length === 0) html += `<span class="empty-cell">—</span>`;
+      html += `</td>`;
     });
-
     html += `</tr>`;
   });
 
@@ -1042,61 +1387,60 @@ function renderAllClassesTable() {
   $('timetableContent').innerHTML = html;
 }
 
-/**
- * 🎯 عرض كل الأساتذة (جدول مقارن)
- */
-function renderAllTeachersTable() {
+function renderAllTeachers() {
   const data = collectData();
-  const filteredTeachers = data.teachers;
 
   $('timetableStats').innerHTML = `
-    <div class="stat-mini">
-      <div class="label">عدد الأساتذة</div>
-      <div class="value">${filteredTeachers.length}</div>
-    </div>
-    <div class="stat-mini">
-      <div class="label">مجموع الحصص</div>
-      <div class="value" style="color: #7C3AED">${generatedTimetable.length}</div>
-    </div>
-    <div class="stat-mini">
-      <div class="label">عدد المواد</div>
-      <div class="value" style="color: #FFB800">${data.subjects.length}</div>
-    </div>
-    <div class="stat-mini">
-      <div class="label">الحصص اليومية</div>
-      <div class="value" style="color: #10B981">${data.periods}</div>
-    </div>
+    <div class="stat-mini"><div class="label">الأساتذة</div><div class="value">${data.teachers.length}</div></div>
+    <div class="stat-mini"><div class="label">الحصص</div><div class="value" style="color: #7C3AED">${generatedTimetable.length}</div></div>
+    <div class="stat-mini"><div class="label">المواد</div><div class="value" style="color: #FFB800">${data.subjects.length}</div></div>
+    <div class="stat-mini"><div class="label">الأيام</div><div class="value" style="color: #10B981">${data.days.length}</div></div>
   `;
 
   let html = `<div style="text-align: center; margin-bottom: 16px;">
-    <h2 style="font-size: 20px; font-weight: 900; color: var(--accent); margin: 0;">📊 الجدول الجماعي — كل الأساتذة</h2>
-    <p style="font-size: 12px; color: var(--text-mute);">${data.institution} — ${data.year}</p>
+    <h2 style="font-size: 18px; font-weight: 900; color: var(--accent); margin: 0;">📊 الجدول الجماعي — كل الأساتذة</h2>
+    <p style="font-size: 11px; color: var(--text-mute);">${data.institution} — ${data.year}</p>
   </div>`;
 
   html += `<div style="overflow-x: auto;"><table class="timetable"><thead><tr>
-    <th>الأستاذ</th>
-    <th>المادة</th>
-    <th>عدد الحصص</th>
-    ${data.days.map(d => `<th>${d}</th>`).join('')}
+    <th style="min-width:60px">الأستاذ</th>
+    <th style="min-width:60px">المادة</th>
+    ${data.days.map(d => {
+      const isH = constraints.holidays.includes(d);
+      return `<th style="${isH ? 'background: linear-gradient(135deg, #EF4444, #DC2626);' : ''}">${d}${isH ? ' 🚫' : ''}</th>`;
+    }).join('')}
   </tr></thead><tbody>`;
 
-  filteredTeachers.forEach((t, tIdx) => {
+  data.teachers.forEach((t, tIdx) => {
     const tLessons = generatedTimetable.filter(s => s.teacherIdx === tIdx);
+    const restDays = constraints.teacherRest.filter(r => r.teacher === t.name).map(r => r.day);
+
     html += `<tr>`;
     html += `<td style="font-weight: 800; color: var(--accent); background: var(--bg-3)">${t.name}</td>`;
-    html += `<td style="color: var(--gold); font-size: 11px">${t.subject}</td>`;
-    html += `<td style="font-weight: 700; color: var(--success)">${tLessons.length}</td>`;
+    html += `<td style="color: var(--gold); font-size: 10px">${t.subject}</td>`;
 
     data.days.forEach((day, dIdx) => {
-      const dayLessons = tLessons.filter(s => s.day === dIdx);
-      html += `<td style="font-size: 10px">
-        ${dayLessons.map(l => `<div style="padding: 2px; border-bottom: 1px dashed var(--border)">
+      const isH = constraints.holidays.includes(day);
+      const isRest = restDays.includes(day);
+      if (isH) {
+        html += `<td class="rest-cell">🚫</td>`;
+        return;
+      }
+      if (isRest) {
+        html += `<td class="rest-cell">🏠 راحة</td>`;
+        return;
+      }
+      const dayLessons = tLessons.filter(s => s.day === dIdx).sort((a, b) => a.period - b.period);
+      html += `<td style="font-size: 9px; padding: 2px">`;
+      dayLessons.forEach(l => {
+        html += `<div style="border-bottom: 1px dashed var(--border); padding: 1px 0">
           <strong style="color: var(--accent)">${l.subjectName}</strong>
           <div style="color: var(--gold)">${l.className}</div>
-        </div>`).join('') || '<span class="empty-cell">—</span>'}
-      </td>`;
+        </div>`;
+      });
+      if (dayLessons.length === 0) html += `<span class="empty-cell">—</span>`;
+      html += `</td>`;
     });
-
     html += `</tr>`;
   });
 
@@ -1104,7 +1448,7 @@ function renderAllTeachersTable() {
   $('timetableContent').innerHTML = html;
 }
 
-/* ═══════ Print & Export ═══════ */
+/* ═══ Print & Export ═══ */
 $('printTimetableBtn').onclick = () => {
   if (!generatedTimetable.length) return toast('لا يوجد جدول', 'error');
   window.print();
@@ -1129,16 +1473,12 @@ $('excelTimetableBtn').onclick = () => {
   const data = collectData();
   const wb = XLSX.utils.book_new();
 
-  // ورقة 1: جميع الحصص
-  const allData = [['اليوم', 'الحصة', 'الأستاذ', 'المادة', 'الفوج', 'القاعة']];
+  const allData = [['اليوم', 'الحصة', 'الأستاذ', 'المادة', 'الفوج']];
   generatedTimetable.forEach(s => {
-    allData.push([data.days[s.day], `P${s.period + 1}`, s.teacherName, s.subjectName, s.className, s.roomName || '—']);
+    allData.push([data.days[s.day], `P${s.period + 1}`, s.teacherName, s.subjectName, s.className]);
   });
-  const ws1 = XLSX.utils.aoa_to_sheet(allData);
-  ws1['!cols'] = [{ wch: 12 }, { wch: 10 }, { wch: 20 }, { wch: 20 }, { wch: 12 }, { wch: 15 }];
-  XLSX.utils.book_append_sheet(wb, ws1, 'جميع الحصص');
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(allData), 'جميع الحصص');
 
-  // ورقة 2: جدول كل أستاذ
   const tData = [['الأستاذ', 'المادة', ...data.days]];
   data.teachers.forEach((t, tIdx) => {
     const row = [t.name, t.subject];
@@ -1148,11 +1488,8 @@ $('excelTimetableBtn').onclick = () => {
     });
     tData.push(row);
   });
-  const ws2 = XLSX.utils.aoa_to_sheet(tData);
-  ws2['!cols'] = [{ wch: 20 }, { wch: 18 }, ...data.days.map(() => ({ wch: 25 }))];
-  XLSX.utils.book_append_sheet(wb, ws2, 'جداول الأساتذة');
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(tData), 'جداول الأساتذة');
 
-  // ورقة 3: جدول كل فوج
   const cData = [['الفوج', ...data.days]];
   data.classes.forEach((c, cIdx) => {
     const row = [c];
@@ -1162,15 +1499,13 @@ $('excelTimetableBtn').onclick = () => {
     });
     cData.push(row);
   });
-  const ws3 = XLSX.utils.aoa_to_sheet(cData);
-  ws3['!cols'] = [{ wch: 12 }, ...data.days.map(() => ({ wch: 25 }))];
-  XLSX.utils.book_append_sheet(wb, ws3, 'جداول الأفواج');
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(cData), 'جداول الأفواج');
 
   XLSX.writeFile(wb, `الجداول_الزمنية_${new Date().toISOString().slice(0, 10)}.xlsx`);
-  toast('📊 تم تصدير Excel', 'success');
+  toast('📊 تم التصدير', 'success');
 };
 
-/* XML Builder v12 — نسخة محسّنة */
+/* ═══ XML Builder v13 ═══ */
 function buildFullXML(data, schedule = []) {
   const { days, periods, duration, classes, subjects, rooms, teachers } = data;
 
@@ -1252,14 +1587,10 @@ $('downloadBtn').onclick = () => {
   toast('⬇️ تم التحميل', 'success');
 };
 
-$('downloadExcelBtn').onclick = exportToExcelForAsc;
-$('downloadCsvBtn').onclick = exportToCsvMulti;
-
-function exportToExcelForAsc() {
+$('downloadExcelBtn').onclick = () => {
   const data = collectData();
   const wb = XLSX.utils.book_new();
   
-  // Teachers
   const tD = [['Teacher', 'Subject', 'Class', 'Periods']];
   data.teachers.forEach(t => {
     const cls = (t.classes || '').split(/[,،]/).map(s => s.trim()).filter(Boolean);
@@ -1267,14 +1598,9 @@ function exportToExcelForAsc() {
     cls.forEach(c => tD.push([t.name, t.subject, c, per]));
   });
   XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(tD), 'Teachers');
-  
-  // Classes
   XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet([['Class'], ...data.classes.map(c => [c])]), 'Classes');
-  
-  // Subjects
   XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet([['Subject'], ...data.subjects.map(s => [s])]), 'Subjects');
   
-  // Lessons
   const lD = [['Class', 'Subject', 'Teacher', 'Periods']];
   data.teachers.forEach(t => {
     const cls = (t.classes || '').split(/[,،]/).map(s => s.trim()).filter(Boolean);
@@ -1284,10 +1610,10 @@ function exportToExcelForAsc() {
   XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(lD), 'Lessons');
   
   XLSX.writeFile(wb, `donia_export_${new Date().toISOString().slice(0, 10)}.xlsx`);
-  toast('📊 تم تصدير Excel', 'success');
-}
+  toast('📊 تم التصدير', 'success');
+};
 
-function exportToCsvMulti() {
+$('downloadCsvBtn').onclick = () => {
   const data = collectData();
   let csv = 'Class,Subject,Teacher,Periods\n';
   data.teachers.forEach(t => {
@@ -1300,8 +1626,8 @@ function exportToCsvMulti() {
   a.href = URL.createObjectURL(blob);
   a.download = `donia_export_${Date.now()}.csv`;
   a.click();
-  toast('📄 تم تصدير CSV', 'success');
-}
+  toast('📄 تم التصدير', 'success');
+};
 
 $('previewBtn').onclick = () => {
   if (!generatedXML) {
@@ -1311,29 +1637,17 @@ $('previewBtn').onclick = () => {
   $('previewContent').textContent = generatedXML;
   $('previewModal').classList.remove('hidden');
 };
-$('copyXmlBtn').onclick = async () => {
-  if (!generatedXML) {
-    const data = collectData();
-    generatedXML = buildFullXML(data, generatedTimetable);
-  }
-  try { await navigator.clipboard.writeText(generatedXML); toast('📋 تم النسخ', 'success'); }
-  catch { toast('❌ فشل', 'error'); }
-};
 function closePreview() { $('previewModal').classList.add('hidden'); }
 window.closePreview = closePreview;
 
 window.addEventListener('DOMContentLoaded', () => {
   const k = localStorage.getItem(STORAGE.API_KEY);
   if (k) $('apiKeyInput').value = k;
-  updateApiIndicator();
-
   $('classesInput').value = DEFAULTS.classes.join('\n');
   $('subjectsInput').value = DEFAULTS.subjects.join('\n');
   $('roomsInput').value = DEFAULTS.rooms.join('\n');
-
   const saved = localStorage.getItem(STORAGE.TT);
   if (saved) { try { generatedTimetable = JSON.parse(saved); } catch {} }
-
   updateStats();
   log(`✅ ${APP_VERSION} — ${BUILD_TIME}`, 'success');
 });
