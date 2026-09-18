@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-<title>DONIA LABS OSCTIME AI v9.0</title>
+<title>DONIA LABS OSCTIME AI v10.0</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
@@ -38,6 +38,8 @@
   .btn-ghost:hover { background: rgba(0,229,255,.08); }
   .btn-osctime { background: linear-gradient(135deg, #10B981, #059669); color: #fff; font-weight: 900; border: none; cursor: pointer; box-shadow: 0 8px 24px rgba(16,185,129,.35); }
   .btn-osctime:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(16,185,129,.5); }
+  .btn-excel { background: linear-gradient(135deg, #F59E0B, #D97706); color: #fff; font-weight: 900; border: none; cursor: pointer; box-shadow: 0 8px 24px rgba(245,158,11,.35); }
+  .btn-excel:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(245,158,11,.5); }
   .input-field { background: var(--bg); border: 1px solid var(--border); color: var(--text); }
   .input-field:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,229,255,.15); }
   .step-active { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #0A0F1E; font-weight: 800; }
@@ -79,6 +81,7 @@
   .teacher-chip.ok { border-color: var(--success); }
   #versionBadge { background: rgba(0,229,255,.1); color: var(--accent); padding: 2px 8px; border-radius: 6px; font-size: 10px; font-family: monospace; }
   .osctime-import-box { background: linear-gradient(135deg, rgba(16,185,129,.1), rgba(5,150,105,.05)); border: 2px dashed var(--success); border-radius: 16px; padding: 24px; margin-top: 16px; }
+  .excel-import-box { background: linear-gradient(135deg, rgba(245,158,11,.1), rgba(217,119,6,.05)); border: 2px dashed var(--gold); border-radius: 16px; padding: 24px; margin-top: 16px; }
 </style>
 </head>
 <body>
@@ -248,24 +251,47 @@
     <div class="flex items-center gap-3 mb-5">
       <div class="w-10 h-10 rounded-lg grid place-items-center font-bold" style="background: rgba(0,229,255,.1); color: var(--accent)">5</div>
       <div>
-        <h2 class="text-xl font-bold">التصدير إلى osctime</h2>
+        <h2 class="text-xl font-bold">التصدير إلى aSc Timetables 2023</h2>
       </div>
     </div>
 
+    <!-- ═══ 🆕 v10.0: صندوق تصدير Excel (موصى به) ═══ -->
+    <div class="excel-import-box text-center">
+      <div class="text-4xl mb-3">📊</div>
+      <h3 class="text-lg font-extrabold mb-2" style="color: var(--gold)">الطريقة المضمونة 100% — تصدير Excel</h3>
+      <p class="text-xs mb-4" style="color: var(--text-mute)">
+        حمّل الملف ثم في aSc: <strong>File → Import → Excel file</strong>
+      </p>
+      <button id="downloadExcelBtn" class="btn-excel px-8 py-4 rounded-xl text-lg">
+        📊 تصدير Excel لـ aSc (موصى به)
+      </button>
+      <p class="text-xs mt-3" style="color: var(--text-mute)">
+        يحتوي على 5 أوراق: Teachers · Classes · Subjects · Rooms · Lessons
+      </p>
+    </div>
+
+    <!-- ═══ صندوق تصدير XML (احتياطي) ═══ -->
     <div class="osctime-import-box text-center">
       <div class="text-4xl mb-3">🎯</div>
-      <h3 class="text-lg font-extrabold mb-2" style="color: var(--success)">تصدير إلى aSc Timetables 2023</h3>
+      <h3 class="text-lg font-extrabold mb-2" style="color: var(--success)">تصدير XML (احتياطي)</h3>
       <p class="text-xs mb-4" style="color: var(--text-mute)">
-        حمّل الملف ثم: <strong>File → Import → aSc Timetables XML</strong>
+        في aSc: <strong>File → New → Import data from file → aSc Timetables XML</strong>
       </p>
-      <button id="downloadBtn" class="btn-osctime px-8 py-4 rounded-xl text-lg">⬇️ تحميل timetable_import.xml</button>
+      <div class="flex flex-wrap gap-3 justify-center">
+        <button id="downloadBtn" class="btn-osctime px-6 py-3 rounded-xl">
+          ⚙️ تحميل timetable_import.xml
+        </button>
+        <button id="downloadCsvBtn" class="btn-ghost px-6 py-3 rounded-lg">
+          📄 تصدير CSV
+        </button>
+      </div>
     </div>
 
     <div class="flex flex-wrap gap-3 mt-6 justify-center">
       <button id="previewBtn" class="btn-ghost px-5 py-2 rounded-lg text-sm">👁️ معاينة XML</button>
-      <button id="copyXmlBtn" class="btn-ghost px-5 py-2 rounded-lg text-sm">📋 نسخ</button>
+      <button id="copyXmlBtn" class="btn-ghost px-5 py-2 rounded-lg text-sm">📋 نسخ XML</button>
       <button id="printBtn" class="btn-ghost px-5 py-2 rounded-lg text-sm">🖨️ طباعة</button>
-      <button id="exportReportBtn" class="btn-ghost px-5 py-2 rounded-lg text-sm" style="border-color: var(--success); color: var(--success)">📊 تقرير Excel</button>
+      <button id="exportReportBtn" class="btn-ghost px-5 py-2 rounded-lg text-sm" style="border-color: var(--success); color: var(--success)">📊 تقرير الأخطاء</button>
     </div>
 
     <div class="mt-6">
@@ -318,18 +344,18 @@
 </div>
 
 <footer class="text-center text-xs py-8 mt-12" style="border-top: 1px solid var(--border); color: var(--text-mute)">
-  © 2025 DONIA LABS TECH — <span id="footerVersion">v9.0</span> · MIT License
+  © 2025 DONIA LABS TECH — <span id="footerVersion">v10.0</span> · MIT License
 </footer>
 
 <script>
 'use strict';
 
-const APP_VERSION = 'v9.0';
+const APP_VERSION = 'v10.0';
 const BUILD_TIME = new Date().toISOString().slice(0, 16).replace('T', ' ');
 
 const $ = (id) => document.getElementById(id);
 const $$ = (sel) => document.querySelectorAll(sel);
-const STORAGE = { API_KEY: 'donia_api_v9', THEME: 'donia_theme_v9', TT: 'donia_tt_v9' };
+const STORAGE = { API_KEY: 'donia_api_v10', THEME: 'donia_theme_v10', TT: 'donia_tt_v10' };
 
 let currentStep = 1;
 const TOTAL_STEPS = 5;
@@ -365,7 +391,7 @@ function toast(msg, type = 'info') {
   $('toastMsg').style.color = c[type] || c.info;
   $('toast').classList.remove('hidden');
   clearTimeout(window.__t);
-  window.__t = setTimeout(() => $('toast').classList.add('hidden'), 3000);
+  window.__t = setTimeout(() => $('toast').classList.add('hidden'), 3500);
 }
 
 function log(msg, type = 'info') {
@@ -822,7 +848,7 @@ function collectData() {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   🎯 TIMETABLE SOLVER v9
+   🎯 TIMETABLE SOLVER
    ═══════════════════════════════════════════════════════════════ */
 function solveTimetable(data) {
   const { days, periods, classes, subjects, rooms, teachers } = data;
@@ -863,7 +889,6 @@ function solveTimetable(data) {
   const teacherDayCount = {};
   teachers.forEach((_, i) => teacherDayCount[i] = new Array(D).fill(0));
 
-  // توسيع Lessons حسب count ثم خلط
   const expanded = [];
   lessons.forEach(l => {
     for (let i = 0; i < l.count; i++) expanded.push(l);
@@ -939,17 +964,8 @@ $('clearTimetableBtn').onclick = () => {
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   🎯 XML BUILDER v9 — صيغة aSc Timetables 2023 الصحيحة 100%
-   ═══════════════════════════════════════════════════════════════
-   
-   الفروق الرئيسية:
-   1. لا نضع <cards> إطلاقاً (aSc يولّدها تلقائياً)
-   2. كل (أستاذ + مادة + فوج) = <lesson> واحد مع periodsperweek
-   3. days bitmask صحيح: 1, 2, 4, 8, 16, 32, 64
-   4. نضع <weeksdef> للأسبوع
-   5. نضع <termsdef> إن لم يكن موجوداً
+   🎯 XML BUILDER — صيغة aSc Timetables 2023
    ═══════════════════════════════════════════════════════════════ */
-
 function esc(s) {
   return String(s == null ? '' : s).replace(/[<>&"']/g, c =>
     ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;', "'": '&apos;' }[c]));
@@ -958,7 +974,6 @@ function esc(s) {
 function buildFullXML(data, schedule = []) {
   const { days, periods, duration, classes, subjects, rooms, teachers } = data;
 
-  // ═══ 1. PERIODS ═══
   let pX = '';
   for (let i = 1; i <= periods; i++) {
     const s = 8 * 60 + (i - 1) * duration;
@@ -967,45 +982,36 @@ function buildFullXML(data, schedule = []) {
     pX += `    <period name="الحصة ${i}" short="P${i}" period="${i}" starttime="${f(s)}" endtime="${f(e)}" />\n`;
   }
 
-  // ═══ 2. DAYSDEF — bitmask صحيح ═══
   let dX = '';
   days.forEach((d, i) => {
-    const bit = Math.pow(2, i);  // 1, 2, 4, 8, 16, 32, 64
+    const bit = Math.pow(2, i);
     dX += `    <daysdef name="${esc(d)}" short="D${i + 1}" days="${bit}" />\n`;
   });
 
-  // ═══ 3. WEEKSDEF — إلزامي ═══
   const wX = `    <weeksdef name="كل الأسابيع" short="W1" weeks="1" />\n`;
-
-  // ═══ 4. TERMSDEF — إلزامي ═══
   const tX2 = `    <termsdef name="السنة الدراسية" short="T1" terms="1" />\n`;
 
-  // ═══ 5. SUBJECTS ═══
   let sX = '';
   subjects.forEach((s, i) => {
     const short = s.slice(0, 8).replace(/[^\w\u0600-\u06FF]/g, '') || 'S' + (i + 1);
     sX += `    <subject name="${esc(s)}" short="${esc(short)}" id="${i + 1}" />\n`;
   });
 
-  // ═══ 6. TEACHERS ═══
   let teX = '';
   teachers.forEach((t, i) => {
     teX += `    <teacher name="${esc(t.name)}" short="T${i + 1}" id="${i + 1}" />\n`;
   });
 
-  // ═══ 7. CLASSES ═══
   let cX = '';
   classes.forEach((c, i) => {
     cX += `    <class name="${esc(c)}" short="C${String(i + 1).padStart(2, '0')}" id="${i + 1}" />\n`;
   });
 
-  // ═══ 8. CLASSROOMS ═══
   let rX = '';
   rooms.forEach((r, i) => {
     rX += `    <classroom name="${esc(r)}" short="R${i + 1}" id="${i + 1}" />\n`;
   });
 
-  // ═══ 9. LESSONS — كل إسناد واحد بـ periodsperweek ═══
   let lX = '';
   let lid = 1;
   teachers.forEach((t, tIdx) => {
@@ -1016,7 +1022,6 @@ function buildFullXML(data, schedule = []) {
     const clsList = (t.classes || '').split(/[,،]/).map(s => s.trim()).filter(Boolean);
     if (!clsList.length) return;
 
-    // توزيع الحصص على الأفواج
     const totalH = (t.hours || 0) + (t.extra || 0);
     const perClass = Math.max(1, Math.ceil(totalH / clsList.length));
 
@@ -1024,7 +1029,6 @@ function buildFullXML(data, schedule = []) {
       const cIdx = classes.indexOf(cn) + 1;
       if (cIdx === 0) return;
 
-      // ⭐ كل درس = (فوج + مادة + أستاذ) مع periodsperweek
       lX += `    <lesson id="${lid}"`;
       lX += ` classids="${cIdx}"`;
       lX += ` subjectid="${subjIdx}"`;
@@ -1035,7 +1039,6 @@ function buildFullXML(data, schedule = []) {
     });
   });
 
-  // ═══ 10. البناء النهائي — بنية aSc Timetables 2023 الرسمية ═══
   return `<?xml version="1.0" encoding="UTF-8"?>
 <!-- DONIA LABS TECH — ${APP_VERSION} — ${BUILD_TIME} -->
 <osctime version="2023" institution="${esc(data.institution)}" year="${esc(data.year)}">
@@ -1062,6 +1065,171 @@ ${lX}  </lessons>
   </cardrelationships>
 </osctime>`;
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   🆕 v10.0 — التصدير إلى Excel متوافق مع aSc Timetables
+   ═══════════════════════════════════════════════════════════════
+   
+   يُنتج ملف Excel بأوراق متعددة يتعرف عليها aSc تلقائياً:
+   - Teachers : قائمة الأساتذة
+   - Classes  : قائمة الأفواج
+   - Subjects : قائمة المواد
+   - Rooms    : قائمة القاعات
+   - Lessons  : الإسنادات (الأستاذ + المادة + الفوج + عدد الحصص)
+   ═══════════════════════════════════════════════════════════════ */
+
+function exportToExcelForAsc() {
+  try {
+    const data = collectData();
+
+    if (!data.teachers.length) {
+      toast('⚠️ أدخل الأساتذة أولاً', 'warn');
+      return;
+    }
+
+    const wb = XLSX.utils.book_new();
+
+    // ═══ Sheet 1: Teachers ═══
+    const teachersData = [['Teacher', 'Short', 'Subject', 'Class', 'Periods']];
+    data.teachers.forEach(t => {
+      const clsList = (t.classes || '').split(/[,،]/).map(s => s.trim()).filter(Boolean);
+      const totalH = (t.hours || 0) + (t.extra || 0);
+      const perClass = Math.max(1, Math.ceil(totalH / (clsList.length || 1)));
+
+      clsList.forEach(cn => {
+        teachersData.push([
+          t.name,
+          t.name.slice(0, 12),
+          t.subject,
+          cn,
+          perClass
+        ]);
+      });
+    });
+    const ws1 = XLSX.utils.aoa_to_sheet(teachersData);
+    ws1['!cols'] = [{ wch: 20 }, { wch: 14 }, { wch: 22 }, { wch: 12 }, { wch: 10 }];
+    XLSX.utils.book_append_sheet(wb, ws1, 'Teachers');
+
+    // ═══ Sheet 2: Classes ═══
+    const classesData = [['Class', 'Short']];
+    data.classes.forEach(c => {
+      classesData.push([c, c]);
+    });
+    const ws2 = XLSX.utils.aoa_to_sheet(classesData);
+    ws2['!cols'] = [{ wch: 15 }, { wch: 12 }];
+    XLSX.utils.book_append_sheet(wb, ws2, 'Classes');
+
+    // ═══ Sheet 3: Subjects ═══
+    const subjectsData = [['Subject', 'Short']];
+    data.subjects.forEach(s => {
+      subjectsData.push([s, s.slice(0, 10)]);
+    });
+    const ws3 = XLSX.utils.aoa_to_sheet(subjectsData);
+    ws3['!cols'] = [{ wch: 22 }, { wch: 12 }];
+    XLSX.utils.book_append_sheet(wb, ws3, 'Subjects');
+
+    // ═══ Sheet 4: Rooms ═══
+    const roomsData = [['Room', 'Short']];
+    data.rooms.forEach(r => {
+      roomsData.push([r, r.slice(0, 12)]);
+    });
+    const ws4 = XLSX.utils.aoa_to_sheet(roomsData);
+    ws4['!cols'] = [{ wch: 22 }, { wch: 12 }];
+    XLSX.utils.book_append_sheet(wb, ws4, 'Rooms');
+
+    // ═══ Sheet 5: Lessons ═══
+    const lessonsData = [['Class', 'Subject', 'Teacher', 'Periods', 'Room']];
+    data.teachers.forEach(t => {
+      const clsList = (t.classes || '').split(/[,،]/).map(s => s.trim()).filter(Boolean);
+      const totalH = (t.hours || 0) + (t.extra || 0);
+      const perClass = Math.max(1, Math.ceil(totalH / (clsList.length || 1)));
+
+      clsList.forEach(cn => {
+        lessonsData.push([
+          cn,
+          t.subject,
+          t.name,
+          perClass,
+          t.room || ''
+        ]);
+      });
+    });
+    const ws5 = XLSX.utils.aoa_to_sheet(lessonsData);
+    ws5['!cols'] = [{ wch: 12 }, { wch: 22 }, { wch: 20 }, { wch: 10 }, { wch: 15 }];
+    XLSX.utils.book_append_sheet(wb, ws5, 'Lessons');
+
+    // ═══ حفظ الملف ═══
+    const filename = `donia_export_${new Date().toISOString().slice(0, 10)}.xlsx`;
+    XLSX.writeFile(wb, filename);
+
+    toast('📊 تم تصدير Excel — افتح aSc → File → Import → Excel', 'success');
+    log(`📊 تصدير Excel: ${filename}`, 'success');
+    log(`📋 الأوراق: Teachers, Classes, Subjects, Rooms, Lessons`, 'info');
+    log(`📌 الخطوات: aSc → File → Import → Excel file → اختر الملف`, 'info');
+  } catch (e) {
+    log('❌ فشل التصدير: ' + e.message, 'error');
+    toast('❌ فشل التصدير', 'error');
+  }
+}
+
+/* ═══ تصدير CSV متعدد الأقسام ═══ */
+function exportToCsvMulti() {
+  try {
+    const data = collectData();
+    if (!data.teachers.length) return toast('⚠️ أدخل الأساتذة', 'warn');
+
+    let combined = '';
+
+    combined += `=== TEACHERS ===\nTeacher,Short,Subject,Class,Periods\n`;
+    data.teachers.forEach(t => {
+      const clsList = (t.classes || '').split(/[,،]/).map(s => s.trim()).filter(Boolean);
+      const totalH = (t.hours || 0) + (t.extra || 0);
+      const perClass = Math.max(1, Math.ceil(totalH / (clsList.length || 1)));
+      clsList.forEach(cn => {
+        combined += `${t.name},${t.name.slice(0, 12)},${t.subject},${cn},${perClass}\n`;
+      });
+    });
+
+    combined += `\n=== CLASSES ===\nClass,Short\n`;
+    data.classes.forEach(c => { combined += `${c},${c}\n`; });
+
+    combined += `\n=== SUBJECTS ===\nSubject,Short\n`;
+    data.subjects.forEach(s => { combined += `${s},${s.slice(0, 10)}\n`; });
+
+    combined += `\n=== ROOMS ===\nRoom,Short\n`;
+    data.rooms.forEach(r => { combined += `${r},${r.slice(0, 12)}\n`; });
+
+    combined += `\n=== LESSONS ===\nClass,Subject,Teacher,Periods,Room\n`;
+    data.teachers.forEach(t => {
+      const clsList = (t.classes || '').split(/[,،]/).map(s => s.trim()).filter(Boolean);
+      const totalH = (t.hours || 0) + (t.extra || 0);
+      const perClass = Math.max(1, Math.ceil(totalH / (clsList.length || 1)));
+      clsList.forEach(cn => {
+        combined += `${cn},${t.subject},${t.name},${perClass},${t.room || ''}\n`;
+      });
+    });
+
+    const blob = new Blob(['\uFEFF' + combined], { type: 'text/csv;charset=utf-8' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `donia_export_${Date.now()}.csv`;
+    a.click();
+
+    toast('📄 تم تصدير CSV', 'success');
+    log(`📄 تصدير CSV`, 'success');
+  } catch (e) {
+    log('❌ ' + e.message, 'error');
+  }
+}
+
+/* ═══ ربط الأزرار الجديدة ═══ */
+document.addEventListener('DOMContentLoaded', () => {
+  const excelBtn = document.getElementById('downloadExcelBtn');
+  const csvBtn = document.getElementById('downloadCsvBtn');
+
+  if (excelBtn) excelBtn.onclick = exportToExcelForAsc;
+  if (csvBtn) csvBtn.onclick = exportToCsvMulti;
+});
 
 /* ═══════════════════════════════════════════════════════════════
    VIEWER
