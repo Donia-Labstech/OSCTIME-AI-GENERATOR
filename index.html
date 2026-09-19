@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-<title>DONIA LABS OSCTIME AI v15.0</title>
+<title>DONIA LABS TECH — OSCTIME AI v16.0</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
@@ -40,6 +40,7 @@
   .btn-ghost { border: 1px solid var(--border); color: var(--accent); background: transparent; cursor: pointer; }
   .btn-ghost:hover { background: rgba(0,229,255,.08); }
   .btn-osctime { background: linear-gradient(135deg, #10B981, #059669); color: #fff; font-weight: 900; border: none; cursor: pointer; }
+  .btn-osctime:hover { transform: translateY(-2px); }
   .btn-excel { background: linear-gradient(135deg, #F59E0B, #D97706); color: #fff; font-weight: 900; border: none; cursor: pointer; }
   .btn-print { background: linear-gradient(135deg, #7C3AED, #6366F1); color: #fff; font-weight: 900; border: none; cursor: pointer; }
   .btn-danger { background: linear-gradient(135deg, #EF4444, #DC2626); color: #fff; font-weight: 900; border: none; cursor: pointer; }
@@ -70,8 +71,6 @@
   .sheet-card { background: var(--bg-2); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
   .teacher-chip { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; background: var(--bg-3); border: 1px solid var(--border); color: var(--text); margin: 2px; }
   #versionBadge { background: rgba(0,229,255,.1); color: var(--accent); padding: 2px 8px; border-radius: 6px; font-size: 10px; font-family: monospace; }
-  
-  /* Timetable */
   .timetable-wrap { overflow-x: auto; padding: 16px; border-radius: 12px; background: var(--bg-2); }
   .timetable { width: 100%; border-collapse: collapse; min-width: 900px; }
   .timetable th { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #0A0F1E; font-weight: 800; padding: 10px 6px; border: 1px solid var(--border); font-size: 12px; }
@@ -87,27 +86,12 @@
   .stat-mini { background: var(--bg-2); border: 1px solid var(--border); border-radius: 8px; padding: 8px; text-align: center; }
   .stat-mini .label { font-size: 10px; color: var(--text-mute); }
   .stat-mini .value { font-size: 18px; font-weight: 800; color: var(--accent); }
-  
-  /* Portal */
   .portal-card { background: linear-gradient(135deg, rgba(0,229,255,.08), rgba(124,58,237,.05)); border: 2px solid var(--accent); border-radius: 16px; padding: 20px; transition: all .3s; }
   .portal-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,229,255,.15); }
   .portal-icon { font-size: 48px; text-align: center; margin-bottom: 12px; }
   .link-box { background: var(--bg-3); border: 1px dashed var(--accent); border-radius: 10px; padding: 12px; font-family: monospace; font-size: 12px; word-break: break-all; color: var(--accent); margin: 12px 0; }
   .qr-box { background: #FFFFFF; padding: 12px; border-radius: 12px; text-align: center; display: inline-block; }
-  
-  /* Short Code Badge */
-  .code-badge {
-    display: inline-block;
-    background: linear-gradient(135deg, #10B981, #059669);
-    color: #fff;
-    font-family: monospace;
-    font-weight: 900;
-    font-size: 24px;
-    padding: 8px 20px;
-    border-radius: 12px;
-    letter-spacing: 4px;
-    box-shadow: 0 4px 12px rgba(16,185,129,.4);
-  }
+  .code-badge { display: inline-block; background: linear-gradient(135deg, #10B981, #059669); color: #fff; font-family: monospace; font-weight: 900; font-size: 24px; padding: 8px 20px; border-radius: 12px; letter-spacing: 4px; box-shadow: 0 4px 12px rgba(16,185,129,.4); }
   
   @media print {
     body * { visibility: hidden; }
@@ -119,6 +103,151 @@
 </head>
 <body>
 
+<!-- ═══════════════════════════════════════════════════════════════
+     🚪 بوابة الزوار (تظهر فقط عند ?portal=true)
+     ═══════════════════════════════════════════════════════════════ -->
+<div id="visitorPortal" class="hidden" style="min-height: 100vh; background: var(--bg);">
+  
+  <div class="glass sticky top-0 z-40" style="border-bottom: 2px solid var(--accent);">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between flex-wrap gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-14 h-14 rounded-xl btn-primary grid place-items-center text-3xl font-black">D</div>
+        <div>
+          <h1 class="text-xl font-extrabold leading-tight">DONIA LABS TECH</h1>
+          <p class="text-xs" style="color: var(--accent)">مختبر الأفكار الذكية والتكنولوجيا المتقدمة</p>
+        </div>
+      </div>
+      <a href="https://donialabstech.online/" target="_blank" class="btn-primary px-5 py-2 rounded-lg text-sm">
+        🌐 زيارة الموقع
+      </a>
+    </div>
+  </div>
+
+  <div class="max-w-4xl mx-auto px-4 py-8">
+    <div class="glass rounded-3xl p-8 mb-6 text-center" style="border: 2px solid var(--accent);">
+      <div class="text-6xl mb-4">👋</div>
+      <h2 class="text-3xl font-black mb-3" style="color: var(--accent)">مرحباً بكم</h2>
+      <p class="text-lg mb-2">في <strong>مختبر الأفكار الذكية والتكنولوجيا المتقدمة</strong></p>
+      <p class="text-xl font-extrabold mb-4" style="color: var(--gold)">DONIA LABS TECH</p>
+      <div class="h-px my-6" style="background: linear-gradient(90deg, transparent, var(--accent), transparent)"></div>
+      <p class="text-base mb-4" style="color: var(--text-mute)">
+        للحصول على جدولك الزمني، يرجى ملء البيانات في النموذج أدناه
+      </p>
+      <button onclick="scrollToForm()" class="btn-primary px-8 py-4 rounded-xl text-lg font-extrabold">
+        📝 املأ النموذج الآن
+      </button>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-4 mb-8">
+      <div class="rounded-xl p-5 text-center" style="background: var(--bg-2); border: 1px solid var(--border);">
+        <div class="text-4xl mb-2">📊</div>
+        <h3 class="font-bold mb-1">جداول ذكية</h3>
+        <p class="text-xs" style="color: var(--text-mute)">توليد تلقائي بدون تعارض</p>
+      </div>
+      <div class="rounded-xl p-5 text-center" style="background: var(--bg-2); border: 1px solid var(--border);">
+        <div class="text-4xl mb-2">🤖</div>
+        <h3 class="font-bold mb-1">مدعوم بـ AI</h3>
+        <p class="text-xs" style="color: var(--text-mute)">تحليل ذكي للبيانات</p>
+      </div>
+      <div class="rounded-xl p-5 text-center" style="background: var(--bg-2); border: 1px solid var(--border);">
+        <div class="text-4xl mb-2">⚡</div>
+        <h3 class="font-bold mb-1">سريع ومجاني</h3>
+        <p class="text-xs" style="color: var(--text-mute)">يعمل من المتصفح مباشرة</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="portalForm" class="max-w-4xl mx-auto px-4 pb-12">
+    <div class="glass rounded-3xl p-8" style="border: 1px solid var(--border);">
+      <h2 class="text-2xl font-extrabold mb-6 text-center" style="color: var(--accent)">
+        📋 نموذج البيانات
+      </h2>
+
+      <div class="mb-6 p-4 rounded-xl" style="background: var(--bg-2); border: 1px solid var(--border);">
+        <h3 class="font-bold mb-3" style="color: var(--gold)">① معلومات المؤسسة</h3>
+        <div class="grid md:grid-cols-2 gap-3">
+          <div>
+            <label class="text-xs">اسم المؤسسة</label>
+            <input id="pInstName" placeholder="مثال: متوسطة الشهيد..." class="input-field w-full p-3 rounded-lg mt-1" />
+          </div>
+          <div>
+            <label class="text-xs">السنة الدراسية</label>
+            <input id="pSchoolYear" value="2024-2025" class="input-field w-full p-3 rounded-lg mt-1" />
+          </div>
+          <div>
+            <label class="text-xs">الاسم الكامل</label>
+            <input id="pFullName" placeholder="اسمك الكامل" class="input-field w-full p-3 rounded-lg mt-1" />
+          </div>
+          <div>
+            <label class="text-xs">رقم الهاتف</label>
+            <input id="pPhone" placeholder="+213..." class="input-field w-full p-3 rounded-lg mt-1" />
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-6 p-4 rounded-xl" style="background: var(--bg-2); border: 1px solid var(--border);">
+        <h3 class="font-bold mb-3" style="color: var(--gold)">② الإسناد التربوي</h3>
+        <label class="text-xs">أضف الأساتذة والمواد والأفواج</label>
+        <textarea id="pTeachers" rows="8" placeholder="ع1 | عربية | 4م1، 4م4 | 14&#10;ر1 | رياضيات | 4م1، 4م4، 2م2 | 19&#10;عل1 | علوم | 3م1، 3م3 | 18" class="input-field w-full p-3 rounded-lg mt-1 font-mono text-sm"></textarea>
+        <p class="text-xs mt-2" style="color: var(--text-mute)">
+          صيغة: <code>الرمز | المادة | الأفواج | عدد الحصص</code>
+        </p>
+      </div>
+
+      <div class="mb-6 p-4 rounded-xl" style="background: var(--bg-2); border: 1px solid var(--border);">
+        <h3 class="font-bold mb-3" style="color: var(--gold)">③ القيود</h3>
+        <div class="grid md:grid-cols-2 gap-3">
+          <div>
+            <label class="text-xs">أيام العطلة</label>
+            <input id="pHolidays" placeholder="الجمعة, السبت" class="input-field w-full p-3 rounded-lg mt-1" />
+          </div>
+          <div>
+            <label class="text-xs">فترات محظورة</label>
+            <input id="pBlocked" placeholder="الثلاثاء مساءً" class="input-field w-full p-3 rounded-lg mt-1" />
+          </div>
+        </div>
+        <div class="mt-3">
+          <label class="text-xs">ملاحظات إضافية</label>
+          <textarea id="pNotes" rows="3" placeholder="أي قيود أخرى..." class="input-field w-full p-3 rounded-lg mt-1"></textarea>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap gap-3 justify-center">
+        <button onclick="submitPortalForm()" class="btn-osctime px-8 py-4 rounded-xl text-lg">
+          📤 إرسال البيانات
+        </button>
+        <button onclick="downloadPortalData()" class="btn-primary px-6 py-4 rounded-xl">
+          ⬇️ تحميل نسخة
+        </button>
+        <button onclick="clearPortalForm()" class="btn-ghost px-6 py-4 rounded-xl">
+          🗑️ مسح
+        </button>
+      </div>
+
+      <div id="portalSuccess" class="hidden mt-6 p-5 rounded-xl text-center" style="background: rgba(16,185,129,.1); border: 2px solid var(--success);">
+        <div class="text-4xl mb-2">✅</div>
+        <h3 class="font-bold mb-2" style="color: var(--success)">تم استلام بياناتك</h3>
+        <p class="text-sm" style="color: var(--text-mute)">شكراً لتعاونك — سيتواصل معك فريق DONIA LABS قريباً</p>
+      </div>
+    </div>
+
+    <div class="text-center mt-8">
+      <p class="text-sm mb-3" style="color: var(--text-mute)">لمزيد من الخدمات، زوروا موقعنا:</p>
+      <a href="https://donialabstech.online/" target="_blank" class="btn-primary px-8 py-3 rounded-xl text-base inline-block">
+        🌐 https://donialabstech.online/
+      </a>
+      <p class="text-xs mt-6" style="color: var(--text-mute)">
+        © 2025 DONIA LABS TECH — جميع الحقوق محفوظة
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     💼 التطبيق الكامل (يظهر فقط عند عدم وجود ?portal=true)
+     ═══════════════════════════════════════════════════════════════ -->
+<div id="mainApp">
+
 <header class="glass sticky top-0 z-40 no-print" style="border-bottom: 1px solid var(--border)">
   <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between flex-wrap gap-3">
     <div class="flex items-center gap-3">
@@ -129,6 +258,7 @@
       </div>
     </div>
     <div class="flex items-center gap-3">
+      <a href="https://donialabstech.online/" target="_blank" class="btn-ghost px-4 py-2 rounded-lg text-sm hidden md:block">🌐</a>
       <button id="themeToggle" class="theme-toggle"></button>
       <button id="openPortalBtn" class="btn-share px-4 py-2 rounded-lg text-sm">🌐 البوابة</button>
     </div>
@@ -166,7 +296,7 @@
 
       <div class="rounded-xl p-5" style="background: var(--bg-2); border: 1px dashed var(--success)">
         <div class="flex items-center justify-between mb-3">
-          <h3 class="font-bold">🔗 استيراد من رمز قصير</h3>
+          <h3 class="font-bold">🔗 استيراد من رمز</h3>
           <button id="importFromCodeBtn" class="btn-osctime px-4 py-2 rounded-lg text-xs">استيراد</button>
         </div>
         <input id="importCodeInput" type="text" placeholder="مثال: ABC123" class="input-field w-full p-2 rounded-lg text-xs font-mono text-center" maxlength="10" style="letter-spacing: 4px; text-transform: uppercase" />
@@ -334,27 +464,25 @@
   <section id="step7" class="glass rounded-2xl p-6 mb-6 hidden">
     <div class="flex items-center gap-3 mb-5">
       <div class="w-10 h-10 rounded-lg grid place-items-center font-bold" style="background: rgba(0,229,255,.1); color: var(--accent)">7</div>
-      <div>
-        <h2 class="text-xl font-bold">التصدير إلى aSc Timetables 2023</h2>
-      </div>
+      <div><h2 class="text-xl font-bold">التصدير إلى aSc Timetables 2023</h2></div>
     </div>
 
-    <div class="osctime-import-box text-center mb-4" style="background: linear-gradient(135deg, rgba(16,185,129,.1), rgba(5,150,105,.05)); border: 2px dashed var(--success); border-radius: 16px; padding: 24px;">
+    <div class="rounded-2xl p-6 mb-4 text-center" style="background: linear-gradient(135deg, rgba(16,185,129,.1), rgba(5,150,105,.05)); border: 2px dashed var(--success);">
       <div class="text-4xl mb-3">📊</div>
-      <h3 class="text-lg font-extrabold mb-2" style="color: var(--success)">الطريقة المضمونة — تصدير Excel</h3>
+      <h3 class="text-lg font-extrabold mb-2" style="color: var(--success)">الطريقة المضمونة — Excel</h3>
       <p class="text-xs mb-4" style="color: var(--text-mute)">
         في aSc: <strong>File → Import → Excel file</strong>
       </p>
       <button id="downloadExcelBtn" class="btn-excel px-8 py-4 rounded-xl text-lg">📊 تصدير Excel لـ aSc</button>
     </div>
 
-    <div class="osctime-import-box text-center mb-4" style="background: linear-gradient(135deg, rgba(16,185,129,.1), rgba(5,150,105,.05)); border: 2px dashed var(--success); border-radius: 16px; padding: 24px;">
+    <div class="rounded-2xl p-6 mb-4 text-center" style="background: linear-gradient(135deg, rgba(16,185,129,.1), rgba(5,150,105,.05)); border: 2px dashed var(--success);">
       <div class="text-4xl mb-3">🎯</div>
-      <h3 class="text-lg font-extrabold mb-2" style="color: var(--success)">تصدير XML (احتياطي)</h3>
+      <h3 class="text-lg font-extrabold mb-2" style="color: var(--success)">تصدير XML</h3>
       <button id="downloadBtn" class="btn-osctime px-8 py-4 rounded-xl text-lg">⬇️ تحميل XML</button>
     </div>
 
-    <div class="osctime-import-box text-center" style="background: linear-gradient(135deg, rgba(0,229,255,.1), rgba(124,58,237,.05)); border: 2px dashed var(--accent); border-radius: 16px; padding: 24px;">
+    <div class="rounded-2xl p-6 text-center" style="background: linear-gradient(135deg, rgba(0,229,255,.1), rgba(124,58,237,.05)); border: 2px dashed var(--accent);">
       <div class="text-4xl mb-3">📄</div>
       <h3 class="text-lg font-extrabold mb-2" style="color: var(--accent)">تصدير CSV</h3>
       <button id="downloadCsvBtn" class="btn-ghost px-8 py-4 rounded-xl text-lg">📄 تحميل CSV</button>
@@ -367,7 +495,9 @@
   </div>
 </main>
 
-<!-- 🌐 بوابة المشاركة — v15 -->
+</div>
+
+<!-- Modal بوابة المشاركة (للمطور فقط) -->
 <div id="portalModal" class="hidden fixed inset-0 bg-black/85 z-50 p-4 overflow-auto no-print">
   <div class="glass rounded-2xl p-6 max-w-5xl mx-auto my-8">
     <div class="flex justify-between items-center mb-5 flex-wrap gap-3">
@@ -378,14 +508,11 @@
       <button onclick="closePortal()" class="text-2xl" style="color: var(--text-mute); background: none; border: none; cursor: pointer">✕</button>
     </div>
 
-    <!-- 🆕 رابط جامع شامل -->
     <div class="rounded-xl p-5 mb-6" style="background: linear-gradient(135deg, rgba(16,185,129,.15), rgba(5,150,105,.08)); border: 2px solid var(--success)">
-      <h4 class="font-bold text-center text-lg mb-3" style="color: var(--success)">🌟 الرابط الجامع (كل شيء في رابط واحد)</h4>
-      <p class="text-xs text-center mb-4" style="color: var(--text-mute)">يشمل: البيانات + الإسناد + القيود</p>
+      <h4 class="font-bold text-center text-lg mb-3" style="color: var(--success)">🌟 الرابط الجامع (كل شيء)</h4>
       <button onclick="generateUnifiedLink()" class="btn-osctime w-full py-3 rounded-lg text-base">🔗 توليد الرابط الجامع</button>
     </div>
 
-    <!-- 3 أنواع منفصلة -->
     <div class="grid md:grid-cols-3 gap-4 mb-6">
       <div class="portal-card">
         <div class="portal-icon">📋</div>
@@ -404,38 +531,25 @@
       </div>
     </div>
 
-    <!-- منطقة الرابط المُولَّد -->
     <div id="linkOutput" class="hidden">
       <div class="rounded-xl p-5 mb-4" style="background: var(--bg-2); border: 2px solid var(--success)">
         <h4 class="font-bold mb-3 text-center" style="color: var(--success)">✅ تم توليد الرابط</h4>
-
-        <!-- 🆕 الرمز القصير -->
         <div class="text-center mb-4">
           <p class="text-xs mb-2" style="color: var(--text-mute)">الرمز القصير:</p>
           <div class="code-badge" id="shortCode">------</div>
-          <p class="text-xs mt-2" style="color: var(--text-mute)">شارك هذا الرمز بدلاً من الرابط الطويل</p>
         </div>
-
-        <!-- الرابط الكامل -->
-        <p class="text-xs mb-2" style="color: var(--text-mute)">أو الرابط الكامل:</p>
+        <p class="text-xs mb-2" style="color: var(--text-mute)">أو الرابط:</p>
         <div class="link-box" id="generatedLink">...</div>
-
         <div class="flex flex-wrap gap-2 mt-4 justify-center">
           <button onclick="copyPortalLink()" class="btn-primary px-5 py-2 rounded-lg">📋 نسخ الرابط</button>
           <button onclick="copyShortCode()" class="btn-osctime px-5 py-2 rounded-lg">🔢 نسخ الرمز</button>
           <button onclick="shareWhatsApp()" class="btn-whatsapp px-5 py-2 rounded-lg">📱 واتساب</button>
           <button onclick="shareEmail()" class="btn-email px-5 py-2 rounded-lg">📧 بريد</button>
         </div>
-
         <div class="mt-6 text-center">
-          <p class="text-sm mb-3" style="color: var(--text-mute)">📷 أو امسح QR:</p>
+          <p class="text-sm mb-3" style="color: var(--text-mute)">📷 QR:</p>
           <div class="qr-box" id="qrCodeContainer"></div>
         </div>
-      </div>
-
-      <div class="rounded-xl p-4" style="background: var(--bg-2); border: 1px solid var(--border)">
-        <h4 class="font-bold mb-3">📚 الرموز الأخيرة</h4>
-        <div id="linksHistory" class="space-y-2"></div>
       </div>
     </div>
   </div>
@@ -460,24 +574,25 @@
   <p id="toastMsg" class="text-sm font-bold"></p>
 </div>
 
-<footer class="text-center text-xs py-8 mt-12 no-print" style="border-top: 1px solid var(--border); color: var(--text-mute)">
-  © 2025 DONIA LABS TECH — <span id="footerVersion">v15.0</span> · MIT License
+<footer id="mainFooter" class="text-center text-xs py-8 mt-12 no-print" style="border-top: 1px solid var(--border); color: var(--text-mute)">
+  © 2025 DONIA LABS TECH — <span id="footerVersion">v16.0</span> · 
+  <a href="https://donialabstech.online/" target="_blank" style="color: var(--accent)">donialabstech.online</a>
 </footer>
 
 <script>
 'use strict';
 
-const APP_VERSION = 'v15.0';
+const APP_VERSION = 'v16.0';
 const BUILD_TIME = new Date().toISOString().slice(0, 16).replace('T', ' ');
+const OFFICIAL_WEBSITE = 'https://donialabstech.online/';
 
 const $ = (id) => document.getElementById(id);
 const $$ = (sel) => document.querySelectorAll(sel);
 const STORAGE = { 
-  API_KEY: 'donia_api_v15', 
-  THEME: 'donia_theme_v15', 
-  TT: 'donia_tt_v15', 
-  CONSTRAINTS: 'donia_constraints_v15',
-  CODES: 'donia_codes_v15'
+  THEME: 'donia_theme_v16', 
+  TT: 'donia_tt_v16', 
+  CONSTRAINTS: 'donia_constraints_v16',
+  CODES: 'donia_codes_v16'
 };
 
 let currentStep = 1;
@@ -493,30 +608,193 @@ let constraints = {
   holidays: [], timeBlocks: [], teacherRest: [], subjectRest: [], doublePeriods: []
 };
 
+/* ═══════════════════════════════════════════════════════════════
+   🚪 بوابة الزوار — فحص URL
+   ═══════════════════════════════════════════════════════════════ */
+function isVisitorPortal() {
+  const params = new URLSearchParams(window.location.search);
+  const hash = window.location.hash;
+  return params.get('portal') === 'true' ||
+         params.get('portal') === '1' ||
+         hash === '#portal';
+}
+
+function initVisitorPortal() {
+  if (!isVisitorPortal()) {
+    // إخفاء بوابة الزوار
+    const vp = document.getElementById('visitorPortal');
+    if (vp) vp.classList.add('hidden');
+    return;
+  }
+
+  // إخفاء التطبيق الرئيسي
+  const mainApp = document.getElementById('mainApp');
+  if (mainApp) mainApp.style.display = 'none';
+  const mainFooter = document.getElementById('mainFooter');
+  if (mainFooter) mainFooter.style.display = 'none';
+
+  // إظهار بوابة الزوار
+  const vp = document.getElementById('visitorPortal');
+  if (vp) vp.classList.remove('hidden');
+
+  console.log('🚪 بوابة الزوار مُفعّلة');
+}
+
+/* دوال بوابة الزوار */
+function scrollToForm() {
+  const form = document.getElementById('portalForm');
+  if (form) form.scrollIntoView({ behavior: 'smooth' });
+}
+window.scrollToForm = scrollToForm;
+
+function submitPortalForm() {
+  const inst = document.getElementById('pInstName').value.trim();
+  const year = document.getElementById('pSchoolYear').value.trim();
+  const name = document.getElementById('pFullName').value.trim();
+  const phone = document.getElementById('pPhone').value.trim();
+  const teachers = document.getElementById('pTeachers').value.trim();
+  const holidays = document.getElementById('pHolidays').value.trim();
+  const blocked = document.getElementById('pBlocked').value.trim();
+  const notes = document.getElementById('pNotes').value.trim();
+
+  if (!inst) { alert('⚠️ أدخل اسم المؤسسة'); return; }
+  if (!name) { alert('⚠️ أدخل اسمك الكامل'); return; }
+
+  const payload = {
+    type: 'portal-submission',
+    institution: inst, year, name, phone,
+    teachersRaw: teachers,
+    holidays: holidays.split(',').map(s => s.trim()).filter(Boolean),
+    blockedPeriods: blocked,
+    notes,
+    timestamp: new Date().toISOString()
+  };
+
+  const submissions = JSON.parse(localStorage.getItem('donia_portal_submissions') || '[]');
+  submissions.unshift(payload);
+  localStorage.setItem('donia_portal_submissions', JSON.stringify(submissions.slice(0, 50)));
+
+  document.getElementById('portalSuccess').classList.remove('hidden');
+  document.getElementById('portalSuccess').scrollIntoView({ behavior: 'smooth' });
+
+  const dataToSend = `
+📋 نموذج DONIA LABS TECH
+━━━━━━━━━━━━━━━━━━━
+
+🏫 المؤسسة: ${inst}
+📅 السنة: ${year}
+👤 الاسم: ${name}
+📱 الهاتف: ${phone || '—'}
+
+👨‍🏫 الإسناد:
+${teachers || '—'}
+
+📅 العطل: ${holidays || '—'}
+🚫 المحظورات: ${blocked || '—'}
+
+📝 ملاحظات: ${notes || '—'}
+
+━━━━━━━━━━━━━━━━━━━
+🌐 ${OFFICIAL_WEBSITE}
+  `.trim();
+
+  navigator.clipboard.writeText(dataToSend).then(() => {
+    setTimeout(() => {
+      alert('✅ تم استلام بياناتك ونسخها للحافظة\n\nيمكنك لصقها في واتساب أو البريد');
+    }, 500);
+  }).catch(() => {});
+}
+window.submitPortalForm = submitPortalForm;
+
+function downloadPortalData() {
+  const inst = document.getElementById('pInstName').value.trim();
+  if (!inst) { alert('⚠️ أدخل اسم المؤسسة أولاً'); return; }
+
+  const data = {
+    institution: inst,
+    year: document.getElementById('pSchoolYear').value,
+    submittedBy: document.getElementById('pFullName').value,
+    phone: document.getElementById('pPhone').value,
+    teachersRaw: document.getElementById('pTeachers').value,
+    holidays: document.getElementById('pHolidays').value,
+    blockedPeriods: document.getElementById('pBlocked').value,
+    notes: document.getElementById('pNotes').value,
+    timestamp: new Date().toISOString()
+  };
+
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `donia_form_${Date.now()}.json`;
+  a.click();
+}
+window.downloadPortalData = downloadPortalData;
+
+function clearPortalForm() {
+  if (!confirm('مسح كل البيانات؟')) return;
+  ['pInstName', 'pFullName', 'pPhone', 'pTeachers', 'pHolidays', 'pBlocked', 'pNotes'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  document.getElementById('pSchoolYear').value = '2024-2025';
+  document.getElementById('portalSuccess').classList.add('hidden');
+}
+window.clearPortalForm = clearPortalForm;
+
+/* ═══════════════════════════════════════════════════════════════
+   INIT
+   ═══════════════════════════════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', () => {
-  $('versionBadge').textContent = `${APP_VERSION} (${BUILD_TIME})`;
-  $('footerVersion').textContent = APP_VERSION;
-  loadConstraints();
-  renderAllConstraints();
-  renderCodesHistory();
-  checkURLForImport();
-  console.log(`🚀 ${APP_VERSION}`);
+  initVisitorPortal();
+
+  // التطبيق الرئيسي
+  if (!isVisitorPortal()) {
+    $('versionBadge').textContent = `${APP_VERSION} (${BUILD_TIME})`;
+    $('footerVersion').textContent = APP_VERSION;
+    loadConstraints();
+    renderAllConstraints();
+    checkURLForImport();
+
+    $('classesInput').value = DEFAULTS.classes.join('\n');
+    $('subjectsInput').value = DEFAULTS.subjects.join('\n');
+    $('roomsInput').value = DEFAULTS.rooms.join('\n');
+
+    const saved = localStorage.getItem(STORAGE.TT);
+    if (saved) { try { generatedTimetable = JSON.parse(saved); } catch {} }
+
+    updateStats();
+    log(`✅ ${APP_VERSION} جاهز`, 'success');
+    log(`🌐 البوابة: اضغط زر "البوابة"`, 'info');
+  }
+
+  console.log(`🚀 ${APP_VERSION} (${BUILD_TIME})`);
 });
 
+/* ═══════════════════════════════════════════════════════════════
+   THEME
+   ═══════════════════════════════════════════════════════════════ */
 function applyTheme(t) {
   document.documentElement.setAttribute('data-theme', t);
   localStorage.setItem(STORAGE.THEME, t);
 }
-$('themeToggle').onclick = () => {
-  const cur = document.documentElement.getAttribute('data-theme');
-  applyTheme(cur === 'dark' ? 'light' : 'dark');
-};
+const themeToggleEl = $('themeToggle');
+if (themeToggleEl) {
+  themeToggleEl.onclick = () => {
+    const cur = document.documentElement.getAttribute('data-theme');
+    applyTheme(cur === 'dark' ? 'light' : 'dark');
+  };
+}
 applyTheme(localStorage.getItem(STORAGE.THEME) || 'dark');
 
+/* ═══════════════════════════════════════════════════════════════
+   TOAST
+   ═══════════════════════════════════════════════════════════════ */
 function toast(msg, type = 'info') {
   const c = { info: '#00E5FF', success: '#10B981', error: '#EF4444', warn: '#FFB800' };
-  $('toastMsg').textContent = msg;
-  $('toastMsg').style.color = c[type] || c.info;
+  const el = $('toastMsg');
+  if (!el) return;
+  el.textContent = msg;
+  el.style.color = c[type] || c.info;
   $('toast').classList.remove('hidden');
   clearTimeout(window.__t);
   window.__t = setTimeout(() => $('toast').classList.add('hidden'), 3500);
@@ -532,12 +810,8 @@ function log(msg, type = 'info') {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   🎯 SHORT CODE SYSTEM
+   SHORT CODE SYSTEM
    ═══════════════════════════════════════════════════════════════ */
-
-/**
- * توليد رمز قصير عشوائي (6 أحرف)
- */
 function generateShortCode() {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
   let code = '';
@@ -547,16 +821,9 @@ function generateShortCode() {
   return code;
 }
 
-/**
- * حفظ البيانات مع رمز قصير
- */
 function saveCodeData(code, payload) {
   const codes = JSON.parse(localStorage.getItem(STORAGE.CODES) || '{}');
-  codes[code] = {
-    payload,
-    timestamp: new Date().toISOString()
-  };
-  // احتفظ بـ 50 رمزاً فقط
+  codes[code] = { payload, timestamp: new Date().toISOString() };
   const keys = Object.keys(codes);
   if (keys.length > 50) {
     const oldest = keys.sort((a, b) => new Date(codes[a].timestamp) - new Date(codes[b].timestamp))[0];
@@ -565,9 +832,6 @@ function saveCodeData(code, payload) {
   localStorage.setItem(STORAGE.CODES, JSON.stringify(codes));
 }
 
-/**
- * استرجاع البيانات من رمز
- */
 function loadCodeData(code) {
   const codes = JSON.parse(localStorage.getItem(STORAGE.CODES) || '{}');
   return codes[code] ? codes[code].payload : null;
@@ -576,276 +840,111 @@ function loadCodeData(code) {
 /* ═══════════════════════════════════════════════════════════════
    PORTAL
    ═══════════════════════════════════════════════════════════════ */
+const openPortalBtnEl = $('openPortalBtn');
+if (openPortalBtnEl) {
+  openPortalBtnEl.onclick = () => {
+    $('portalModal').classList.remove('hidden');
+  };
+}
 
-$('openPortalBtn').onclick = () => {
-  $('portalModal').classList.remove('hidden');
-  renderCodesHistory();
-};
 function closePortal() { $('portalModal').classList.add('hidden'); }
 window.closePortal = closePortal;
 
-/**
- * 🆕 الرابط الجامع — يشمل كل شيء
- */
 function generateUnifiedLink() {
   const data = collectData();
   const payload = {
     type: 'unified',
-    institution: data.institution,
-    year: data.year,
-    days: data.days,
-    periods: data.periods,
-    duration: data.duration,
-    classes: data.classes,
-    subjects: data.subjects,
-    rooms: data.rooms,
-    teachers: data.teachers,
-    constraints: constraints
+    institution: data.institution, year: data.year,
+    days: data.days, periods: data.periods, duration: data.duration,
+    classes: data.classes, subjects: data.subjects, rooms: data.rooms,
+    teachers: data.teachers, constraints
   };
-
   const code = generateShortCode();
   saveCodeData(code, payload);
-
   const baseUrl = window.location.origin + window.location.pathname;
   const link = `${baseUrl}#${code}`;
-
   showGeneratedLink(code, link, 'unified');
-  toast(`🌟 تم توليد الرابط الجامع (الرمز: ${code})`, 'success');
+  toast(`🌟 تم توليد الرابط (${code})`, 'success');
 }
+window.generateUnifiedLink = generateUnifiedLink;
 
-/**
- * توليد رابط منفصل لنوع محدد
- */
 function generatePortalLink(type) {
   const data = collectData();
   let payload = { type };
-
   if (type === 'basic') {
-    payload = {
-      ...payload,
-      institution: data.institution,
-      year: data.year,
-      days: data.days,
-      periods: data.periods,
-      duration: data.duration
-    };
+    payload = { ...payload, institution: data.institution, year: data.year, days: data.days, periods: data.periods, duration: data.duration };
   } else if (type === 'teachers') {
-    payload = {
-      ...payload,
-      teachers: data.teachers,
-      classes: data.classes,
-      subjects: data.subjects,
-      rooms: data.rooms
-    };
+    payload = { ...payload, teachers: data.teachers, classes: data.classes, subjects: data.subjects, rooms: data.rooms };
   } else if (type === 'constraints') {
     payload = { ...payload, constraints };
   }
-
   const code = generateShortCode();
   saveCodeData(code, payload);
-
   const baseUrl = window.location.origin + window.location.pathname;
   const link = `${baseUrl}#${code}`;
-
   showGeneratedLink(code, link, type);
-  toast(`✅ تم توليد الرابط (الرمز: ${code})`, 'success');
+  toast(`✅ تم توليد الرابط (${code})`, 'success');
 }
 window.generatePortalLink = generatePortalLink;
-window.generateUnifiedLink = generateUnifiedLink;
 
-/**
- * عرض الرابط والرمز
- */
 function showGeneratedLink(code, link, type) {
   currentShortCode = code;
   $('linkOutput').classList.remove('hidden');
   $('shortCode').textContent = code;
   $('generatedLink').textContent = link;
   generateQRCode(link);
-
-  const labels = { basic: 'البيانات', teachers: 'الإسناد', constraints: 'القيود', unified: 'جامع (الكل)' };
-  saveCodeToHistory({
-    code, link, type,
-    timestamp: new Date().toISOString(),
-    label: labels[type] || type
-  });
 }
 
 function generateQRCode(text) {
   const container = $('qrCodeContainer');
+  if (!container || typeof QRCode === 'undefined') return;
   container.innerHTML = '';
-  if (typeof QRCode === 'undefined') return;
   QRCode.toCanvas(text, { width: 200, margin: 1 }, (err, canvas) => {
     if (!err) container.appendChild(canvas);
   });
 }
 
 function copyPortalLink() {
-  const link = $('generatedLink').textContent;
-  navigator.clipboard.writeText(link).then(() => {
-    toast('📋 تم نسخ الرابط', 'success');
-  });
+  navigator.clipboard.writeText($('generatedLink').textContent).then(() => toast('📋 تم النسخ', 'success'));
 }
 window.copyPortalLink = copyPortalLink;
 
 function copyShortCode() {
-  navigator.clipboard.writeText(currentShortCode).then(() => {
-    toast(`🔢 تم نسخ الرمز: ${currentShortCode}`, 'success');
-  });
+  navigator.clipboard.writeText(currentShortCode).then(() => toast(`🔢 تم نسخ: ${currentShortCode}`, 'success'));
 }
 window.copyShortCode = copyShortCode;
 
 function shareWhatsApp() {
   const link = $('generatedLink').textContent;
-  const text = `🔗 رابط ملء البيانات - DONIA LABS\n\nالرمز: *${currentShortCode}*\n\nالرابط: ${link}\n\n📝 افتح الرابط وأدخل الرمز`;
+  const text = `🔗 رابط ملء البيانات - DONIA LABS\n\nالرمز: *${currentShortCode}*\n\nالرابط: ${link}`;
   window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
 }
 window.shareWhatsApp = shareWhatsApp;
 
 function shareEmail() {
   const link = $('generatedLink').textContent;
-  const subject = 'دعوة لملء بيانات الجدول الدراسي';
-  const body = `السلام عليكم،\n\nيرجى فتح الرابط التالي:\n${link}\n\nالرمز القصير: ${currentShortCode}\n\nشكراً.\nDONIA LABS TECH`;
+  const subject = 'دعوة لملء بيانات الجدول';
+  const body = `السلام عليكم،\n\n${link}\n\nالرمز: ${currentShortCode}\n\n${OFFICIAL_WEBSITE}`;
   window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }
 window.shareEmail = shareEmail;
 
-/* سجل الرموز */
-function saveCodeToHistory(item) {
-  const history = JSON.parse(localStorage.getItem(STORAGE.CODES + '_history') || '[]');
-  history.unshift(item);
-  localStorage.setItem(STORAGE.CODES + '_history', JSON.stringify(history.slice(0, 20)));
-  renderCodesHistory();
-}
-
-function renderCodesHistory() {
-  const container = $('linksHistory');
-  if (!container) return;
-  const history = JSON.parse(localStorage.getItem(STORAGE.CODES + '_history') || '[]');
-  if (history.length === 0) {
-    container.innerHTML = '<p class="text-xs text-center" style="color: var(--text-mute); padding: 8px">لا توجد رموز سابقة</p>';
-    return;
-  }
-  container.innerHTML = history.map((item, idx) => `
-    <div class="flex items-center justify-between gap-2 p-2 rounded-lg" style="background: var(--bg-3)">
-      <div class="flex-1 text-xs">
-        <span class="font-bold" style="color: var(--success); font-family: monospace">${item.code}</span>
-        <span style="color: var(--text-mute)"> — ${item.label}</span>
-      </div>
-      <button onclick="useCodeFromHistory('${item.code}')" class="btn-primary px-3 py-1 rounded-lg text-xs">🔗</button>
-    </div>
-  `).join('');
-}
-
-function useCodeFromHistory(code) {
-  const payload = loadCodeData(code);
-  if (!payload) return toast('❌ الرمز غير موجود', 'error');
-  currentShortCode = code;
-  const baseUrl = window.location.origin + window.location.pathname;
-  $('generatedLink').textContent = `${baseUrl}#${code}`;
-  $('shortCode').textContent = code;
-  $('linkOutput').classList.remove('hidden');
-  generateQRCode(`${baseUrl}#${code}`);
-  toast('🔗 تم الاسترجاع', 'success');
-}
-window.useCodeFromHistory = useCodeFromHistory;
-
-/* 🆕 استيراد من رمز قصير */
-$('importFromCodeBtn').onclick = () => {
-  const code = $('importCodeInput').value.trim().toUpperCase();
-  if (!code) return toast('أدخل الرمز', 'warn');
-  const payload = loadCodeData(code);
-  if (!payload) return toast('❌ الرمز غير موجود', 'error');
-  applyPayload(payload);
-  toast('✅ تم الاستيراد', 'success');
-};
-
-/* 🆕 فحص URL عند التحميل */
-function checkURLForImport() {
-  const hash = window.location.hash.replace('#', '');
-  const params = new URLSearchParams(window.location.search);
-  const encoded = params.get('import');
-
-  // أولاً: ابحث عن رمز في Hash
-  if (hash && hash.length <= 10) {
-    const payload = loadCodeData(hash);
-    if (payload) {
-      log(`📥 استيراد من الرمز: ${hash}`, 'info');
-      applyPayload(payload);
-      window.history.replaceState({}, '', window.location.pathname);
-      return;
-    } else {
-      toast('⚠️ الرمز غير موجود في هذا المتصفح', 'warn');
-      log(`⚠️ الرمز ${hash} غير موجود محلياً`, 'warn');
-      log(`💡 الرموز تعمل فقط على نفس المتصفح`, 'info');
-    }
-  }
-
-  // ثانياً: الطريقة القديمة (Base64 في URL)
-  if (encoded) {
-    try {
-      const jsonStr = LZString.decompressFromEncodedURIComponent(encoded) || decodeURIComponent(escape(atob(encoded)));
-      const payload = JSON.parse(jsonStr);
-      log(`📥 استيراد من الرابط القديم`, 'info');
-      applyPayload(payload);
-      window.history.replaceState({}, '', window.location.pathname);
-    } catch (e) {
-      console.error(e);
-      toast('❌ فشل استيراد البيانات', 'error');
-    }
-  }
-}
-
-function applyPayload(payload) {
-  if (payload.type === 'basic' || payload.type === 'unified') {
-    if (payload.institution) $('instName').value = payload.institution;
-    if (payload.year) $('schoolYear').value = payload.year;
-    if (payload.days) $('daysInput').value = payload.days.join(', ');
-    if (payload.periods) $('periodsCount').value = payload.periods;
-    if (payload.duration) $('periodDuration').value = payload.duration;
-  }
-
-  if (payload.type === 'teachers' || payload.type === 'unified') {
-    if (payload.classes) $('classesInput').value = payload.classes.join('\n');
-    if (payload.subjects) $('subjectsInput').value = payload.subjects.join('\n');
-    if (payload.rooms) $('roomsInput').value = payload.rooms.join('\n');
-    if (payload.teachers) renderTeachers(payload.teachers);
-  }
-
-  if (payload.type === 'constraints' || payload.type === 'unified') {
-    if (payload.constraints) {
-      constraints = payload.constraints;
-      saveConstraints();
-      renderAllConstraints();
-    }
-  }
-
-  updateStats();
-  toast('✅ تم استيراد البيانات', 'success');
-  gotoStep(2);
-}
-
 /* ═══════════════════════════════════════════════════════════════
-   CONSTRAINTS SYSTEM
+   CONSTRAINTS
    ═══════════════════════════════════════════════════════════════ */
-function saveConstraints() {
-  localStorage.setItem(STORAGE.CONSTRAINTS, JSON.stringify(constraints));
-}
+function saveConstraints() { localStorage.setItem(STORAGE.CONSTRAINTS, JSON.stringify(constraints)); }
 function loadConstraints() {
   const saved = localStorage.getItem(STORAGE.CONSTRAINTS);
   if (saved) { try { constraints = JSON.parse(saved); } catch {} }
 }
 
 function renderAllConstraints() {
-  renderHolidays();
-  renderTimeBlocks();
-  renderTeacherRest();
-  renderSubjectRest();
-  renderDoublePeriods();
+  renderHolidays(); renderTimeBlocks(); renderTeacherRest(); renderSubjectRest(); renderDoublePeriods();
 }
 
 function renderHolidays() {
   const c = $('holidaysContainer');
+  if (!c) return;
   c.innerHTML = constraints.holidays.map((day, idx) => `
     <div class="flex items-center justify-between gap-2 p-2 rounded-lg" style="background: var(--bg-3)">
       <span class="font-bold" style="color: var(--error)">🚫 ${day}</span>
@@ -854,20 +953,19 @@ function renderHolidays() {
   `).join('') || '<p class="text-xs text-center" style="color: var(--text-mute)">لا توجد</p>';
 }
 
-$('addHolidayBtn').onclick = () => {
+const addHolidayBtnEl = $('addHolidayBtn');
+if (addHolidayBtnEl) addHolidayBtnEl.onclick = () => {
   const day = prompt('اسم اليوم:');
-  if (!day) return;
-  if (constraints.holidays.includes(day)) return;
+  if (!day || constraints.holidays.includes(day)) return;
   constraints.holidays.push(day);
-  saveConstraints();
-  renderHolidays();
+  saveConstraints(); renderHolidays();
 };
-
 function removeHoliday(idx) { constraints.holidays.splice(idx, 1); saveConstraints(); renderHolidays(); }
 window.removeHoliday = removeHoliday;
 
 function renderTimeBlocks() {
   const c = $('timeBlocksContainer');
+  if (!c) return;
   c.innerHTML = constraints.timeBlocks.map((b, idx) => `
     <div class="flex items-center justify-between gap-2 p-2 rounded-lg" style="background: var(--bg-3)">
       <div class="text-xs"><span style="color: var(--warn)">${b.day}</span> P${b.startPeriod}-P${b.endPeriod}</div>
@@ -876,21 +974,21 @@ function renderTimeBlocks() {
   `).join('') || '<p class="text-xs text-center" style="color: var(--text-mute)">لا توجد</p>';
 }
 
-$('addTimeBlockBtn').onclick = () => {
+const addTimeBlockBtnEl = $('addTimeBlockBtn');
+if (addTimeBlockBtnEl) addTimeBlockBtnEl.onclick = () => {
   const day = prompt('اليوم:');
   const s = parseInt(prompt('من الحصة:'));
   const e = parseInt(prompt('إلى الحصة:'));
   if (!day || !s || !e) return;
   constraints.timeBlocks.push({ day, startPeriod: s, endPeriod: e });
-  saveConstraints();
-  renderTimeBlocks();
+  saveConstraints(); renderTimeBlocks();
 };
-
 function removeTimeBlock(idx) { constraints.timeBlocks.splice(idx, 1); saveConstraints(); renderTimeBlocks(); }
 window.removeTimeBlock = removeTimeBlock;
 
 function renderTeacherRest() {
   const c = $('teacherRestContainer');
+  if (!c) return;
   c.innerHTML = constraints.teacherRest.map((r, idx) => `
     <div class="flex items-center justify-between gap-2 p-2 rounded-lg" style="background: var(--bg-3)">
       <div class="text-xs"><span style="color: var(--gold)">${r.teacher}</span> — <span style="color: var(--error)">${r.day}</span></div>
@@ -899,20 +997,19 @@ function renderTeacherRest() {
   `).join('') || '<p class="text-xs text-center" style="color: var(--text-mute)">لم تُحدَّد</p>';
 }
 
-$('addTeacherRestBtn').onclick = () => {
-  const t = prompt('الأستاذ:');
-  const d = prompt('يوم الراحة:');
+const addTeacherRestBtnEl = $('addTeacherRestBtn');
+if (addTeacherRestBtnEl) addTeacherRestBtnEl.onclick = () => {
+  const t = prompt('الأستاذ:'); const d = prompt('يوم الراحة:');
   if (!t || !d) return;
   constraints.teacherRest.push({ teacher: t, day: d });
-  saveConstraints();
-  renderTeacherRest();
+  saveConstraints(); renderTeacherRest();
 };
-
 function removeTeacherRest(idx) { constraints.teacherRest.splice(idx, 1); saveConstraints(); renderTeacherRest(); }
 window.removeTeacherRest = removeTeacherRest;
 
 function renderSubjectRest() {
   const c = $('subjectRestContainer');
+  if (!c) return;
   c.innerHTML = constraints.subjectRest.map((r, idx) => `
     <div class="flex items-center justify-between gap-2 p-2 rounded-lg" style="background: var(--bg-3)">
       <div class="text-xs"><span style="color: var(--accent)">${r.subject}</span> — <span style="color: var(--error)">${r.day}</span></div>
@@ -921,20 +1018,19 @@ function renderSubjectRest() {
   `).join('') || '<p class="text-xs text-center" style="color: var(--text-mute)">لم تُحدَّد</p>';
 }
 
-$('addSubjectRestBtn').onclick = () => {
-  const s = prompt('المادة:');
-  const d = prompt('يوم الراحة:');
+const addSubjectRestBtnEl = $('addSubjectRestBtn');
+if (addSubjectRestBtnEl) addSubjectRestBtnEl.onclick = () => {
+  const s = prompt('المادة:'); const d = prompt('يوم الراحة:');
   if (!s || !d) return;
   constraints.subjectRest.push({ subject: s, day: d });
-  saveConstraints();
-  renderSubjectRest();
+  saveConstraints(); renderSubjectRest();
 };
-
 function removeSubjectRest(idx) { constraints.subjectRest.splice(idx, 1); saveConstraints(); renderSubjectRest(); }
 window.removeSubjectRest = removeSubjectRest;
 
 function renderDoublePeriods() {
   const c = $('doublePeriodsContainer');
+  if (!c) return;
   c.innerHTML = constraints.doublePeriods.map((s, idx) => `
     <div class="flex items-center justify-between gap-2 p-2 rounded-lg" style="background: var(--bg-3)">
       <span style="color: var(--accent)">🔗 ${s}</span>
@@ -943,14 +1039,13 @@ function renderDoublePeriods() {
   `).join('') || '<p class="text-xs text-center" style="color: var(--text-mute)">لا توجد</p>';
 }
 
-$('addDoublePeriodBtn').onclick = () => {
+const addDoublePeriodBtnEl = $('addDoublePeriodBtn');
+if (addDoublePeriodBtnEl) addDoublePeriodBtnEl.onclick = () => {
   const s = prompt('المادة المزدوجة:');
-  if (!s) return;
+  if (!s || constraints.doublePeriods.includes(s)) return;
   constraints.doublePeriods.push(s);
-  saveConstraints();
-  renderDoublePeriods();
+  saveConstraints(); renderDoublePeriods();
 };
-
 function removeDoublePeriod(idx) { constraints.doublePeriods.splice(idx, 1); saveConstraints(); renderDoublePeriods(); }
 window.removeDoublePeriod = removeDoublePeriod;
 
@@ -975,8 +1070,10 @@ function gotoStep(n) {
   updateStats();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
-$('nextBtn').onclick = () => gotoStep(currentStep + 1);
-$('prevBtn').onclick = () => gotoStep(currentStep - 1);
+const nextBtnEl = $('nextBtn');
+if (nextBtnEl) nextBtnEl.onclick = () => gotoStep(currentStep + 1);
+const prevBtnEl = $('prevBtn');
+if (prevBtnEl) prevBtnEl.onclick = () => gotoStep(currentStep - 1);
 $$('.step').forEach(el => el.onclick = () => gotoStep(+el.dataset.step));
 
 /* DEFAULTS */
@@ -985,7 +1082,8 @@ const DEFAULTS = {
   subjects: ['عربية','رياضيات','فرنسية','إنجليزية','علوم طبيعية','فيزياء','اجتماعيات','تربية إسلامية','تربية مدنية','تربية بدنية','موسيقى','إعلام آلي'],
   rooms: ['القاعة 1','القاعة 2','القاعة 3','القاعة 4','القاعة 5','القاعة 6','القاعة 7','القاعة 8','القاعة 9','القاعة 10','القاعة 11','القاعة 12','القاعة 13','القاعة 14','القاعة 15','القاعة 16','القاعة 17','القاعة 18','ورشة 1','ورشة 2','مخبر 1','مخبر 2']
 };
-$('loadDefaults').onclick = () => {
+const loadDefaultsEl = $('loadDefaults');
+if (loadDefaultsEl) loadDefaultsEl.onclick = () => {
   $('classesInput').value = DEFAULTS.classes.join('\n');
   $('subjectsInput').value = DEFAULTS.subjects.join('\n');
   $('roomsInput').value = DEFAULTS.rooms.join('\n');
@@ -994,7 +1092,8 @@ $('loadDefaults').onclick = () => {
 };
 
 function updateStats() {
-  const c = ($('classesInput').value || '').split('\n').filter(s => s.trim()).length;
+  const classesEl = $('classesInput'); if (!classesEl) return;
+  const c = (classesEl.value || '').split('\n').filter(s => s.trim()).length;
   const s = ($('subjectsInput').value || '').split('\n').filter(s => s.trim()).length;
   const r = ($('roomsInput').value || '').split('\n').filter(s => s.trim()).length;
   const t = $$('#teachersContainer > div').length;
@@ -1022,11 +1121,12 @@ function updateStats() {
   if (el) el.addEventListener('input', updateStats);
 });
 
-/* ═══════════════════════════════════════════════════════════════
-   EXCEL PARSER
-   ═══════════════════════════════════════════════════════════════ */
-$('excelUploadBtn').onclick = () => $('excelInput').click();
-$('excelInput').onchange = (e) => {
+/* EXCEL PARSER */
+const excelUploadBtnEl = $('excelUploadBtn');
+if (excelUploadBtnEl) excelUploadBtnEl.onclick = () => $('excelInput').click();
+
+const excelInputEl = $('excelInput');
+if (excelInputEl) excelInputEl.onchange = (e) => {
   const file = e.target.files[0];
   if (!file) return;
   $('excelFileName').textContent = '📎 ' + file.name;
@@ -1186,8 +1286,10 @@ function addTeacherRow(t = { name: '', subject: '', classes: '', hours: 0, extra
   $('teachersContainer').appendChild(div);
   updateStats();
 }
-$('addTeacherBtn').onclick = () => addTeacherRow();
-$('clearTeachersBtn').onclick = () => {
+const addTeacherBtnEl = $('addTeacherBtn');
+if (addTeacherBtnEl) addTeacherBtnEl.onclick = () => addTeacherRow();
+const clearTeachersBtnEl = $('clearTeachersBtn');
+if (clearTeachersBtnEl) clearTeachersBtnEl.onclick = () => {
   if (!confirm('مسح الكل؟')) return;
   $('teachersContainer').innerHTML = '';
   updateStats();
@@ -1289,7 +1391,8 @@ function solveTimetable(data) {
   return { schedule, placed, failed };
 }
 
-$('generateTimetableBtn').onclick = () => {
+const generateTimetableBtnEl = $('generateTimetableBtn');
+if (generateTimetableBtnEl) generateTimetableBtnEl.onclick = () => {
   $('logBox').innerHTML = '';
   try {
     const data = collectData();
@@ -1309,15 +1412,14 @@ $('generateTimetableBtn').onclick = () => {
   } catch (e) { log('❌ ' + e.message, 'error'); }
 };
 
-$('clearTimetableBtn').onclick = () => {
+const clearTimetableBtnEl = $('clearTimetableBtn');
+if (clearTimetableBtnEl) clearTimetableBtnEl.onclick = () => {
   generatedTimetable = [];
   localStorage.removeItem(STORAGE.TT);
   updateStats();
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   VIEWER
-   ═══════════════════════════════════════════════════════════════ */
+/* VIEWER */
 $$('.view-tab').forEach(tab => tab.onclick = () => {
   $$('.view-tab').forEach(x => x.classList.remove('active'));
   tab.classList.add('active');
@@ -1470,14 +1572,9 @@ function renderAllTeachers() {
   $('timetableContent').innerHTML = html;
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   🎯 EXPORT — تصدير XML لـ aSc (بالصيغة الصحيحة)
-   ═══════════════════════════════════════════════════════════════ */
-
+/* EXPORTS */
 function buildFullXML(data) {
   const { days, periods, duration, classes, subjects, rooms, teachers } = data;
-
-  // Periods
   let pX = '';
   for (let i = 1; i <= periods; i++) {
     const s = 8 * 60 + (i - 1) * duration;
@@ -1485,30 +1582,14 @@ function buildFullXML(data) {
     const f = m => `${String(Math.floor(m / 60)).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`;
     pX += `    <period name="P${i}" short="P${i}" period="${i}" starttime="${f(s)}" endtime="${f(e)}" />\n`;
   }
-
-  // Days
   let dX = '';
   days.forEach((d, i) => { dX += `    <daysdef name="D${i + 1}" short="D${i + 1}" days="${Math.pow(2, i)}" />\n`; });
-
-  // Subjects
-  let sX = '';
+  let sX = '', teX = '', cX = '', rX = '';
   subjects.forEach((s, i) => { sX += `    <subject name="S${i + 1}" short="S${i + 1}" id="${i + 1}" />\n`; });
-
-  // Teachers
-  let teX = '';
   teachers.forEach((t, i) => { teX += `    <teacher name="T${i + 1}" short="T${i + 1}" id="${i + 1}" />\n`; });
-
-  // Classes
-  let cX = '';
   classes.forEach((c, i) => { cX += `    <class name="C${i + 1}" short="C${i + 1}" id="${i + 1}" />\n`; });
-
-  // Classrooms
-  let rX = '';
   rooms.forEach((r, i) => { rX += `    <classroom name="R${i + 1}" short="R${i + 1}" id="${i + 1}" />\n`; });
-
-  // ClassSubjects — الصيغة الرسمية
-  let csX = '';
-  let csId = 1;
+  let csX = '', csId = 1;
   teachers.forEach((t, tIdx) => {
     const subjIdx = subjects.indexOf(t.subject) + 1;
     if (subjIdx === 0) return;
@@ -1523,20 +1604,14 @@ function buildFullXML(data) {
       csId++;
     });
   });
-
   return `<?xml version="1.0" encoding="UTF-8"?>
-<!-- DONIA LABS TECH — ${APP_VERSION} -->
 <osctime version="2023">
   <periods>
 ${pX}  </periods>
   <daysdef>
 ${dX}  </daysdef>
-  <weeksdef>
-    <weeksdef name="W1" short="W1" weeks="1" />
-  </weeksdef>
-  <termsdef>
-    <termsdef name="T1" short="T1" terms="1" />
-  </termsdef>
+  <weeksdef><weeksdef name="W1" short="W1" weeks="1" /></weeksdef>
+  <termsdef><termsdef name="T1" short="T1" terms="1" /></termsdef>
   <subjects>
 ${sX}  </subjects>
   <teachers>
@@ -1550,15 +1625,12 @@ ${csX}  </classsubjects>
 </osctime>`;
 }
 
-/* 🎯 تصدير Excel متعدد الأوراق لـ aSc */
-$('downloadExcelBtn').onclick = () => {
+const downloadExcelBtnEl = $('downloadExcelBtn');
+if (downloadExcelBtnEl) downloadExcelBtnEl.onclick = () => {
   try {
     const data = collectData();
     if (!data.teachers.length) return toast('⚠️ أضف أساتذة أولاً', 'warn');
-
     const wb = XLSX.utils.book_new();
-
-    // Teachers
     const tD = [['Name', 'Short', 'Subject', 'Class', 'Periods']];
     data.teachers.forEach(t => {
       const cls = (t.classes || '').split(/[,،]/).map(s => s.trim()).filter(Boolean);
@@ -1568,44 +1640,23 @@ $('downloadExcelBtn').onclick = () => {
     const ws1 = XLSX.utils.aoa_to_sheet(tD);
     ws1['!cols'] = [{ wch: 20 }, { wch: 14 }, { wch: 22 }, { wch: 12 }, { wch: 10 }];
     XLSX.utils.book_append_sheet(wb, ws1, 'Teachers');
-
-    // Classes
-    const cD = [['Name', 'Short']];
-    data.classes.forEach(c => cD.push([c, c]));
-    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(cD), 'Classes');
-
-    // Subjects
-    const sD = [['Name', 'Short']];
-    data.subjects.forEach(s => sD.push([s, s.slice(0, 10)]));
-    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(sD), 'Subjects');
-
-    // Rooms
-    const rD = [['Name', 'Short']];
-    data.rooms.forEach(r => rD.push([r, r.slice(0, 12)]));
-    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(rD), 'Rooms');
-
-    // Lessons
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet([['Name', 'Short'], ...data.classes.map(c => [c, c])]), 'Classes');
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet([['Name', 'Short'], ...data.subjects.map(s => [s, s.slice(0, 10)])]), 'Subjects');
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet([['Name', 'Short'], ...data.rooms.map(r => [r, r.slice(0, 12)])]), 'Rooms');
     const lD = [['Class', 'Subject', 'Teacher', 'Periods', 'Room']];
     data.teachers.forEach(t => {
       const cls = (t.classes || '').split(/[,،]/).map(s => s.trim()).filter(Boolean);
       const per = Math.max(1, Math.ceil(((t.hours || 0) + (t.extra || 0)) / (cls.length || 1)));
       cls.forEach(c => lD.push([c, t.subject, t.name, per, t.room || '']));
     });
-    const ws5 = XLSX.utils.aoa_to_sheet(lD);
-    ws5['!cols'] = [{ wch: 12 }, { wch: 22 }, { wch: 20 }, { wch: 10 }, { wch: 15 }];
-    XLSX.utils.book_append_sheet(wb, ws5, 'Lessons');
-
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(lD), 'Lessons');
     XLSX.writeFile(wb, `donia_asc_export_${new Date().toISOString().slice(0, 10)}.xlsx`);
-    toast('📊 تم تصدير Excel', 'success');
-    log(`📊 Excel: 5 أوراق (Teachers, Classes, Subjects, Rooms, Lessons)`, 'success');
-  } catch (e) {
-    log('❌ ' + e.message, 'error');
-    toast('❌ فشل التصدير', 'error');
-  }
+    toast('📊 تم التصدير', 'success');
+  } catch (e) { log('❌ ' + e.message, 'error'); }
 };
 
-/* 🎯 تصدير XML */
-$('downloadBtn').onclick = () => {
+const downloadBtnEl = $('downloadBtn');
+if (downloadBtnEl) downloadBtnEl.onclick = () => {
   try {
     const data = collectData();
     if (!data.teachers.length) return toast('⚠️ أضف أساتذة أولاً', 'warn');
@@ -1615,15 +1666,12 @@ $('downloadBtn').onclick = () => {
     a.href = URL.createObjectURL(blob);
     a.download = 'timetable_import.xml';
     a.click();
-    toast('⬇️ تم تحميل XML', 'success');
-    log(`⬇️ XML: timetable_import.xml`, 'success');
-  } catch (e) {
-    log('❌ ' + e.message, 'error');
-  }
+    toast('⬇️ تم التحميل', 'success');
+  } catch (e) { log('❌ ' + e.message, 'error'); }
 };
 
-/* 🎯 تصدير CSV */
-$('downloadCsvBtn').onclick = () => {
+const downloadCsvBtnEl = $('downloadCsvBtn');
+if (downloadCsvBtnEl) downloadCsvBtnEl.onclick = () => {
   try {
     const data = collectData();
     if (!data.teachers.length) return toast('⚠️ أضف أساتذة أولاً', 'warn');
@@ -1638,15 +1686,14 @@ $('downloadCsvBtn').onclick = () => {
     a.href = URL.createObjectURL(blob);
     a.download = `donia_export_${Date.now()}.csv`;
     a.click();
-    toast('📄 تم تصدير CSV', 'success');
-  } catch (e) {
-    log('❌ ' + e.message, 'error');
-  }
+    toast('📄 تم التصدير', 'success');
+  } catch (e) { log('❌ ' + e.message, 'error'); }
 };
 
-/* Print/PDF */
-$('printTimetableBtn').onclick = () => { if (generatedTimetable.length) window.print(); };
-$('pdfTimetableBtn').onclick = () => {
+const printTimetableBtnEl = $('printTimetableBtn');
+if (printTimetableBtnEl) printTimetableBtnEl.onclick = () => { if (generatedTimetable.length) window.print(); };
+const pdfTimetableBtnEl = $('pdfTimetableBtn');
+if (pdfTimetableBtnEl) pdfTimetableBtnEl.onclick = () => {
   if (!generatedTimetable.length) return toast('لا يوجد جدول', 'error');
   html2pdf().set({
     margin: 10, filename: `جدول_${Date.now()}.pdf`,
@@ -1654,7 +1701,8 @@ $('pdfTimetableBtn').onclick = () => {
   }).from($('printArea')).save();
   toast('📄 يتم الإنشاء...', 'info');
 };
-$('excelTimetableBtn').onclick = () => {
+const excelTimetableBtnEl = $('excelTimetableBtn');
+if (excelTimetableBtnEl) excelTimetableBtnEl.onclick = () => {
   if (!generatedTimetable.length) return toast('لا يوجد جدول', 'error');
   const data = collectData();
   const wb = XLSX.utils.book_new();
@@ -1675,17 +1723,69 @@ function updateSummary() {
   ].map(c => `<div class="stat-card"><p class="text-xs" style="color:var(--text-mute)">${c.l}</p><p class="text-2xl font-extrabold" style="color:${c.c}">${c.v}</p></div>`).join('');
 }
 
-/* INIT */
-window.addEventListener('DOMContentLoaded', () => {
-  $('classesInput').value = DEFAULTS.classes.join('\n');
-  $('subjectsInput').value = DEFAULTS.subjects.join('\n');
-  $('roomsInput').value = DEFAULTS.rooms.join('\n');
-  const saved = localStorage.getItem(STORAGE.TT);
-  if (saved) { try { generatedTimetable = JSON.parse(saved); } catch {} }
+/* IMPORT FROM CODE */
+const importFromCodeBtnEl = $('importFromCodeBtn');
+if (importFromCodeBtnEl) importFromCodeBtnEl.onclick = () => {
+  const code = $('importCodeInput').value.trim().toUpperCase();
+  if (!code) return toast('أدخل الرمز', 'warn');
+  const payload = loadCodeData(code);
+  if (!payload) return toast('❌ الرمز غير موجود', 'error');
+  applyPayload(payload);
+  toast('✅ تم الاستيراد', 'success');
+};
+
+function checkURLForImport() {
+  const hash = window.location.hash.replace('#', '');
+  const params = new URLSearchParams(window.location.search);
+  const encoded = params.get('import');
+
+  if (hash && hash.length <= 10) {
+    const payload = loadCodeData(hash);
+    if (payload) {
+      log(`📥 استيراد من الرمز: ${hash}`, 'info');
+      applyPayload(payload);
+      window.history.replaceState({}, '', window.location.pathname);
+      return;
+    } else {
+      log(`⚠️ الرمز ${hash} غير موجود`, 'warn');
+    }
+  }
+
+  if (encoded) {
+    try {
+      const jsonStr = LZString.decompressFromEncodedURIComponent(encoded) || decodeURIComponent(escape(atob(encoded)));
+      const payload = JSON.parse(jsonStr);
+      applyPayload(payload);
+      window.history.replaceState({}, '', window.location.pathname);
+    } catch (e) { console.error(e); }
+  }
+}
+
+function applyPayload(payload) {
+  if (payload.type === 'basic' || payload.type === 'unified') {
+    if (payload.institution) $('instName').value = payload.institution;
+    if (payload.year) $('schoolYear').value = payload.year;
+    if (payload.days) $('daysInput').value = payload.days.join(', ');
+    if (payload.periods) $('periodsCount').value = payload.periods;
+    if (payload.duration) $('periodDuration').value = payload.duration;
+  }
+  if (payload.type === 'teachers' || payload.type === 'unified') {
+    if (payload.classes) $('classesInput').value = payload.classes.join('\n');
+    if (payload.subjects) $('subjectsInput').value = payload.subjects.join('\n');
+    if (payload.rooms) $('roomsInput').value = payload.rooms.join('\n');
+    if (payload.teachers) renderTeachers(payload.teachers);
+  }
+  if (payload.type === 'constraints' || payload.type === 'unified') {
+    if (payload.constraints) {
+      constraints = payload.constraints;
+      saveConstraints();
+      renderAllConstraints();
+    }
+  }
   updateStats();
-  log(`✅ ${APP_VERSION} جاهز`, 'success');
-  log(`🌐 البوابة: اضغط زر "البوابة"`, 'info');
-});
+  toast('✅ تم استيراد البيانات', 'success');
+  gotoStep(2);
+}
 </script>
 </body>
 </html>
