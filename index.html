@@ -4,7 +4,34 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-<title>DONIA LABS TECH — OSCTIME AI v16.0</title>
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+<title>DONIA LABS TECH — OSCTIME AI v16.1</title>
+
+<!-- ⚡ تشغيل فوري — قبل أي شيء (منع وميض التطبيق في البوابة) -->
+<script>
+(function() {
+  function isPortal() {
+    const params = new URLSearchParams(window.location.search);
+    const hash = window.location.hash.replace('#', '').toUpperCase();
+    
+    // ?portal=true
+    if (params.get('portal') === 'true' || params.get('portal') === '1') return true;
+    
+    // #portal
+    if (hash === 'PORTAL') return true;
+    
+    // #ABC123 (رمز قصير 6 أحرف A-Z0-9)
+    if (hash && /^[A-Z0-9]{6}$/.test(hash)) return true;
+    
+    return false;
+  }
+
+  const mode = isPortal() ? 'portal' : 'app';
+  document.documentElement.setAttribute('data-mode', mode);
+  console.log('🚀 DONIA LABS — Mode:', mode);
+})();
+</script>
 
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
@@ -33,6 +60,21 @@
   }
   * { font-family: 'Cairo', sans-serif; transition: background .25s, color .25s, border-color .25s; box-sizing: border-box; }
   body { background: var(--bg); color: var(--text); min-height: 100vh; margin: 0; }
+  
+  /* ═══ التحكم في العرض حسب الوضع ═══ */
+  html[data-mode="portal"] #mainApp,
+  html[data-mode="portal"] #mainFooter { display: none !important; }
+  
+  html[data-mode="portal"] #visitorPortal { display: block !important; }
+  
+  html[data-mode="app"] #visitorPortal { display: none !important; }
+  html[data-mode="app"] #mainApp { display: block !important; }
+  html[data-mode="app"] #mainFooter { display: block !important; }
+  
+  #visitorPortal, #mainApp { animation: none !important; }
+  
+  .hidden-init { display: none !important; }
+  
   .glass { background: var(--glass); backdrop-filter: blur(16px); border: 1px solid var(--border); }
   .btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #0A0F1E; font-weight: 800; border: none; cursor: pointer; transition: all .2s; }
   [data-theme="light"] .btn-primary { color: #fff; }
@@ -104,9 +146,9 @@
 <body>
 
 <!-- ═══════════════════════════════════════════════════════════════
-     🚪 بوابة الزوار (تظهر فقط عند ?portal=true)
+     🚪 بوابة الزوار
      ═══════════════════════════════════════════════════════════════ -->
-<div id="visitorPortal" class="hidden" style="min-height: 100vh; background: var(--bg);">
+<div id="visitorPortal" style="min-height: 100vh; background: var(--bg);">
   
   <div class="glass sticky top-0 z-40" style="border-bottom: 2px solid var(--accent);">
     <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between flex-wrap gap-3">
@@ -237,14 +279,14 @@
         🌐 https://donialabstech.online/
       </a>
       <p class="text-xs mt-6" style="color: var(--text-mute)">
-        © 2025 DONIA LABS TECH — جميع الحقوق محفوظة
+        © <span class="dynamicYear"></span> DONIA LABS TECH — جميع الحقوق محفوظة
       </p>
     </div>
   </div>
 </div>
 
 <!-- ═══════════════════════════════════════════════════════════════
-     💼 التطبيق الكامل (يظهر فقط عند عدم وجود ?portal=true)
+     💼 التطبيق الكامل
      ═══════════════════════════════════════════════════════════════ -->
 <div id="mainApp">
 
@@ -497,7 +539,7 @@
 
 </div>
 
-<!-- Modal بوابة المشاركة (للمطور فقط) -->
+<!-- Modal بوابة المشاركة (للمطور) -->
 <div id="portalModal" class="hidden fixed inset-0 bg-black/85 z-50 p-4 overflow-auto no-print">
   <div class="glass rounded-2xl p-6 max-w-5xl mx-auto my-8">
     <div class="flex justify-between items-center mb-5 flex-wrap gap-3">
@@ -509,7 +551,7 @@
     </div>
 
     <div class="rounded-xl p-5 mb-6" style="background: linear-gradient(135deg, rgba(16,185,129,.15), rgba(5,150,105,.08)); border: 2px solid var(--success)">
-      <h4 class="font-bold text-center text-lg mb-3" style="color: var(--success)">🌟 الرابط الجامع (كل شيء)</h4>
+      <h4 class="font-bold text-center text-lg mb-3" style="color: var(--success)">🌟 الرابط الجامع</h4>
       <button onclick="generateUnifiedLink()" class="btn-osctime w-full py-3 rounded-lg text-base">🔗 توليد الرابط الجامع</button>
     </div>
 
@@ -575,24 +617,25 @@
 </div>
 
 <footer id="mainFooter" class="text-center text-xs py-8 mt-12 no-print" style="border-top: 1px solid var(--border); color: var(--text-mute)">
-  © 2025 DONIA LABS TECH — <span id="footerVersion">v16.0</span> · 
+  © <span class="dynamicYear"></span> DONIA LABS TECH — <span id="footerVersion">v16.1</span> · 
   <a href="https://donialabstech.online/" target="_blank" style="color: var(--accent)">donialabstech.online</a>
 </footer>
 
 <script>
 'use strict';
 
-const APP_VERSION = 'v16.0';
+const APP_VERSION = 'v16.1';
 const BUILD_TIME = new Date().toISOString().slice(0, 16).replace('T', ' ');
 const OFFICIAL_WEBSITE = 'https://donialabstech.online/';
+const CURRENT_YEAR = new Date().getFullYear(); // 🆕 السنة الحالية ديناميكياً
 
 const $ = (id) => document.getElementById(id);
 const $$ = (sel) => document.querySelectorAll(sel);
 const STORAGE = { 
-  THEME: 'donia_theme_v16', 
-  TT: 'donia_tt_v16', 
-  CONSTRAINTS: 'donia_constraints_v16',
-  CODES: 'donia_codes_v16'
+  THEME: 'donia_theme_v161', 
+  TT: 'donia_tt_v161', 
+  CONSTRAINTS: 'donia_constraints_v161',
+  CODES: 'donia_codes_v161'
 };
 
 let currentStep = 1;
@@ -609,43 +652,104 @@ let constraints = {
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   🚪 بوابة الزوار — فحص URL
+   🎯 كشف وضع البوابة (نفس المنطق الذي في الأعلى)
    ═══════════════════════════════════════════════════════════════ */
 function isVisitorPortal() {
   const params = new URLSearchParams(window.location.search);
-  const hash = window.location.hash;
-  return params.get('portal') === 'true' ||
-         params.get('portal') === '1' ||
-         hash === '#portal';
+  const hash = window.location.hash.replace('#', '').toUpperCase();
+  
+  if (params.get('portal') === 'true' || params.get('portal') === '1') return true;
+  if (hash === 'PORTAL') return true;
+  if (hash && /^[A-Z0-9]{6}$/.test(hash)) return true;
+  
+  return false;
 }
 
-function initVisitorPortal() {
-  if (!isVisitorPortal()) {
-    // إخفاء بوابة الزوار
-    const vp = document.getElementById('visitorPortal');
-    if (vp) vp.classList.add('hidden');
-    return;
+/* ═══════════════════════════════════════════════════════════════
+   🆕 تحديث السنة تلقائياً
+   ═══════════════════════════════════════════════════════════════ */
+function updateDynamicYear() {
+  document.querySelectorAll('.dynamicYear').forEach(el => {
+    el.textContent = CURRENT_YEAR;
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   INIT
+   ═══════════════════════════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', () => {
+  // تحديث السنة
+  updateDynamicYear();
+
+  if (isVisitorPortal()) {
+    // 🚪 وضع البوابة
+    console.log('🚪 بوابة الزوار');
+    
+    // تحميل رمز إن وُجد
+    const hash = window.location.hash.replace('#', '').toUpperCase();
+    if (hash && /^[A-Z0-9]{6}$/.test(hash)) {
+      const payload = loadCodeData(hash);
+      if (payload) {
+        fillPortalFromPayload(payload);
+      }
+    }
+  } else {
+    // 💼 وضع التطبيق
+    console.log('💼 التطبيق الكامل');
+    
+    $('versionBadge').textContent = `${APP_VERSION} (${BUILD_TIME})`;
+    $('footerVersion').textContent = APP_VERSION;
+    loadConstraints();
+    renderAllConstraints();
+    checkURLForImport();
+
+    $('classesInput').value = DEFAULTS.classes.join('\n');
+    $('subjectsInput').value = DEFAULTS.subjects.join('\n');
+    $('roomsInput').value = DEFAULTS.rooms.join('\n');
+
+    const saved = localStorage.getItem(STORAGE.TT);
+    if (saved) { try { generatedTimetable = JSON.parse(saved); } catch {} }
+
+    updateStats();
+    log(`✅ ${APP_VERSION} جاهز`, 'success');
+    log(`🌐 البوابة: اضغط زر "البوابة"`, 'info');
   }
 
-  // إخفاء التطبيق الرئيسي
-  const mainApp = document.getElementById('mainApp');
-  if (mainApp) mainApp.style.display = 'none';
-  const mainFooter = document.getElementById('mainFooter');
-  if (mainFooter) mainFooter.style.display = 'none';
+  console.log(`🚀 ${APP_VERSION} (${BUILD_TIME}) — Year: ${CURRENT_YEAR}`);
+});
 
-  // إظهار بوابة الزوار
-  const vp = document.getElementById('visitorPortal');
-  if (vp) vp.classList.remove('hidden');
-
-  console.log('🚪 بوابة الزوار مُفعّلة');
-}
-
-/* دوال بوابة الزوار */
+/* ═══════════════════════════════════════════════════════════════
+   بوابة الزوار
+   ═══════════════════════════════════════════════════════════════ */
 function scrollToForm() {
   const form = document.getElementById('portalForm');
   if (form) form.scrollIntoView({ behavior: 'smooth' });
 }
 window.scrollToForm = scrollToForm;
+
+function fillPortalFromPayload(payload) {
+  if (payload.institution) {
+    const el = document.getElementById('pInstName');
+    if (el) el.value = payload.institution;
+  }
+  if (payload.year) {
+    const el = document.getElementById('pSchoolYear');
+    if (el) el.value = payload.year;
+  }
+  if (payload.teachersRaw) {
+    const el = document.getElementById('pTeachers');
+    if (el) el.value = payload.teachersRaw;
+  }
+  if (payload.holidays) {
+    const el = document.getElementById('pHolidays');
+    if (el) el.value = Array.isArray(payload.holidays) ? payload.holidays.join(', ') : payload.holidays;
+  }
+  if (payload.notes) {
+    const el = document.getElementById('pNotes');
+    if (el) el.value = payload.notes;
+  }
+  console.log('📥 تم استيراد البيانات في النموذج');
+}
 
 function submitPortalForm() {
   const inst = document.getElementById('pInstName').value.trim();
@@ -742,35 +846,6 @@ function clearPortalForm() {
 window.clearPortalForm = clearPortalForm;
 
 /* ═══════════════════════════════════════════════════════════════
-   INIT
-   ═══════════════════════════════════════════════════════════════ */
-document.addEventListener('DOMContentLoaded', () => {
-  initVisitorPortal();
-
-  // التطبيق الرئيسي
-  if (!isVisitorPortal()) {
-    $('versionBadge').textContent = `${APP_VERSION} (${BUILD_TIME})`;
-    $('footerVersion').textContent = APP_VERSION;
-    loadConstraints();
-    renderAllConstraints();
-    checkURLForImport();
-
-    $('classesInput').value = DEFAULTS.classes.join('\n');
-    $('subjectsInput').value = DEFAULTS.subjects.join('\n');
-    $('roomsInput').value = DEFAULTS.rooms.join('\n');
-
-    const saved = localStorage.getItem(STORAGE.TT);
-    if (saved) { try { generatedTimetable = JSON.parse(saved); } catch {} }
-
-    updateStats();
-    log(`✅ ${APP_VERSION} جاهز`, 'success');
-    log(`🌐 البوابة: اضغط زر "البوابة"`, 'info');
-  }
-
-  console.log(`🚀 ${APP_VERSION} (${BUILD_TIME})`);
-});
-
-/* ═══════════════════════════════════════════════════════════════
    THEME
    ═══════════════════════════════════════════════════════════════ */
 function applyTheme(t) {
@@ -810,14 +885,12 @@ function log(msg, type = 'info') {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   SHORT CODE SYSTEM
+   SHORT CODE
    ═══════════════════════════════════════════════════════════════ */
 function generateShortCode() {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
   let code = '';
-  for (let i = 0; i < 6; i++) {
-    code += chars.charAt(Math.floor(Math.random() * chars.length));
-  }
+  for (let i = 0; i < 6; i++) code += chars.charAt(Math.floor(Math.random() * chars.length));
   return code;
 }
 
@@ -838,13 +911,11 @@ function loadCodeData(code) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   PORTAL
+   PORTAL (للمطور)
    ═══════════════════════════════════════════════════════════════ */
 const openPortalBtnEl = $('openPortalBtn');
 if (openPortalBtnEl) {
-  openPortalBtnEl.onclick = () => {
-    $('portalModal').classList.remove('hidden');
-  };
+  openPortalBtnEl.onclick = () => $('portalModal').classList.remove('hidden');
 }
 
 function closePortal() { $('portalModal').classList.add('hidden'); }
@@ -871,13 +942,9 @@ window.generateUnifiedLink = generateUnifiedLink;
 function generatePortalLink(type) {
   const data = collectData();
   let payload = { type };
-  if (type === 'basic') {
-    payload = { ...payload, institution: data.institution, year: data.year, days: data.days, periods: data.periods, duration: data.duration };
-  } else if (type === 'teachers') {
-    payload = { ...payload, teachers: data.teachers, classes: data.classes, subjects: data.subjects, rooms: data.rooms };
-  } else if (type === 'constraints') {
-    payload = { ...payload, constraints };
-  }
+  if (type === 'basic') payload = { ...payload, institution: data.institution, year: data.year, days: data.days, periods: data.periods, duration: data.duration };
+  else if (type === 'teachers') payload = { ...payload, teachers: data.teachers, classes: data.classes, subjects: data.subjects, rooms: data.rooms };
+  else if (type === 'constraints') payload = { ...payload, constraints };
   const code = generateShortCode();
   saveCodeData(code, payload);
   const baseUrl = window.location.origin + window.location.pathname;
@@ -957,8 +1024,7 @@ const addHolidayBtnEl = $('addHolidayBtn');
 if (addHolidayBtnEl) addHolidayBtnEl.onclick = () => {
   const day = prompt('اسم اليوم:');
   if (!day || constraints.holidays.includes(day)) return;
-  constraints.holidays.push(day);
-  saveConstraints(); renderHolidays();
+  constraints.holidays.push(day); saveConstraints(); renderHolidays();
 };
 function removeHoliday(idx) { constraints.holidays.splice(idx, 1); saveConstraints(); renderHolidays(); }
 window.removeHoliday = removeHoliday;
@@ -1043,8 +1109,7 @@ const addDoublePeriodBtnEl = $('addDoublePeriodBtn');
 if (addDoublePeriodBtnEl) addDoublePeriodBtnEl.onclick = () => {
   const s = prompt('المادة المزدوجة:');
   if (!s || constraints.doublePeriods.includes(s)) return;
-  constraints.doublePeriods.push(s);
-  saveConstraints(); renderDoublePeriods();
+  constraints.doublePeriods.push(s); saveConstraints(); renderDoublePeriods();
 };
 function removeDoublePeriod(idx) { constraints.doublePeriods.splice(idx, 1); saveConstraints(); renderDoublePeriods(); }
 window.removeDoublePeriod = removeDoublePeriod;
@@ -1076,7 +1141,6 @@ const prevBtnEl = $('prevBtn');
 if (prevBtnEl) prevBtnEl.onclick = () => gotoStep(currentStep - 1);
 $$('.step').forEach(el => el.onclick = () => gotoStep(+el.dataset.step));
 
-/* DEFAULTS */
 const DEFAULTS = {
   classes: ['1م1','1م2','1م3','1م4','1م5','1م6','2م1','2م2','2م3','2م4','2م5','3م1','3م2','3م3','3م4','3م5','4م1','4م2','4م3','4م4','4م5','4م6'],
   subjects: ['عربية','رياضيات','فرنسية','إنجليزية','علوم طبيعية','فيزياء','اجتماعيات','تربية إسلامية','تربية مدنية','تربية بدنية','موسيقى','إعلام آلي'],
@@ -1087,8 +1151,7 @@ if (loadDefaultsEl) loadDefaultsEl.onclick = () => {
   $('classesInput').value = DEFAULTS.classes.join('\n');
   $('subjectsInput').value = DEFAULTS.subjects.join('\n');
   $('roomsInput').value = DEFAULTS.rooms.join('\n');
-  updateStats();
-  toast('✅ تم التحميل', 'success');
+  updateStats(); toast('✅ تم التحميل', 'success');
 };
 
 function updateStats() {
@@ -1253,8 +1316,7 @@ function acceptSheetPreview() {
   if (pendingImport.rooms.length) $('roomsInput').value = pendingImport.rooms.join('\n');
   renderTeachers(pendingImport.teachers);
   toast(`✅ ${pendingImport.teachers.length} أستاذ`, 'success');
-  closeSheetPreview();
-  gotoStep(2);
+  closeSheetPreview(); gotoStep(2);
 }
 window.closeSheetPreview = closeSheetPreview;
 window.acceptSheetPreview = acceptSheetPreview;
@@ -1341,7 +1403,6 @@ function solveTimetable(data) {
       });
     });
   });
-
   const grid = Array.from({ length: D }, () => Array.from({ length: P }, () => ({
     teachers: new Set(), classes: new Set()
   })));
@@ -1352,7 +1413,6 @@ function solveTimetable(data) {
   const schedule = [];
   const teacherDayCount = {};
   teachers.forEach((_, i) => teacherDayCount[i] = new Array(D).fill(0));
-
   const isHoliday = (d) => constraints.holidays.includes(d);
   const isTimeBlocked = (d, p) => constraints.timeBlocks.some(b => b.day === d && p >= b.startPeriod && p <= b.endPeriod);
   const isTeacherRest = (t, d) => constraints.teacherRest.some(r => r.teacher === t && r.day === d);
@@ -1407,8 +1467,7 @@ if (generateTimetableBtnEl) generateTimetableBtnEl.onclick = () => {
     localStorage.setItem(STORAGE.TT, JSON.stringify(generatedTimetable));
     toast(`🎉 ${best.placed} حصة`, 'success');
     generatedXML = buildFullXML(data, generatedTimetable);
-    updateStats();
-    gotoStep(6);
+    updateStats(); gotoStep(6);
   } catch (e) { log('❌ ' + e.message, 'error'); }
 };
 
@@ -1448,7 +1507,6 @@ function renderTimetables() {
     $('timetableStats').innerHTML = '';
     return;
   }
-
   if (currentViewType === 'teacher') renderSingle('teacher', viewSelectedId);
   else if (currentViewType === 'class') renderSingle('class', viewSelectedId);
   else if (currentViewType === 'all-classes') renderAllClasses();
@@ -1473,14 +1531,12 @@ function renderSingle(type, id) {
     <h2 style="font-size:20px; font-weight:900; color:var(--accent); margin:0;">${isT ? '👨‍🏫' : '🎓'} ${name} ${sub ? `— ${sub}` : ''}</h2>
     <p style="font-size:12px; color:var(--text-mute);">${data.institution} — ${data.year}</p>
   </div>`;
-
   html += `<table class="timetable"><thead><tr><th>الحصة</th>`;
   data.days.forEach(d => {
     const isH = constraints.holidays.includes(d);
     html += `<th style="${isH ? 'background:linear-gradient(135deg,#EF4444,#DC2626);' : ''}">${d}${isH ? ' 🚫' : ''}</th>`;
   });
   html += `</tr></thead><tbody>`;
-
   for (let p = 1; p <= data.periods; p++) {
     const s = 8*60 + (p-1)*data.duration;
     const e = s + data.duration;
@@ -1493,9 +1549,8 @@ function renderSingle(type, id) {
         html += `<td class="rest-cell">🚫</td>`; continue;
       }
       const l = filtered.find(x => x.day === d && x.period === p - 1);
-      if (l) {
-        html += `<td><div class="lesson-cell"><div class="lesson-subject">${l.subjectName}</div><div class="lesson-info">${isT ? l.className : l.teacherName}</div></div></td>`;
-      } else html += `<td><span class="empty-cell">—</span></td>`;
+      if (l) html += `<td><div class="lesson-cell"><div class="lesson-subject">${l.subjectName}</div><div class="lesson-info">${isT ? l.className : l.teacherName}</div></div></td>`;
+      else html += `<td><span class="empty-cell">—</span></td>`;
     }
     html += `</tr>`;
   }
@@ -1723,7 +1778,7 @@ function updateSummary() {
   ].map(c => `<div class="stat-card"><p class="text-xs" style="color:var(--text-mute)">${c.l}</p><p class="text-2xl font-extrabold" style="color:${c.c}">${c.v}</p></div>`).join('');
 }
 
-/* IMPORT FROM CODE */
+/* IMPORT */
 const importFromCodeBtnEl = $('importFromCodeBtn');
 if (importFromCodeBtnEl) importFromCodeBtnEl.onclick = () => {
   const code = $('importCodeInput').value.trim().toUpperCase();
@@ -1735,19 +1790,17 @@ if (importFromCodeBtnEl) importFromCodeBtnEl.onclick = () => {
 };
 
 function checkURLForImport() {
-  const hash = window.location.hash.replace('#', '');
+  const hash = window.location.hash.replace('#', '').toUpperCase();
   const params = new URLSearchParams(window.location.search);
   const encoded = params.get('import');
 
-  if (hash && hash.length <= 10) {
+  if (hash && /^[A-Z0-9]{6}$/.test(hash)) {
     const payload = loadCodeData(hash);
     if (payload) {
       log(`📥 استيراد من الرمز: ${hash}`, 'info');
       applyPayload(payload);
       window.history.replaceState({}, '', window.location.pathname);
       return;
-    } else {
-      log(`⚠️ الرمز ${hash} غير موجود`, 'warn');
     }
   }
 
