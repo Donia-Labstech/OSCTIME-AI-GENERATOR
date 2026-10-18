@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-<title>DONIA LABS TECH — OSCTIME AI v18.0</title>
+<title>DONIA LABS TECH — OSCTIME AI v19.0</title>
 
 <script>
 (function() {
@@ -24,7 +24,6 @@
 <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.5.0/lz-string.min.js"></script>
 
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 
@@ -61,10 +60,8 @@
   .btn-print { background: linear-gradient(135deg, #7C3AED, #6366F1); color: #fff; font-weight: 900; border: none; cursor: pointer; }
   .btn-danger { background: linear-gradient(135deg, #EF4444, #DC2626); color: #fff; font-weight: 900; border: none; cursor: pointer; }
   .btn-whatsapp { background: linear-gradient(135deg, #25D366, #128C7E); color: #fff; font-weight: 900; border: none; cursor: pointer; }
-  .btn-email { background: linear-gradient(135deg, #EA4335, #C5221F); color: #fff; font-weight: 900; border: none; cursor: pointer; }
   .btn-share { background: linear-gradient(135deg, #00E5FF, #7C3AED); color: #fff; font-weight: 900; border: none; cursor: pointer; }
   .btn-backup { background: linear-gradient(135deg, #06B6D4, #0891B2); color: #fff; font-weight: 900; border: none; cursor: pointer; }
-  .btn-restore { background: linear-gradient(135deg, #8B5CF6, #7C3AED); color: #fff; font-weight: 900; border: none; cursor: pointer; }
   .btn-github { background: linear-gradient(135deg, #333, #24292e); color: #fff; font-weight: 900; border: none; cursor: pointer; }
   .input-field { background: var(--bg); border: 1px solid var(--border); color: var(--text); }
   .input-field:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,229,255,.15); }
@@ -105,20 +102,27 @@
   .stat-mini { background: var(--bg-2); border: 1px solid var(--border); border-radius: 8px; padding: 8px; text-align: center; }
   .stat-mini .label { font-size: 10px; color: var(--text-mute); }
   .stat-mini .value { font-size: 18px; font-weight: 800; color: var(--accent); }
-  .portal-card { background: linear-gradient(135deg, rgba(0,229,255,.08), rgba(124,58,237,.05)); border: 2px solid var(--accent); border-radius: 16px; padding: 20px; transition: all .3s; }
+  .portal-card { background: linear-gradient(135deg, rgba(0,229,255,.08), rgba(124,58,237,.05)); border: 2px solid var(--accent); border-radius: 16px; padding: 20px; }
   .portal-icon { font-size: 48px; text-align: center; margin-bottom: 12px; }
   .link-box { background: var(--bg-3); border: 1px dashed var(--accent); border-radius: 10px; padding: 12px; font-family: monospace; font-size: 12px; word-break: break-all; color: var(--accent); margin: 12px 0; }
   .qr-box { background: #FFFFFF; padding: 12px; border-radius: 12px; text-align: center; display: inline-block; }
   .code-badge { display: inline-block; background: linear-gradient(135deg, #10B981, #059669); color: #fff; font-family: monospace; font-weight: 900; font-size: 24px; padding: 8px 20px; border-radius: 12px; letter-spacing: 4px; }
   .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.85); z-index: 60; padding: 16px; overflow: auto; }
   .modal-content { background: var(--glass); backdrop-filter: blur(16px); border: 1px solid var(--border); border-radius: 16px; padding: 24px; max-width: 500px; margin: 40px auto; }
+  
+  /* 🆕 v19: الترويسة الرسمية */
+  .official-header { display: none; }
+  .official-print { display: none; }
+  
   @media print {
-    @page { size: A4 landscape; margin: 15mm 10mm 15mm 10mm; }
+    @page { size: A4 portrait; margin: 15mm 10mm 15mm 10mm; }
     body { background: #FFFFFF !important; color: #000000 !important; }
-    .no-print, #visitorPortal, #portalModal, #backupModal, #githubModal, header, footer, #statsBar, #timetableStats, #entitySelector, button, #toast { display: none !important; }
+    .no-print, #visitorPortal, #portalModal, #backupModal, #githubModal, header, footer, #statsBar, #timetableStats, #entitySelector, .btn-primary, .btn-ghost, .btn-osctime, .btn-excel, .btn-print, .btn-danger, .btn-whatsapp, .btn-share, .btn-backup, .btn-github, #toast { display: none !important; }
     #printArea { display: block !important; position: absolute !important; left: 0 !important; top: 0 !important; width: 100% !important; }
+    .official-print { display: block !important; }
     .timetable tr, .timetable td { page-break-inside: avoid !important; }
     .timetable { page-break-after: always !important; }
+    .timetable th { background: #000 !important; color: #FFF !important; -webkit-print-color-adjust: exact; }
   }
 </style>
 </head>
@@ -131,7 +135,7 @@
       <div class="flex items-center gap-3">
         <div class="w-14 h-14 rounded-xl btn-primary grid place-items-center text-3xl font-black">D</div>
         <div>
-          <h1 class="text-xl font-extrabold leading-tight">DONIA LABS TECH</h1>
+          <h1 class="text-xl font-extrabold">DONIA LABS TECH</h1>
           <p class="text-xs" style="color: var(--accent)">مختبر الأفكار الذكية والتكنولوجيا المتقدمة</p>
         </div>
       </div>
@@ -144,7 +148,7 @@
       <h2 class="text-3xl font-black mb-3" style="color: var(--accent)">مرحباً بكم</h2>
       <p class="text-lg mb-2">في <strong>مختبر الأفكار الذكية والتكنولوجيا المتقدمة</strong></p>
       <p class="text-xl font-extrabold mb-4" style="color: var(--gold)">DONIA LABS TECH</p>
-      <p class="text-base mb-4" style="color: var(--text-mute)">للحصول على جدولك الزمني، يرجى ملء البيانات في النموذج أدناه</p>
+      <p class="text-base mb-4" style="color: var(--text-mute)">للحصول على جدولك الزمني، يرجى ملء البيانات أدناه</p>
       <button onclick="document.getElementById('portalForm').scrollIntoView({behavior:'smooth'})" class="btn-primary px-8 py-4 rounded-xl text-lg font-extrabold">📝 املأ النموذج الآن</button>
     </div>
   </div>
@@ -164,21 +168,13 @@
         <h3 class="font-bold mb-3" style="color: var(--gold)">② الإسناد</h3>
         <textarea id="pTeachers" rows="8" class="input-field w-full p-3 rounded-lg font-mono text-sm" placeholder="اسم | مادة | أفواج | حصص"></textarea>
       </div>
-      <div class="mb-6 p-4 rounded-xl" style="background: var(--bg-2);">
-        <h3 class="font-bold mb-3" style="color: var(--gold)">③ القيود</h3>
-        <div class="grid md:grid-cols-2 gap-3">
-          <div><label class="text-xs">العطل</label><input id="pHolidays" class="input-field w-full p-3 rounded-lg mt-1" placeholder="الجمعة, السبت" /></div>
-          <div><label class="text-xs">محظورات</label><input id="pBlocked" class="input-field w-full p-3 rounded-lg mt-1" /></div>
-        </div>
-        <div class="mt-3"><label class="text-xs">ملاحظات</label><textarea id="pNotes" rows="3" class="input-field w-full p-3 rounded-lg mt-1"></textarea></div>
-      </div>
       <div class="flex flex-wrap gap-3 justify-center">
         <button onclick="submitPortalForm()" class="btn-osctime px-8 py-4 rounded-xl">📤 إرسال</button>
         <button onclick="downloadPortalData()" class="btn-primary px-6 py-4 rounded-xl">⬇️ تحميل</button>
         <button onclick="clearPortalForm()" class="btn-ghost px-6 py-4 rounded-xl">🗑️ مسح</button>
       </div>
       <div id="portalSuccess" class="hidden mt-6 p-5 rounded-xl text-center" style="background: rgba(16,185,129,.1); border: 2px solid var(--success);">
-        <div class="text-4xl mb-2">✅</div><h3 class="font-bold mb-2">تم استلام بياناتك</h3>
+        <div class="text-4xl mb-2">✅</div><h3 class="font-bold">تم استلام بياناتك</h3>
       </div>
     </div>
     <div class="text-center mt-8">
@@ -188,7 +184,7 @@
   </div>
 </div>
 
-<!-- ═══════════════════ التطبيق الكامل ═══════════════════ -->
+<!-- ═══════════════════ التطبيق ═══════════════════ -->
 <div id="mainApp">
 <header class="glass sticky top-0 z-40 no-print" style="border-bottom: 1px solid var(--border);">
   <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between flex-wrap gap-3">
@@ -242,11 +238,11 @@
     <div class="grid md:grid-cols-3 gap-4 mb-4">
       <div><label class="text-sm">المؤسسة</label><input id="instName" value="متوسطة العقيد سي الحواس" class="input-field w-full p-3 mt-2 rounded-lg" /></div>
       <div><label class="text-sm">السنة</label><input id="schoolYear" value="2024-2025" class="input-field w-full p-3 mt-2 rounded-lg" /></div>
-      <div><label class="text-sm">مدة الحصة</label><input id="periodDuration" type="number" value="55" class="input-field w-full p-3 mt-2 rounded-lg" /></div>
+      <div><label class="text-sm">مدة الحصة</label><input id="periodDuration" type="number" value="60" class="input-field w-full p-3 mt-2 rounded-lg" /></div>
     </div>
     <div class="grid md:grid-cols-2 gap-4">
       <div><label class="text-sm">الأيام</label><input id="daysInput" value="الأحد, الاثنين, الثلاثاء, الأربعاء, الخميس" class="input-field w-full p-3 mt-2 rounded-lg" /></div>
-      <div><label class="text-sm">عدد الحصص</label><input id="periodsCount" type="number" value="7" class="input-field w-full p-3 mt-2 rounded-lg" /></div>
+      <div><label class="text-sm">عدد الحصص</label><input id="periodsCount" type="number" value="8" class="input-field w-full p-3 mt-2 rounded-lg" /></div>
     </div>
   </section>
 
@@ -278,16 +274,6 @@
           <button onclick="loadDefaultConstraints()" class="btn-osctime px-5 py-3 rounded-xl text-sm">⚡ تحميل</button>
           <button onclick="clearAllConstraints()" class="btn-danger px-4 py-3 rounded-xl text-sm">🗑️ مسح</button>
         </div>
-      </div>
-      <div class="mt-4 p-3 rounded-lg text-xs" style="background: var(--bg-3); color: var(--text-mute);">
-        <strong style="color: var(--gold)">📋 القواعد:</strong>
-        <ul class="mt-2 space-y-1">
-          <li>🟢 عربية + ت.إسلامية → الاثنين | 🟡 اجتماعيات → الأحد | 🔵 فرنسية + إنجليزية + موسيقى + إعلام → الثلاثاء</li>
-          <li>🟣 علوم + فيزياء → الأربعاء | 🔴 رياضيات → الخميس</li>
-          <li>⏰ 4 صباحاً + 3 مساءً | الثلاثاء: صباحي فقط | الخميس: حصتان</li>
-          <li>🔗 رياضة (كلها مزدوجة) | علوم + فيزياء (حصة مزدوجة لكل فوج)</li>
-          <li>👥 تفويج: موسيقى+إعلام | إنجليزية+فرنسية | عربية+رياضيات</li>
-        </ul>
       </div>
     </div>
     <div class="grid md:grid-cols-2 gap-4 mb-6">
@@ -340,7 +326,17 @@
       <button id="fullscreenBtn" class="btn-ghost px-5 py-2 rounded-lg text-sm">⛶ ملء الشاشة</button>
     </div>
     <div id="timetableStats" class="timetable-stats"></div>
-    <div id="printArea" class="timetable-wrap"><div id="timetableContent"></div></div>
+    <div id="printArea" class="timetable-wrap">
+      <div id="officialHeaderPrint" class="official-print" style="text-align:center; margin-bottom:20px; line-height:1.8; font-family:'Cairo',sans-serif;">
+        <p style="font-size:14px; font-weight:700; margin:0;">الجمهورية الجزائرية الديمقراطية الشعبية</p>
+        <p style="font-size:13px; font-weight:600; margin:0;">وزارة التربية الوطنية</p>
+        <p style="font-size:12px; margin:0;">مديرية التربية لولاية <span id="printWilaya">الجزائر</span></p>
+        <p style="font-size:12px; margin:0;">متوسطة <span id="printInst">العقيد سي الحواس</span></p>
+        <p style="font-size:12px; margin:0;">السنة الدراسية: <span id="printYear">2024-2025</span></p>
+        <hr style="margin:10px 0;" />
+      </div>
+      <div id="timetableContent"></div>
+    </div>
   </section>
 
   <section id="step7" class="glass rounded-2xl p-6 mb-6 hidden">
@@ -368,7 +364,6 @@
 </main>
 </div>
 
-<!-- Modals -->
 <div id="portalModal" class="hidden modal-overlay no-print">
   <div class="modal-content" style="max-width:800px;">
     <div class="flex justify-between mb-5">
@@ -408,7 +403,7 @@
     <div class="space-y-3">
       <button onclick="exportBackup()" class="btn-backup w-full py-3 rounded-lg">📥 تصدير JSON</button>
       <button onclick="exportBackupExcel()" class="btn-excel w-full py-3 rounded-lg">📊 تصدير Excel</button>
-      <label class="btn-restore w-full py-3 rounded-lg cursor-pointer text-center block">📤 استرجاع<input type="file" id="restoreInput" accept=".json" class="hidden" /></label>
+      <label class="btn-restore w-full py-3 rounded-lg cursor-pointer text-center block" style="background: linear-gradient(135deg, #8B5CF6, #7C3AED); color:#fff;">📤 استرجاع<input type="file" id="restoreInput" accept=".json" class="hidden" /></label>
     </div>
     <div id="backupStatus" class="mt-4 p-3 rounded-lg text-xs text-center" style="background: var(--bg-3);">جاهز</div>
   </div>
@@ -454,21 +449,31 @@
 </div>
 
 <footer id="mainFooter" class="text-center text-xs py-8 mt-12 no-print" style="border-top: 1px solid var(--border); color: var(--text-mute);">
-  © <span class="dynamicYear"></span> DONIA LABS TECH — <span id="footerVersion">v18.0</span> · 
+  © <span class="dynamicYear"></span> DONIA LABS TECH — <span id="footerVersion">v19.0</span> · 
   <a href="https://donialabstech.online/" target="_blank" style="color: var(--accent);">donialabstech.online</a>
 </footer>
 
 <script>
 'use strict';
 
-const APP_VERSION = 'v18.0';
+const APP_VERSION = 'v19.0';
 const BUILD_TIME = new Date().toISOString().slice(0, 16).replace('T', ' ');
 const OFFICIAL_WEBSITE = 'https://donialabstech.online/';
 const CURRENT_YEAR = new Date().getFullYear();
 
 const $ = (id) => document.getElementById(id);
 const $$ = (sel) => document.querySelectorAll(sel);
-const STORAGE = { THEME: 'donia_theme_v18', TT: 'donia_tt_v18', CONSTRAINTS: 'donia_constraints_v18', CODES: 'donia_codes_v18', GITHUB: 'donia_github_v18' };
+const STORAGE = { THEME: 'donia_theme_v19', TT: 'donia_tt_v19', CONSTRAINTS: 'donia_constraints_v19', CODES: 'donia_codes_v19', GITHUB: 'donia_github_v19' };
+
+/* 🆕 v19: المنهاج الرسمي من ملف التنظيم التربوي */
+const OFFICIAL_CURRICULUM = {
+  '4م': { 'عربية': 7, 'رياضيات': 5, 'فرنسية': 5, 'علوم': 3, 'فيزياء': 3, 'اجتماعيات': 3, 'إنجليزية': 4, 'ت.بدنية': 2, 'موسيقى': 1, 'رسم': 1 },
+  '3م': { 'عربية': 6, 'رياضيات': 5, 'فرنسية': 5, 'علوم': 3, 'فيزياء': 3, 'اجتماعيات': 3, 'إنجليزية': 4, 'ت.بدنية': 2, 'رسم': 1 },
+  '2م': { 'عربية': 7, 'رياضيات': 5, 'فرنسية': 5, 'علوم': 3, 'فيزياء': 3, 'اجتماعيات': 3, 'إنجليزية': 3, 'ت.بدنية': 2, 'رسم': 1 },
+  '1م': { 'عربية': 7, 'رياضيات': 5, 'فرنسية': 5, 'علوم': 3, 'فيزياء': 3, 'اجتماعيات': 3, 'إنجليزية': 3, 'ت.بدنية': 2, 'موسيقى': 1 }
+};
+
+const PERIOD_TIMES = ['08:00-09:00','09:00-10:00','10:00-11:00','11:00-12:00','13:00-14:00','14:00-15:00','15:00-16:00','16:00-17:00'];
 
 let currentStep = 1;
 const TOTAL_STEPS = 7;
@@ -482,12 +487,12 @@ let currentShortCode = '';
 let constraints = {
   holidays: [], timeBlocks: [], teacherRest: [], subjectRest: [],
   doublePeriods: [], teamTeaching: [],
-  rules: { noSinglePeriod: false, noClassGaps: false, noTeacherTwoGaps: false, morningPeriods: 4, eveningPeriods: 3, thursdayPeriods: 2, tuesdayMorningOnly: false }
+  rules: { noSinglePeriod: false, noClassGaps: false, noTeacherTwoGaps: false, morningPeriods: 4, eveningPeriods: 4, thursdayPeriods: 4, tuesdayMorningOnly: false }
 };
 
 const DEFAULTS = {
-  classes: ['1م1','1م2','1م3','1م4','1م5','1م6','2م1','2م2','2م3','2م4','2م5','3م1','3م2','3م3','3م4','3م5','4م1','4م2','4م3','4م4','4م5','4م6'],
-  subjects: ['عربية','رياضيات','فرنسية','إنجليزية','علوم طبيعية','فيزياء','اجتماعيات','تربية إسلامية','تربية مدنية','تربية بدنية','موسيقى','إعلام آلي'],
+  classes: ['1م1','1م2','1م3','1م4','1م5','1م6','1م7','1م8','2م1','2م2','2م3','2م4','2م5','2م6','3م1','3م2','3م3','3م4','3م5','4م1','4م2','4م3','4م4'],
+  subjects: ['عربية','رياضيات','فرنسية','علوم','فيزياء','اجتماعيات','إنجليزية','ت.بدنية','موسيقى','رسم','امازيغية','اعلام الي'],
   rooms: ['القاعة 1','القاعة 2','القاعة 3','القاعة 4','القاعة 5','القاعة 6','القاعة 7','القاعة 8','القاعة 9','القاعة 10','القاعة 11','القاعة 12','القاعة 13','القاعة 14','القاعة 15','القاعة 16','القاعة 17','القاعة 18','ورشة 1','ورشة 2','مخبر 1','مخبر 2']
 };
 
@@ -519,7 +524,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (saved) { try { generatedTimetable = JSON.parse(saved); } catch {} }
     updateStats();
     log(`✅ ${APP_VERSION} جاهز`, 'success');
-    log(`🎛️ اذهب للخطوة 4 → "تحميل القيود الافتراضية"`, 'info');
+    log(`🎛️ الخطوة 4: "تحميل القيود الافتراضية"`, 'info');
+    log(`📚 المنهاج الرسمي محمّل (${Object.keys(OFFICIAL_CURRICULUM).length} مستويات)`, 'info');
   }
 });
 
@@ -556,13 +562,13 @@ function fillPortalFromPayload(p) {
 function submitPortalForm() {
   const inst = $('pInstName').value.trim(), name = $('pFullName').value.trim();
   if (!inst || !name) { alert('⚠️ املأ الحقول المطلوبة'); return; }
-  const payload = { type: 'portal-submission', institution: inst, year: $('pSchoolYear').value, name, phone: $('pPhone').value, teachersRaw: $('pTeachers').value, holidays: $('pHolidays').value.split(',').map(s=>s.trim()).filter(Boolean), blockedPeriods: $('pBlocked').value, notes: $('pNotes').value, timestamp: new Date().toISOString() };
+  const payload = { type: 'portal-submission', institution: inst, year: $('pSchoolYear').value, name, phone: $('pPhone').value, teachersRaw: $('pTeachers').value, timestamp: new Date().toISOString() };
   const subs = JSON.parse(localStorage.getItem('donia_portal_submissions') || '[]');
   subs.unshift(payload);
   localStorage.setItem('donia_portal_submissions', JSON.stringify(subs.slice(0,50)));
   $('portalSuccess').classList.remove('hidden');
   $('portalSuccess').scrollIntoView({ behavior: 'smooth' });
-  navigator.clipboard.writeText(`📋 ${inst}\n👤 ${name}\n${OFFICIAL_WEBSITE}`).then(() => toast('✅ تم الإرسال', 'success'));
+  navigator.clipboard.writeText(`📋 ${inst}\n👤 ${name}\n${OFFICIAL_WEBSITE}`).then(() => toast('✅', 'success'));
 }
 window.submitPortalForm = submitPortalForm;
 
@@ -576,16 +582,15 @@ window.downloadPortalData = downloadPortalData;
 
 function clearPortalForm() {
   if (!confirm('مسح؟')) return;
-  ['pInstName','pFullName','pPhone','pTeachers','pHolidays','pBlocked','pNotes'].forEach(id => { const el = $(id); if (el) el.value = ''; });
+  ['pInstName','pFullName','pPhone','pTeachers'].forEach(id => { const el = $(id); if (el) el.value = ''; });
 }
 window.clearPortalForm = clearPortalForm;
 
 /* Short Code */
 function generateShortCode() { const c = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; let s = ''; for (let i = 0; i < 6; i++) s += c.charAt(Math.floor(Math.random() * c.length)); return s; }
-function saveCodeData(code, payload) { const codes = JSON.parse(localStorage.getItem(STORAGE.CODES) || '{}'); codes[code] = { payload, timestamp: new Date().toISOString() }; const keys = Object.keys(codes); if (keys.length > 50) { const o = keys.sort((a,b) => new Date(codes[a].timestamp) - new Date(codes[b].timestamp))[0]; delete codes[o]; } localStorage.setItem(STORAGE.CODES, JSON.stringify(codes)); }
+function saveCodeData(code, payload) { const codes = JSON.parse(localStorage.getItem(STORAGE.CODES) || '{}'); codes[code] = { payload, timestamp: new Date().toISOString() }; localStorage.setItem(STORAGE.CODES, JSON.stringify(codes)); }
 function loadCodeData(code) { const codes = JSON.parse(localStorage.getItem(STORAGE.CODES) || '{}'); return codes[code] ? codes[code].payload : null; }
 
-/* Portal Modal */
 const openPortalBtnEl = $('openPortalBtn');
 if (openPortalBtnEl) openPortalBtnEl.onclick = () => $('portalModal').classList.remove('hidden');
 function closePortal() { $('portalModal').classList.add('hidden'); }
@@ -623,7 +628,7 @@ function showGeneratedLink(code, link) {
   if (typeof QRCode !== 'undefined') QRCode.toCanvas(link, { width: 180 }, (e, canvas) => { if (!e) c.appendChild(canvas); });
 }
 
-function copyPortalLink() { navigator.clipboard.writeText($('generatedLink').textContent).then(() => toast('📋 تم النسخ', 'success')); }
+function copyPortalLink() { navigator.clipboard.writeText($('generatedLink').textContent).then(() => toast('📋', 'success')); }
 window.copyPortalLink = copyPortalLink;
 function copyShortCode() { navigator.clipboard.writeText(currentShortCode).then(() => toast(`🔢 ${currentShortCode}`, 'success')); }
 window.copyShortCode = copyShortCode;
@@ -674,7 +679,7 @@ window.removeSubjectRest = removeSubjectRest;
 
 function renderDoublePeriods() {
   const c = $('doublePeriodsContainer'); if (!c) return;
-  const labels = { 'all': '🔗 كل الحصص مزدوجة', 'once-per-class': '📌 حصة مزدوجة لكل فوج', 'once': '📌 حصة واحدة مزدوجة' };
+  const labels = { 'all': '🔗 كل الحصص مزدوجة', 'once-per-class': '📌 حصة مزدوجة لكل فوج', 'once': '📌 حصة واحدة' };
   c.innerHTML = constraints.doublePeriods.map((item, i) => {
     const s = typeof item === 'string' ? item : item.subject;
     const t = typeof item === 'string' ? 'all' : (item.type || 'all');
@@ -696,7 +701,6 @@ function loadDefaultDoublePeriods() {
     { subject: 'ت.بدنية', type: 'all' },
     { subject: 'رياضة', type: 'all' },
     { subject: 'علوم', type: 'once-per-class' },
-    { subject: 'علوم طبيعية', type: 'once-per-class' },
     { subject: 'فيزياء', type: 'once-per-class' }
   ];
   saveConstraints(); renderDoublePeriods(); toast('⚡', 'success');
@@ -741,40 +745,38 @@ window.loadDefaultTeamTeaching = loadDefaultTeamTeaching;
 function loadDefaultConstraints() {
   if (!confirm('⚠️ استبدال القيود الحالية؟')) return;
   constraints.subjectRest = [
-    { subject: 'عربية', day: 'الاثنين' }, { subject: 'ت.إسلامية', day: 'الاثنين' }, { subject: 'تربية إسلامية', day: 'الاثنين' },
+    { subject: 'عربية', day: 'الاثنين' }, { subject: 'ت.إسلامية', day: 'الاثنين' },
     { subject: 'اجتماعيات', day: 'الأحد' },
-    { subject: 'فرنسية', day: 'الثلاثاء' }, { subject: 'إنجليزية', day: 'الثلاثاء' }, { subject: 'انجليزية', day: 'الثلاثاء' },
+    { subject: 'فرنسية', day: 'الثلاثاء' }, { subject: 'إنجليزية', day: 'الثلاثاء' },
     { subject: 'موسيقى', day: 'الثلاثاء' }, { subject: 'اعلام الي', day: 'الثلاثاء' }, { subject: 'إعلام آلي', day: 'الثلاثاء' },
-    { subject: 'علوم', day: 'الأربعاء' }, { subject: 'علوم طبيعية', day: 'الأربعاء' }, { subject: 'فيزياء', day: 'الأربعاء' },
+    { subject: 'علوم', day: 'الأربعاء' }, { subject: 'فيزياء', day: 'الأربعاء' },
     { subject: 'رياضيات', day: 'الخميس' }
   ];
   constraints.holidays = ['الجمعة', 'السبت'];
   constraints.timeBlocks = [
-    { day: 'الخميس', startPeriod: 3, endPeriod: 20 },
-    { day: 'الثلاثاء', startPeriod: 5, endPeriod: 7 }
+    { day: 'الخميس', startPeriod: 4, endPeriod: 20 },
+    { day: 'الثلاثاء', startPeriod: 5, endPeriod: 8 }
   ];
-  constraints.rules = { noSinglePeriod: true, noClassGaps: true, noTeacherTwoGaps: true, morningPeriods: 4, eveningPeriods: 3, thursdayPeriods: 2, tuesdayMorningOnly: true };
+  constraints.rules = { noSinglePeriod: true, noClassGaps: true, noTeacherTwoGaps: true, morningPeriods: 4, eveningPeriods: 4, thursdayPeriods: 4, tuesdayMorningOnly: true };
   constraints.doublePeriods = [
-    { subject: 'تربية بدنية', type: 'all' }, { subject: 'ت.بدنية', type: 'all' }, { subject: 'رياضة', type: 'all' },
-    { subject: 'علوم', type: 'once-per-class' }, { subject: 'علوم طبيعية', type: 'once-per-class' }, { subject: 'فيزياء', type: 'once-per-class' }
+    { subject: 'تربية بدنية', type: 'all' }, { subject: 'ت.بدنية', type: 'all' },
+    { subject: 'علوم', type: 'once-per-class' }, { subject: 'فيزياء', type: 'once-per-class' }
   ];
   constraints.teamTeaching = [
     { subject1: 'موسيقى', subject2: 'اعلام الي', type: 'single', appliesTo: 'all' },
-    { subject1: 'موسيقى', subject2: 'إعلام آلي', type: 'single', appliesTo: 'all' },
     { subject1: 'إنجليزية', subject2: 'فرنسية', type: 'single', appliesTo: 'all' },
-    { subject1: 'انجليزية', subject2: 'فرنسية', type: 'single', appliesTo: 'all' },
     { subject1: 'عربية', subject2: 'رياضيات', type: 'single', appliesTo: 'all' },
     { subject1: 'عربية', subject2: 'رياضيات', type: 'double', appliesTo: '4م' }
   ];
   saveConstraints(); renderAllConstraints();
   toast('✅ تم تحميل كل القواعد', 'success');
-  log(`🎛️ قواعد: ${constraints.subjectRest.length} مواد | ${constraints.holidays.length} عطل | ${constraints.timeBlocks.length} حظر | ${constraints.doublePeriods.length} مزدوج | ${constraints.teamTeaching.length} تفويج`, 'success');
+  log(`🎛️ ${constraints.subjectRest.length} مواد | ${constraints.teamTeaching.length} تفويج | ${constraints.doublePeriods.length} مزدوج`, 'success');
 }
 window.loadDefaultConstraints = loadDefaultConstraints;
 
 function clearAllConstraints() {
   if (!confirm('مسح الكل؟')) return;
-  constraints = { holidays: [], timeBlocks: [], teacherRest: [], subjectRest: [], doublePeriods: [], teamTeaching: [], rules: { noSinglePeriod: false, noClassGaps: false, noTeacherTwoGaps: false, morningPeriods: 4, eveningPeriods: 3, thursdayPeriods: 2, tuesdayMorningOnly: false } };
+  constraints = { holidays: [], timeBlocks: [], teacherRest: [], subjectRest: [], doublePeriods: [], teamTeaching: [], rules: { noSinglePeriod: false, noClassGaps: false, noTeacherTwoGaps: false, morningPeriods: 4, eveningPeriods: 4, thursdayPeriods: 4, tuesdayMorningOnly: false } };
   saveConstraints(); renderAllConstraints(); toast('🗑️', 'info');
 }
 window.clearAllConstraints = clearAllConstraints;
@@ -930,7 +932,7 @@ function showSheetPreview(data) {
     { label: 'الأفواج', value: data.classes.length, color: '#10B981', icon: '🏫' },
     { label: 'المواد', value: data.subjects.length, color: '#FFB800', icon: '📚' }
   ].map(c => `<div class="stat-card"><div class="text-2xl mb-1">${c.icon}</div><p class="text-xs" style="color:var(--text-mute);">${c.label}</p><p class="text-2xl font-extrabold" style="color:${c.color};">${c.value}</p></div>`).join('');
-  $('sheetsPreview').innerHTML = data.sheets.map(s => `<div class="sheet-card"><div class="flex justify-between mb-2"><span class="font-bold">✅ ${s.name}</span><span class="text-xs" style="color:var(--text-mute);">👨‍🏫 ${s.teachers.length}</span></div><div class="flex flex-wrap gap-1">${s.teachers.slice(0, 20).map(t => `<span class="teacher-chip">${t.name} (${t.hours}h)</span>`).join('')}</div></div>`).join('');
+  $('sheetsPreview').innerHTML = data.sheets.map(s => `<div class="rounded-xl p-4" style="background: var(--bg-2);"><div class="flex justify-between mb-2"><span class="font-bold">✅ ${s.name}</span><span class="text-xs" style="color:var(--text-mute);">👨‍🏫 ${s.teachers.length}</span></div><div class="flex flex-wrap gap-1">${s.teachers.slice(0, 20).map(t => `<span class="teacher-chip">${t.name} (${t.hours}h)</span>`).join('')}</div></div>`).join('');
   $('sheetPreviewModal').classList.remove('hidden');
 }
 
@@ -972,10 +974,10 @@ function collectData() {
     if (!name) return;
     teachers.push({ name, subject: row.querySelector('.t-subject').value.trim(), room: row.querySelector('.t-room').value.trim(), classes: row.querySelector('.t-classes').value.trim(), hours: +row.querySelector('.t-hours').value || 0, extra: +row.querySelector('.t-extra').value || 0 });
   });
-  return { institution: $('instName').value.trim(), year: $('schoolYear').value.trim(), days, periods: +$('periodsCount').value || 7, duration: +$('periodDuration').value || 55, classes, subjects, rooms, teachers };
+  return { institution: $('instName').value.trim(), year: $('schoolYear').value.trim(), days, periods: +$('periodsCount').value || 8, duration: +$('periodDuration').value || 60, classes, subjects, rooms, teachers };
 }
 
-/* SOLVER v18 */
+/* SOLVER */
 function solveTimetable(data) {
   const { days, periods, classes, subjects, teachers } = data;
   const D = days.length, P = periods;
@@ -1043,7 +1045,7 @@ function solveTimetable(data) {
   const isBlocked = (d, p) => constraints.timeBlocks.some(b => b.day === d && p >= b.startPeriod && p <= b.endPeriod);
   const isTRest = (t, d) => constraints.teacherRest.some(r => r.teacher === t && r.day === d);
   const isSRest = (s, d) => { const k = String(s).trim(); return constraints.subjectRest.some(r => { const rk = r.subject.trim(); return (k === rk || k.includes(rk) || rk.includes(k)) && r.day === d; }); };
-  const avail = day => { const n = days[day]; if (n === 'الخميس') return rules.thursdayPeriods || 2; if (n === 'الثلاثاء' && rules.tuesdayMorningOnly) return rules.morningPeriods || 4; return (rules.morningPeriods || 4) + (rules.eveningPeriods || 3); };
+  const avail = day => { const n = days[day]; if (n === 'الخميس') return rules.thursdayPeriods || 4; if (n === 'الثلاثاء' && rules.tuesdayMorningOnly) return rules.morningPeriods || 4; return (rules.morningPeriods || 4) + (rules.eveningPeriods || 4); };
 
   const expanded = [];
   lessons.forEach(l => { for (let i = 0; i < l.count; i++) expanded.push(l); });
@@ -1059,7 +1061,7 @@ function solveTimetable(data) {
       if (isHoliday(dn) || isBlocked(dn, pn) || isTRest(lesson.teacherName, dn) || isSRest(lesson.subjectName, dn)) continue;
       const cell = grid[d][p];
       if (cell.teachers.has(lesson.teacherIdx) || cell.classes.has(lesson.classIdx)) continue;
-      if (tDayCount[lesson.teacherIdx][d] >= 5) continue;
+      if (tDayCount[lesson.teacherIdx][d] >= 6) continue;
       if (lesson.isDouble) { const nc = grid[d][p + 1]; if (nc.teachers.has(lesson.teacherIdx) || nc.classes.has(lesson.classIdx)) continue; }
       cell.teachers.add(lesson.teacherIdx); cell.classes.add(lesson.classIdx); tDayCount[lesson.teacherIdx][d]++;
       if (lesson.isDouble) { const nc = grid[d][p + 1]; nc.teachers.add(lesson.teacherIdx); nc.classes.add(lesson.classIdx); tDayCount[lesson.teacherIdx][d]++; }
@@ -1136,14 +1138,18 @@ function renderSingle(type, id) {
   const sub = isT ? data.teachers[id]?.subject : '';
   const filtered = generatedTimetable.filter(s => isT ? s.teacherIdx === id : s.classIdx === id);
   $('timetableStats').innerHTML = `<div class="stat-mini"><div class="label">${isT ? 'الأستاذ' : 'الفوج'}</div><div class="value" style="font-size:14px;">${name}</div></div><div class="stat-mini"><div class="label">الحصص</div><div class="value">${filtered.length}</div></div><div class="stat-mini"><div class="label">المواد</div><div class="value" style="color:#7C3AED;">${new Set(filtered.map(s => s.subjectName)).size}</div></div><div class="stat-mini"><div class="label">${isT ? 'الأفواج' : 'الأساتذة'}</div><div class="value" style="color:#FFB800;">${new Set(filtered.map(s => isT ? s.className : s.teacherName)).size}</div></div>`;
-  let html = `<div style="text-align:center;margin-bottom:16px;"><h2 style="font-size:20px;font-weight:900;color:var(--accent);margin:0;">${isT ? '👨‍🏫' : '🎓'} ${name} ${sub ? '— ' + sub : ''}</h2><p style="font-size:12px;color:var(--text-mute);">${data.institution} — ${data.year}</p></div>`;
+  
+  // 🆕 تحديث الترويسة الرسمية
+  $('printInst').textContent = data.institution;
+  $('printYear').textContent = data.year;
+  
+  let html = `<div style="text-align:center;margin-bottom:16px;"><h2 style="font-size:20px;font-weight:900;color:var(--accent);margin:0;">${isT ? '👨‍🏫' : '🎓'} ${name} ${sub ? '— ' + sub : ''}</h2></div>`;
   html += `<table class="timetable"><thead><tr><th>الحصة</th>`;
   data.days.forEach(d => { const h = constraints.holidays.includes(d); html += `<th style="${h ? 'background:linear-gradient(135deg,#EF4444,#DC2626);' : ''}">${d}${h ? ' 🚫' : ''}</th>`; });
   html += `</tr></thead><tbody>`;
   for (let p = 1; p <= data.periods; p++) {
-    const s = 8*60 + (p-1)*data.duration, e = s + data.duration;
-    const f = m => `${String(Math.floor(m/60)).padStart(2,'0')}:${String(m%60).padStart(2,'0')}`;
-    html += `<tr><td class="time-col"><div style="font-weight:800;color:var(--accent);">P${p}</div><div>${f(s)}</div></td>`;
+    const timeLabel = PERIOD_TIMES[p-1] || `P${p}`;
+    html += `<tr><td class="time-col"><div style="font-weight:800;color:var(--accent);">P${p}</div><div style="font-size:8px;">${timeLabel}</div></td>`;
     for (let d = 0; d < data.days.length; d++) {
       const dn = data.days[d];
       if (constraints.holidays.includes(dn) || constraints.timeBlocks.some(b => b.day === dn && p >= b.startPeriod && p <= b.endPeriod)) { html += `<td class="rest-cell">🚫</td>`; continue; }
@@ -1282,7 +1288,7 @@ const printTimetableBtnEl = $('printTimetableBtn'); if (printTimetableBtnEl) pri
 const pdfTimetableBtnEl = $('pdfTimetableBtn');
 if (pdfTimetableBtnEl) pdfTimetableBtnEl.onclick = () => {
   if (!generatedTimetable.length) return toast('لا يوجد', 'error');
-  html2pdf().set({ margin: [15, 10, 15, 10], filename: `timetable_${Date.now()}.pdf`, html2canvas: { scale: 2 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' } }).from($('printArea')).save();
+  html2pdf().set({ margin: [15, 10, 15, 10], filename: `timetable_${Date.now()}.pdf`, html2canvas: { scale: 2 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } }).from($('printArea')).save();
   toast('📄', 'info');
 };
 const excelTimetableBtnEl = $('excelTimetableBtn');
@@ -1319,7 +1325,6 @@ function exportBackup() {
   const backup = { version: APP_VERSION, timestamp: new Date().toISOString(), data, constraints, timetable: generatedTimetable };
   const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
   const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `donia_backup_${new Date().toISOString().slice(0,10)}.json`; a.click();
-  $('backupStatus').textContent = '✅';
   toast('💾', 'success');
 }
 window.exportBackup = exportBackup;
@@ -1419,9 +1424,6 @@ function checkURLForImport() {
   if (hash && /^[A-Z0-9]{6}$/.test(hash)) {
     const p = loadCodeData(hash);
     if (p) { log(`📥 ${hash}`, 'info'); applyPayload(p); window.history.replaceState({}, '', window.location.pathname); return; }
-  }
-  if (enc) {
-    try { const j = LZString.decompressFromEncodedURIComponent(enc) || decodeURIComponent(escape(atob(enc))); applyPayload(JSON.parse(j)); window.history.replaceState({}, '', window.location.pathname); } catch (e) {}
   }
 }
 
